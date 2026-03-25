@@ -14,6 +14,13 @@ const { title, description = 'OpenClaw 플랫폼팀 전략 워크스페이스' }
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title} | OpenClaw 플랫폼팀</title>
   <meta name="description" content={description} />
+  <script is:inline>
+    // 깜빡임 방지: 페이지 로드 전에 테마 적용
+    (function() {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
 </head>
 <body>
   <header class="site-header">
@@ -23,10 +30,13 @@ const { title, description = 'OpenClaw 플랫폼팀 전략 워크스페이스' }
         <span>OpenClaw 플랫폼팀</span>
       </a>
       <nav class="site-nav">
-        <a href="/docs">전략 문서</a>
+        <a href="/overview">전체 그림</a>
+        <a href="/platform">플랫폼</a>
+        <a href="/content">콘텐츠</a>
+        <a href="/lecture">강의</a>
         <a href="/meetings">회의록</a>
         <a href="/insights">인사이트</a>
-        <a href="/weekly">주간</a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="테마 전환">🌙</button>
       </nav>
     </div>
   </header>
@@ -38,6 +48,28 @@ const { title, description = 'OpenClaw 플랫폼팀 전략 워크스페이스' }
   <footer class="site-footer">
     <p>🚀 OpenClaw 플랫폼팀 — 오픈클로 = 지피터스</p>
   </footer>
+
+  <script is:inline>
+    (function() {
+      const btn = document.getElementById('theme-toggle');
+      function update() {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        btn.textContent = isDark ? '☀️' : '🌙';
+      }
+      update();
+      btn.addEventListener('click', function() {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+          document.documentElement.removeAttribute('data-theme');
+          localStorage.setItem('theme', 'light');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          localStorage.setItem('theme', 'dark');
+        }
+        update();
+      });
+    })();
+  </script>
 </body>
 </html>
 
