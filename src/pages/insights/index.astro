@@ -4,16 +4,24 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 let insights: any[] = [];
 try { insights = await getCollection('insights'); } catch {}
+insights.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
 ---
 <BaseLayout title="덕후방 인사이트">
   <div class="list-page">
-    <header class="list-header"><h1>🔍 덕후방 인사이트</h1><p>니즈 시그널, 봇 생태계, FAQ</p></header>
+    <header class="list-header">
+      <h1>🔍 덕후방 인사이트</h1>
+      <p>카톡 오카방에서 수집된 니즈 시그널, 봇 생태계, FAQ, 보안 사례</p>
+    </header>
     {insights.length === 0 ? (
-      <p class="empty">아직 인사이트가 없습니다. 곧 추가될 예정!</p>
+      <p class="empty">아직 인사이트가 없습니다.</p>
     ) : (
       <div class="list-grid">
-        {insights.map((doc) => (
+        {insights.map((doc, i) => (
           <a href={`/insights/${doc.slug}`} class="list-card">
+            <div class="card-top">
+              <span class="card-num">#{i + 1}</span>
+              {doc.data.category && <span class="card-cat">{doc.data.category}</span>}
+            </div>
             <h2 class="card-title">{doc.data.title}</h2>
             {doc.data.description && <p class="card-desc">{doc.data.description}</p>}
           </a>
@@ -26,11 +34,14 @@ try { insights = await getCollection('insights'); } catch {}
   .list-page { max-width: 800px; margin: 0 auto; padding: 0 24px 80px; }
   .list-header { text-align: center; padding: 60px 0 40px; }
   .list-header h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
-  .list-header p { font-size: 16px; color: var(--text-secondary); }
+  .list-header p { font-size: 17px; color: var(--text-secondary); }
   .list-grid { display: flex; flex-direction: column; gap: 12px; }
   .list-card { display: block; padding: 20px 24px; background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
   .list-card:hover { border-color: var(--accent); transform: translateY(-1px); }
-  .card-title { font-size: 18px; font-weight: 700; color: var(--text-primary); }
-  .card-desc { font-size: 13px; color: var(--text-secondary); margin-top: 6px; line-height: 1.5; }
+  .card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .card-num { font-size: 13px; font-weight: 700; color: var(--accent); }
+  .card-cat { font-size: 12px; font-weight: 600; color: var(--text-muted); background: var(--bg-code, var(--accent-bg)); padding: 2px 10px; border-radius: 10px; }
+  .card-title { font-size: 19px; font-weight: 700; color: var(--text-primary); }
+  .card-desc { font-size: 14px; color: var(--text-secondary); margin-top: 6px; line-height: 1.5; }
   .empty { text-align: center; color: var(--text-muted); padding: 40px 0; }
 </style>

@@ -2,6 +2,8 @@
 title: "반복 질문 패턴 (FAQ)"
 date: "2026-03-25"
 description: "덕후방에서 반복 등장하는 질문. 콘텐츠 소재 + 봇 답변 개선 자료."
+category: "❓ FAQ"
+order: 4
 ---
 
 # 반복 질문 패턴 (FAQ)
