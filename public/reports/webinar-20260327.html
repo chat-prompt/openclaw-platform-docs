@@ -3,22 +3,136 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🐱 3/27 OpenClaw 웨비나 종합 성과 분석 (완전판)</title>
+<title>3/27 OpenClaw 웨비나 종합 성과 분석 (완전판) | OpenClaw 플랫폼팀</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 </head>
-<body style="background:#F5F3EE; margin:0; padding:0;">
-<div style="max-width:680px; margin:0 auto; padding:16px 24px 0;">
-  <a href="/" style="color:#b45309; text-decoration:none; font-size:14px; font-family:'Pretendard',-apple-system,sans-serif;">← 전체 목록으로</a>
-</div>
+<body style="margin:0; padding:0;">
 <style>
-  .report-wrap { max-width:680px; margin:0 auto; font-family:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif; color:#1A2332; background:#F5F3EE; padding:0; }
+  /* ── Light (기본) ── */
+  :root {
+    --bg-page: #F5F3EE;
+    --bg-card: #FFFDF9;
+    --bg-code: #F0EDE7;
+    --border-card: #DDD8CE;
+    --border-light: #E8E4DB;
+    --text-primary: #1A2332;
+    --text-secondary: #4A5568;
+    --text-muted: #6B7A8F;
+    --text-faint: #9BA8B8;
+    --accent: #2D9C8F;
+    --accent-light: #3DB8A9;
+    --accent-bg: #E8F6F4;
+    --header-bg: rgba(245, 243, 238, 0.85);
+    --font-body: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    color-scheme: light;
+  }
+  /* ── Dark ── */
+  [data-theme="dark"] {
+    --bg-page: #1E2028;
+    --bg-card: #262830;
+    --bg-code: #2A2D36;
+    --border-card: #3A3D48;
+    --border-light: #333640;
+    --text-primary: #E8EAED;
+    --text-secondary: #B0B8C4;
+    --text-muted: #7B8698;
+    --text-faint: #5A6370;
+    --accent: #3DB8A9;
+    --accent-light: #5CCFBF;
+    --accent-bg: rgba(61, 184, 169, 0.12);
+    --header-bg: rgba(30, 32, 40, 0.85);
+    color-scheme: dark;
+  }
+  body { background: var(--bg-page); transition: background 0.3s ease, color 0.3s ease; }
+
+  /* ── 사이트 헤더 ── */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--header-bg);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-light);
+    padding: 0 24px;
+  }
+  .site-header-inner {
+    max-width: 960px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; height: 56px;
+  }
+  .site-logo {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 17px; font-weight: 700;
+    color: var(--text-primary); text-decoration: none;
+    font-family: var(--font-body);
+  }
+  .site-logo .logo-icon { font-size: 20px; }
+  .site-nav { display: flex; gap: 24px; align-items: center; }
+  .site-nav a {
+    font-size: 15px; font-weight: 500;
+    color: var(--text-muted); text-decoration: none; transition: color 0.15s;
+    font-family: var(--font-body);
+  }
+  .site-nav a:hover, .site-nav a.active { color: var(--accent); }
+  .theme-toggle {
+    background: none; border: 1px solid var(--border-card);
+    border-radius: 8px; padding: 6px 10px; cursor: pointer;
+    font-size: 18px; line-height: 1; transition: all 0.2s;
+    color: var(--text-muted);
+  }
+  .theme-toggle:hover { border-color: var(--accent); background: var(--accent-bg); }
+
+  /* ── 뒤로가기 ── */
+  .back-to-list {
+    max-width: 680px; margin: 0 auto; padding: 24px 24px 0;
+  }
+  .back-to-list a {
+    display: inline-flex; align-items: center;
+    font-size: 14px; color: var(--text-secondary);
+    text-decoration: none; transition: color 0.2s;
+    font-family: var(--font-body);
+  }
+  .back-to-list a:hover { color: var(--accent); }
+
+  /* ── 푸터 ── */
+  .site-footer {
+    text-align: center; padding: 40px 24px;
+    border-top: 1px solid var(--border-light);
+    color: var(--text-muted); font-size: 13px;
+    font-family: var(--font-body);
+  }
+  .site-footer .bot-note { margin-top: 8px; font-size: 12px; color: var(--text-faint); }
+
+  @media (max-width: 768px) {
+    .site-nav { gap: 14px; }
+    .site-nav a { font-size: 13px; }
+    .site-header-inner { height: 50px; }
+    .site-logo { font-size: 15px; }
+  }
+</style>
+
+<!-- ── 사이트 헤더 ── -->
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="/" class="site-logo"><span class="logo-icon">🚀</span> OpenClaw 플랫폼팀</a>
+    <nav class="site-nav">
+      <a href="/overview">전체 그림</a>
+      <a href="/insights">인사이트</a>
+      <a href="/reports" class="active">보고서</a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="테마 전환">🌙</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ── 뒤로가기 ── -->
+<div class="back-to-list"><a href="/reports">← 보고서</a></div>
+
+<style>
+  .report-wrap { max-width:680px; margin:0 auto; font-family:var(--font-body); color:var(--text-primary); background:var(--bg-page); padding:0; }
   .kpi-table { width:100%; border-collapse:separate; border-spacing:8px; }
   .kpi-table td { border-radius:12px; padding:16px 12px; text-align:center; vertical-align:top; }
   .kpi-label { font-size:11px; color:rgba(255,255,255,0.8); font-weight:500; margin-bottom:6px; }
   .kpi-value { font-size:26px; font-weight:800; color:#fff; line-height:1; }
   .kpi-unit { font-size:10px; color:rgba(255,255,255,0.6); margin-top:4px; }
-  .section-card { background:#FFFDF9; border-radius:14px; padding:24px 20px; box-shadow:0 1px 4px rgba(180,160,130,0.08); border:1px solid #DDD8CE; margin:20px 12px; }
+  .section-card { background:var(--bg-card); border-radius:14px; padding:24px 20px; box-shadow:0 1px 4px rgba(180,160,130,0.08); border:1px solid var(--border-card); margin:20px 12px; }
   .data-table { width:100%; border-collapse:collapse; font-size:12px; }
   .data-table th, .data-table td { padding:7px 10px; border-bottom:1px solid #EDE9E0; }
   .table-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
@@ -1104,7 +1218,7 @@
   </div>
 </div>
 
-<!-- ============ FOOTER ============ -->
+<!-- ============ FOOTER (보고서 내부) ============ -->
 <div class="footer-bar" style="background:linear-gradient(135deg,#92400e 0%,#b45309 50%,#d97706 100%);border-radius:0 0 16px 16px;padding:24px 32px;text-align:center;">
   <div style="font-size:28px;margin-bottom:6px;">🐱</div>
   <div style="color:#ffffff;font-size:14px;font-weight:700;margin-bottom:4px;">뽀야 리포트 (완전판)</div>
@@ -1118,5 +1232,35 @@
 </div>
 
 </div>
+
+<!-- ── 사이트 푸터 ── -->
+<footer class="site-footer">
+  <p>🚀 <strong>OpenClaw 플랫폼팀</strong> — 오픈클로 = 지피터스</p>
+  <p class="bot-note">🐱 이 문서는 뽀야가 Airtable API · Zoom API · 카카오톡 로컬 DB 기반으로 자동 생성했습니다.</p>
+</footer>
+
+<script>
+(function() {
+  var saved = localStorage.getItem('theme');
+  if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+  var btn = document.getElementById('theme-toggle');
+  function update() {
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    btn.textContent = isDark ? '☀️' : '🌙';
+  }
+  update();
+  btn.addEventListener('click', function() {
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+    }
+    update();
+  });
+})();
+</script>
 </body>
 </html>

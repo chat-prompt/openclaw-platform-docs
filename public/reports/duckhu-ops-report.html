@@ -3,40 +3,169 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🐱 OpenClaw 덕후방 운영진 활동현황 모니터링 보고서</title>
+<title>덕후방 운영진 활동현황 모니터링 보고서 | OpenClaw 플랫폼팀</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; background: #0f0f0f; color: #e0e0e0; line-height: 1.7; }
-  .container { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
-  
-  .header { text-align: center; margin-bottom: 48px; padding: 40px 24px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); border-radius: 16px; border: 1px solid #2a2a4a; }
-  .header h1 { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 8px; }
-  .header .subtitle { font-size: 15px; color: #8a8aaa; }
-  .header .period { display: inline-block; margin-top: 12px; padding: 6px 16px; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 20px; font-size: 13px; color: #a5b4fc; }
-  
-  .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 40px; }
-  .summary-card { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 20px 16px; text-align: center; }
-  .summary-card .number { font-size: 32px; font-weight: 800; color: #fff; }
-  .summary-card .label { font-size: 12px; color: #8a8aaa; margin-top: 4px; }
-  .summary-card.highlight { border-color: rgba(99, 102, 241, 0.4); background: linear-gradient(135deg, #1a1a3e, #1a1a2e); }
-  .summary-card.highlight .number { color: #a5b4fc; }
-  
-  .section { margin-bottom: 40px; }
-  .section-title { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #2a2a4a; }
-  
-  .chart-container { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 24px; margin-bottom: 40px; }
-  .chart-row { display: flex; align-items: center; margin-bottom: 8px; }
-  .chart-label { width: 70px; font-size: 12px; color: #8a8aaa; flex-shrink: 0; }
-  .chart-bar-wrapper { flex: 1; height: 24px; background: #0f0f1f; border-radius: 4px; overflow: hidden; }
-  .chart-bar { height: 100%; border-radius: 4px; }
-  .chart-bar.normal { background: linear-gradient(90deg, #4338ca, #6366f1); }
-  .chart-bar.peak { background: linear-gradient(90deg, #dc2626, #f87171); }
-  .chart-value { width: 55px; font-size: 12px; color: #a5b4fc; text-align: right; flex-shrink: 0; margin-left: 8px; }
+  /* ═══════════════════════════════════════════
+     OpenClaw 플랫폼팀 — 덕후방 운영 보고서
+     global.css 디자인 시스템 기반
+     ═══════════════════════════════════════════ */
 
-  /* Stacked bar for operators */
+  /* ── Light (기본) ── */
+  :root {
+    --bg-page: #F5F3EE;
+    --bg-card: #FFFDF9;
+    --bg-code: #F0EDE7;
+    --border-card: #DDD8CE;
+    --border-light: #E8E4DB;
+    --text-primary: #1A2332;
+    --text-secondary: #4A5568;
+    --text-muted: #6B7A8F;
+    --text-faint: #9BA8B8;
+    --accent: #2D9C8F;
+    --accent-light: #3DB8A9;
+    --accent-bg: #E8F6F4;
+    --header-bg: rgba(245, 243, 238, 0.85);
+    --content-width: 900px;
+    --font-body: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    color-scheme: light;
+  }
+
+  /* ── Dark ── */
+  [data-theme="dark"] {
+    --bg-page: #1E2028;
+    --bg-card: #262830;
+    --bg-code: #2A2D36;
+    --border-card: #3A3D48;
+    --border-light: #333640;
+    --text-primary: #E8EAED;
+    --text-secondary: #B0B8C4;
+    --text-muted: #7B8698;
+    --text-faint: #5A6370;
+    --accent: #3DB8A9;
+    --accent-light: #5CCFBF;
+    --accent-bg: rgba(61, 184, 169, 0.12);
+    --header-bg: rgba(30, 32, 40, 0.85);
+    color-scheme: dark;
+  }
+
+  /* ── Reset ── */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ── Base ── */
+  html {
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    background: var(--bg-page);
+    line-height: 1.7;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  a { color: var(--accent); text-decoration: none; transition: color 0.15s ease; }
+  a:hover { color: var(--accent-light); }
+
+  /* ── 사이트 헤더 ── */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--header-bg);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-light);
+    padding: 0 24px;
+  }
+  .site-header-inner {
+    max-width: 960px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; height: 56px;
+  }
+  .site-logo {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 17px; font-weight: 700;
+    color: var(--text-primary); text-decoration: none;
+  }
+  .site-logo .logo-icon { font-size: 20px; }
+  .site-nav { display: flex; gap: 24px; align-items: center; }
+  .site-nav a { font-size: 15px; font-weight: 500; color: var(--text-muted); transition: color 0.15s; }
+  .site-nav a:hover, .site-nav a.active { color: var(--accent); }
+  .theme-toggle {
+    background: none; border: 1px solid var(--border-card);
+    border-radius: 8px; padding: 6px 10px; cursor: pointer;
+    font-size: 18px; line-height: 1; transition: all 0.2s; color: var(--text-muted);
+  }
+  .theme-toggle:hover { border-color: var(--accent); background: var(--accent-bg); }
+
+  /* ── 뒤로가기 ── */
+  .back-to-list {
+    max-width: var(--content-width); margin: 0 auto; padding: 24px 24px 0;
+  }
+  .back-to-list a {
+    display: inline-flex; align-items: center;
+    font-size: 14px; color: var(--text-secondary);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .back-to-list a:hover { color: var(--accent); }
+
+  /* ── 기사 스타일 헤더 ── */
+  .article-header {
+    max-width: var(--content-width); margin: 0 auto; padding: 48px 24px 0;
+  }
+  .article-header .series-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600; color: var(--accent);
+    background: var(--accent-bg); padding: 4px 12px; border-radius: 20px; margin-bottom: 16px;
+  }
+  .article-header h1 {
+    font-size: 32px; font-weight: 700; line-height: 1.35;
+    color: var(--text-primary); margin-bottom: 12px; letter-spacing: -0.02em;
+  }
+  .article-header .meta {
+    font-size: 14px; color: var(--text-muted);
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin-bottom: 8px;
+  }
+  .article-header .stats-inline {
+    font-size: 14px; color: var(--text-muted);
+    display: flex; flex-wrap: wrap; gap: 16px;
+    padding-top: 12px; border-top: 1px solid var(--border-light); margin-top: 16px;
+  }
+  .article-header .stats-inline .stat { display: inline-flex; align-items: center; gap: 4px; }
+  .article-header .stats-inline .stat strong { color: var(--accent); font-weight: 700; }
+
+  /* ── 본문 컨테이너 ── */
+  .container {
+    max-width: var(--content-width); margin: 0 auto; padding: 32px 24px 40px;
+  }
+
+  /* ── Summary Grid ── */
+  .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 40px; }
+  .summary-card {
+    background: var(--bg-card); border: 1px solid var(--border-card);
+    border-radius: 12px; padding: 20px 16px; text-align: center;
+  }
+  .summary-card .number { font-size: 32px; font-weight: 800; color: var(--text-primary); }
+  .summary-card .label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .summary-card.highlight { border-color: var(--accent); background: var(--accent-bg); }
+  .summary-card.highlight .number { color: var(--accent); }
+
+  /* ── Section ── */
+  .section { margin-bottom: 40px; }
+  .section-title {
+    font-size: 20px; font-weight: 700; color: var(--text-primary);
+    margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid var(--border-card);
+  }
+
+  /* ── Chart Container ── */
+  .chart-container {
+    background: var(--bg-card); border: 1px solid var(--border-card);
+    border-radius: 12px; padding: 24px; margin-bottom: 40px;
+  }
+
+  /* ── Stacked bars ── */
   .stack-row { display: flex; align-items: center; margin-bottom: 6px; }
-  .stack-label { width: 70px; font-size: 12px; color: #8a8aaa; flex-shrink: 0; }
-  .stack-bar-wrapper { flex: 1; height: 20px; background: #0f0f1f; border-radius: 4px; overflow: hidden; display: flex; }
+  .stack-label { width: 70px; font-size: 12px; color: var(--text-muted); flex-shrink: 0; }
+  .stack-bar-wrapper { flex: 1; height: 20px; background: var(--bg-code); border-radius: 4px; overflow: hidden; display: flex; }
   .stack-seg { height: 100%; min-width: 1px; }
   .seg-dahye { background: #f59e0b; }
   .seg-tata { background: #8b5cf6; }
@@ -44,61 +173,110 @@
   .seg-jun { background: #22c55e; }
   .seg-noonoji { background: #f97316; }
   .seg-park { background: #ec4899; }
-  .seg-others { background: #374151; }
-  .stack-total { width: 55px; font-size: 12px; color: #8a8aaa; text-align: right; flex-shrink: 0; margin-left: 8px; }
-  
-  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; padding: 12px; background: #0f0f1f; border-radius: 8px; }
-  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #c0c0d0; }
+  .seg-others { background: var(--border-card); }
+  .stack-total { width: 55px; font-size: 12px; color: var(--text-muted); text-align: right; flex-shrink: 0; margin-left: 8px; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; padding: 12px; background: var(--bg-code); border-radius: 8px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
   .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
 
-  .op-card { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 24px; margin-bottom: 16px; transition: border-color 0.2s; }
-  .op-card:hover { border-color: #4338ca; }
+  /* ── Operator Cards ── */
+  .op-card {
+    background: var(--bg-card); border: 1px solid var(--border-card);
+    border-radius: 12px; padding: 24px; margin-bottom: 16px; transition: border-color 0.2s;
+  }
+  .op-card:hover { border-color: var(--accent); }
   .op-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
-  .op-name { font-size: 18px; font-weight: 700; color: #fff; }
+  .op-name { font-size: 18px; font-weight: 700; color: var(--text-primary); }
   .op-role { font-size: 12px; padding: 3px 10px; border-radius: 12px; font-weight: 600; }
-  .role-lead { background: rgba(234, 179, 8, 0.15); color: #fbbf24; border: 1px solid rgba(234, 179, 8, 0.3); }
-  .role-core { background: rgba(139, 92, 246, 0.15); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.3); }
-  .role-member { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
-  
+  .role-lead { background: rgba(234, 179, 8, 0.15); color: #d97706; border: 1px solid rgba(234, 179, 8, 0.3); }
+  .role-core { background: rgba(139, 92, 246, 0.15); color: #7c3aed; border: 1px solid rgba(139, 92, 246, 0.3); }
+  .role-member { background: rgba(34, 197, 94, 0.15); color: #16a34a; border: 1px solid rgba(34, 197, 94, 0.3); }
+  [data-theme="dark"] .role-lead { color: #fbbf24; }
+  [data-theme="dark"] .role-core { color: #c4b5fd; }
+  [data-theme="dark"] .role-member { color: #4ade80; }
+
   .op-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
-  .op-stat { background: #0f0f1f; border-radius: 8px; padding: 12px; text-align: center; }
-  .op-stat .val { font-size: 22px; font-weight: 800; color: #fff; }
-  .op-stat .lbl { font-size: 11px; color: #6b6b8a; margin-top: 2px; }
-  
-  .grade { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; margin-bottom: 12px; }
-  .grade-s { background: rgba(234, 179, 8, 0.15); color: #fbbf24; }
-  .grade-a { background: rgba(139, 92, 246, 0.15); color: #c4b5fd; }
-  .grade-b { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
-  .grade-c { background: rgba(251, 146, 60, 0.15); color: #fb923c; }
-  .grade-d { background: rgba(239, 68, 68, 0.15); color: #f87171; }
-  
+  .op-stat { background: var(--bg-code); border-radius: 8px; padding: 12px; text-align: center; }
+  .op-stat .val { font-size: 22px; font-weight: 800; color: var(--text-primary); }
+  .op-stat .lbl { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  /* ── Grades ── */
+  .grade {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; margin-bottom: 12px;
+  }
+  .grade-s { background: rgba(234, 179, 8, 0.15); color: #b45309; }
+  .grade-a { background: rgba(139, 92, 246, 0.15); color: #6d28d9; }
+  .grade-b { background: rgba(34, 197, 94, 0.15); color: #15803d; }
+  .grade-c { background: rgba(251, 146, 60, 0.15); color: #c2410c; }
+  .grade-d { background: rgba(239, 68, 68, 0.15); color: #dc2626; }
+  [data-theme="dark"] .grade-s { color: #fbbf24; }
+  [data-theme="dark"] .grade-a { color: #c4b5fd; }
+  [data-theme="dark"] .grade-b { color: #4ade80; }
+  [data-theme="dark"] .grade-c { color: #fb923c; }
+  [data-theme="dark"] .grade-d { color: #f87171; }
+
+  /* ── Heatmap ── */
   .activity-heatmap { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; margin-bottom: 16px; }
-  .heat-cell { aspect-ratio: 1; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #fff; font-weight: 700; }
-  .heat-0 { background: #1a1a2e; color: #3a3a5a; }
-  .heat-1 { background: #1e3a5f; }
-  .heat-2 { background: #2563eb; }
+  .heat-cell {
+    aspect-ratio: 1; border-radius: 3px; display: flex; align-items: center; justify-content: center;
+    font-size: 9px; color: #fff; font-weight: 700;
+  }
+  .heat-0 { background: var(--bg-code); color: var(--text-faint); }
+  .heat-1 { background: #2D9C8F; }
+  .heat-2 { background: #1e7a6f; }
   .heat-3 { background: #7c3aed; }
   .heat-4 { background: #dc2626; }
   .heat-labels { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; margin-bottom: 4px; }
-  .heat-labels span { font-size: 9px; color: #6b6b8a; text-align: center; }
+  .heat-labels span { font-size: 9px; color: var(--text-muted); text-align: center; }
 
-  .comment { background: #0f0f1f; border-left: 3px solid #4338ca; border-radius: 0 8px 8px 0; padding: 16px; margin-top: 12px; }
-  .comment-title { font-size: 13px; font-weight: 700; color: #a5b4fc; margin-bottom: 6px; }
-  .comment p { font-size: 14px; color: #c0c0d0; margin-bottom: 8px; }
-  .comment .strength { color: #4ade80; }
-  .comment .improve { color: #fb923c; }
-  .comment .action { color: #60a5fa; }
-  .comment .quote { font-style: italic; color: #8a8aaa; border-left: 2px solid #3a3a5a; padding-left: 10px; margin: 8px 0; }
+  /* ── Comment ── */
+  .comment {
+    background: var(--bg-code); border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0; padding: 16px; margin-top: 12px;
+  }
+  .comment-title { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+  .comment p { font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; }
+  .comment .strength { color: #059669; }
+  .comment .improve { color: #c2410c; }
+  .comment .action { color: #2563eb; }
+  .comment .quote {
+    font-style: italic; color: var(--text-muted);
+    border-left: 2px solid var(--border-card); padding-left: 10px; margin: 8px 0;
+  }
+  [data-theme="dark"] .comment .strength { color: #4ade80; }
+  [data-theme="dark"] .comment .improve { color: #fb923c; }
+  [data-theme="dark"] .comment .action { color: #60a5fa; }
 
+  /* ── Ranking Table ── */
   .ranking-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  .ranking-table th { text-align: left; padding: 10px 12px; color: #8a8aaa; font-weight: 600; border-bottom: 1px solid #2a2a4a; font-size: 12px; }
-  .ranking-table td { padding: 10px 12px; border-bottom: 1px solid #1a1a2e; }
-  .ranking-table tr:hover td { background: rgba(99, 102, 241, 0.05); }
-  .rank-bar { height: 6px; border-radius: 3px; background: #2a2a4a; position: relative; }
+  .ranking-table th {
+    text-align: left; padding: 10px 12px; color: var(--text-muted);
+    font-weight: 600; border-bottom: 1px solid var(--border-card); font-size: 12px;
+  }
+  .ranking-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-light); color: var(--text-secondary); }
+  .ranking-table tr:hover td { background: var(--accent-bg); }
+  .rank-bar { height: 6px; border-radius: 3px; background: var(--bg-code); position: relative; }
   .rank-fill { height: 100%; border-radius: 3px; }
 
-  .footer { text-align: center; padding: 24px; color: #4a4a6a; font-size: 12px; margin-top: 40px; }
-  
+  /* ── 푸터 ── */
+  .site-footer {
+    text-align: center; padding: 40px 24px;
+    border-top: 1px solid var(--border-light);
+    color: var(--text-muted); font-size: 13px;
+  }
+  .site-footer .bot-note { margin-top: 8px; font-size: 12px; color: var(--text-faint); }
+
+  /* ── 반응형 ── */
+  @media (max-width: 768px) {
+    .article-header { padding-top: 32px; }
+    .article-header h1 { font-size: 24px; }
+    .site-nav { gap: 14px; }
+    .site-nav a { font-size: 13px; }
+    .site-header-inner { height: 50px; }
+    .site-logo { font-size: 15px; }
+  }
   @media (max-width: 640px) {
     .summary-grid { grid-template-columns: repeat(2, 1fr); }
     .op-stats { grid-template-columns: repeat(2, 1fr); }
@@ -106,13 +284,41 @@
 </style>
 </head>
 <body>
-<div class="container">
-  
-  <div class="header">
-    <h1>🐱 OpenClaw 덕후방</h1>
-    <div class="subtitle">운영진 활동현황 모니터링 보고서</div>
-    <div class="period">📅 2026.03.17 ~ 03.28 (12일간) | 운영진 6명 분석</div>
+
+<!-- ── 사이트 헤더 ── -->
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="/" class="site-logo"><span class="logo-icon">🚀</span> OpenClaw 플랫폼팀</a>
+    <nav class="site-nav">
+      <a href="/overview">전체 그림</a>
+      <a href="/insights">인사이트</a>
+      <a href="/reports" class="active">보고서</a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="테마 전환">🌙</button>
+    </nav>
   </div>
+</header>
+
+<!-- ── 뒤로가기 ── -->
+<div class="back-to-list"><a href="/reports">← 보고서</a></div>
+
+<!-- ── 기사 스타일 헤더 ── -->
+<div class="article-header">
+  <span class="series-badge">📊 덕후방 운영</span>
+  <h1>OpenClaw 덕후방<br>운영진 활동현황 모니터링 보고서</h1>
+  <div class="meta">
+    <span>📅 2026.03.17 ~ 03.28 (12일간)</span>
+    <span>👥 운영진 6명 분석</span>
+  </div>
+  <div class="stats-inline">
+    <span class="stat"><strong>4,023</strong> 총 메시지</span>
+    <span class="stat"><strong>229</strong> 고유 참여자</span>
+    <span class="stat"><strong>1,368</strong> 운영진 메시지</span>
+    <span class="stat"><strong>34%</strong> 운영진 비중</span>
+  </div>
+</div>
+
+<!-- ── 본문 ── -->
+<div class="container">
 
   <!-- Summary -->
   <div class="summary-grid">
@@ -243,7 +449,7 @@
         <div class="stack-total">632</div>
       </div>
       <div class="stack-row">
-        <div class="stack-label" style="color:#f87171; font-weight:700;">3/27 🔥</div>
+        <div class="stack-label" style="color:#dc2626; font-weight:700;">3/27 🔥</div>
         <div class="stack-bar-wrapper">
           <div class="stack-seg seg-dahye" style="width:18.2%" title="다혜 280"></div>
           <div class="stack-seg seg-tata" style="width:7.9%" title="타타 121"></div>
@@ -266,7 +472,7 @@
         </div>
         <div class="stack-total">379</div>
       </div>
-      <div style="font-size:11px; color:#6b6b8a; margin-top:8px;">* 3/28은 오전 10시 기준 · 3/27은 AI토크 웨비나 진행일 (역대 최대 트래픽)</div>
+      <div style="font-size:11px; color:var(--text-faint); margin-top:8px;">* 3/28은 오전 10시 기준 · 3/27은 AI토크 웨비나 진행일 (역대 최대 트래픽)</div>
       <div class="legend">
         <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div>다혜</div>
         <div class="legend-item"><div class="legend-dot" style="background:#8b5cf6;"></div>타타</div>
@@ -274,7 +480,7 @@
         <div class="legend-item"><div class="legend-dot" style="background:#22c55e;"></div>Jun</div>
         <div class="legend-item"><div class="legend-dot" style="background:#f97316;"></div>눈오지</div>
         <div class="legend-item"><div class="legend-dot" style="background:#ec4899;"></div>박정기</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#374151;"></div>일반 멤버</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--border-card);"></div>일반 멤버</div>
       </div>
     </div>
   </div>
@@ -289,54 +495,54 @@
         </thead>
         <tbody>
           <tr>
-            <td style="color:#fbbf24; font-weight:800;">1</td>
-            <td style="color:#fff; font-weight:700;">다혜 (닿)</td>
-            <td style="color:#fff; font-weight:700;">916</td>
+            <td style="color:#d97706; font-weight:800;">1</td>
+            <td style="font-weight:700;">다혜 (닿)</td>
+            <td style="font-weight:700;">916</td>
             <td>12/12</td>
             <td>76.3</td>
             <td><div class="rank-bar"><div class="rank-fill" style="width:100%; background:#f59e0b;"></div></div></td>
             <td><span class="grade grade-s" style="margin:0;">S</span></td>
           </tr>
           <tr>
-            <td style="color:#c4b5fd; font-weight:800;">2</td>
-            <td style="color:#fff; font-weight:700;">타타</td>
-            <td style="color:#fff; font-weight:700;">204</td>
+            <td style="color:#7c3aed; font-weight:800;">2</td>
+            <td style="font-weight:700;">타타</td>
+            <td style="font-weight:700;">204</td>
             <td>8/12</td>
             <td>17.0</td>
             <td><div class="rank-bar"><div class="rank-fill" style="width:22.3%; background:#8b5cf6;"></div></div></td>
             <td><span class="grade grade-a" style="margin:0;">A</span></td>
           </tr>
           <tr>
-            <td style="color:#22d3ee; font-weight:800;">3</td>
-            <td style="color:#fff; font-weight:700;">소파</td>
-            <td style="color:#fff; font-weight:700;">168</td>
+            <td style="color:#0891b2; font-weight:800;">3</td>
+            <td style="font-weight:700;">소파</td>
+            <td style="font-weight:700;">168</td>
             <td>9/12</td>
             <td>14.0</td>
             <td><div class="rank-bar"><div class="rank-fill" style="width:18.3%; background:#06b6d4;"></div></div></td>
             <td><span class="grade grade-a" style="margin:0;">A</span></td>
           </tr>
           <tr>
-            <td style="color:#4ade80; font-weight:800;">4</td>
-            <td style="color:#fff; font-weight:700;">Jun</td>
-            <td style="color:#fff; font-weight:700;">61</td>
+            <td style="color:#16a34a; font-weight:800;">4</td>
+            <td style="font-weight:700;">Jun</td>
+            <td style="font-weight:700;">61</td>
             <td>7/12</td>
             <td>5.1</td>
             <td><div class="rank-bar"><div class="rank-fill" style="width:6.7%; background:#22c55e;"></div></div></td>
             <td><span class="grade grade-b" style="margin:0;">B</span></td>
           </tr>
           <tr>
-            <td style="color:#fb923c; font-weight:800;">5</td>
-            <td style="color:#fff; font-weight:700;">눈오지</td>
-            <td style="color:#fff; font-weight:700;">16</td>
+            <td style="color:#ea580c; font-weight:800;">5</td>
+            <td style="font-weight:700;">눈오지</td>
+            <td style="font-weight:700;">16</td>
             <td>6/12</td>
             <td>1.3</td>
             <td><div class="rank-bar"><div class="rank-fill" style="width:1.7%; background:#f97316;"></div></div></td>
             <td><span class="grade grade-c" style="margin:0;">C</span></td>
           </tr>
           <tr>
-            <td style="color:#f87171; font-weight:800;">6</td>
-            <td style="color:#fff; font-weight:700;">박정기</td>
-            <td style="color:#fff; font-weight:700;">3</td>
+            <td style="color:#dc2626; font-weight:800;">6</td>
+            <td style="font-weight:700;">박정기</td>
+            <td style="font-weight:700;">3</td>
             <td>2/12</td>
             <td>0.3</td>
             <td><div class="rank-bar"><div class="rank-fill" style="width:0.3%; background:#ec4899;"></div></div></td>
@@ -582,22 +788,22 @@
     <div class="section-title">🔍 종합 평가 및 권고사항</div>
     <div class="op-card" style="border-color: rgba(234, 179, 8, 0.3);">
       
-      <h3 style="color:#fbbf24; margin-bottom:16px;">📊 핵심 발견</h3>
+      <h3 style="color:var(--accent); margin-bottom:16px;">📊 핵심 발견</h3>
       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:24px;">
-        <div style="background:#0f0f1f; border-radius:8px; padding:16px;">
-          <div style="font-size:13px; color:#8a8aaa; margin-bottom:4px;">상위 3인 기여도</div>
-          <div style="font-size:28px; font-weight:800; color:#fbbf24;">94%</div>
-          <div style="font-size:12px; color:#6b6b8a;">다혜 916 + 타타 204 + 소파 168 = 1,288 / 1,368</div>
+        <div style="background:var(--bg-code); border-radius:8px; padding:16px;">
+          <div style="font-size:13px; color:var(--text-muted); margin-bottom:4px;">상위 3인 기여도</div>
+          <div style="font-size:28px; font-weight:800; color:var(--accent);">94%</div>
+          <div style="font-size:12px; color:var(--text-faint);">다혜 916 + 타타 204 + 소파 168 = 1,288 / 1,368</div>
         </div>
-        <div style="background:#0f0f1f; border-radius:8px; padding:16px;">
-          <div style="font-size:13px; color:#8a8aaa; margin-bottom:4px;">하위 3인 기여도</div>
-          <div style="font-size:28px; font-weight:800; color:#f87171;">6%</div>
-          <div style="font-size:12px; color:#6b6b8a;">Jun 61 + 눈오지 16 + 박정기 3 = 80 / 1,368</div>
+        <div style="background:var(--bg-code); border-radius:8px; padding:16px;">
+          <div style="font-size:13px; color:var(--text-muted); margin-bottom:4px;">하위 3인 기여도</div>
+          <div style="font-size:28px; font-weight:800; color:#dc2626;">6%</div>
+          <div style="font-size:12px; color:var(--text-faint);">Jun 61 + 눈오지 16 + 박정기 3 = 80 / 1,368</div>
         </div>
       </div>
 
-      <h3 style="color:#60a5fa; margin-bottom:12px;">💡 권고사항</h3>
-      <ol style="padding-left:20px; font-size:14px; line-height:2;">
+      <h3 style="color:var(--accent); margin-bottom:12px;">💡 권고사항</h3>
+      <ol style="padding-left:20px; font-size:14px; line-height:2; color:var(--text-secondary);">
         <li><strong>역할 명시화</strong>: 각 운영진에게 구체적 역할을 배분. 예) 눈오지=환영·공지, Jun=기술Q&A, 타타=비개발자 가이드, 소파=심화 기술, 박정기=MCP·자동화 큐레이션</li>
         <li><strong>주간 최소 활동 기준</strong>: 운영진은 주 5건 이상 메시지 참여 (환영, 답변, 콘텐츠 공유 포함). 2주 연속 미달 시 역할 재논의</li>
         <li><strong>AI토크 레버리지 극대화</strong>: 3/27 AI토크가 1,539건 폭발을 일으킨 만큼, 2주 1회 주기를 유지하되 다음 AI토크 진행자를 미리 정해서 준비 기간 확보</li>
@@ -607,10 +813,37 @@
     </div>
   </div>
 
-  <div class="footer">
-    🐱 뽀짝이 자동 생성 | 2026.03.28 10:15 KST | 데이터: KakaoTalk Local DB (kakaocli) · 운영진 기준: 운영진 카톡방 멤버 6명
-  </div>
+</div><!-- /container -->
 
-</div>
+<!-- ── 사이트 푸터 ── -->
+<footer class="site-footer">
+  <p>🚀 <strong>OpenClaw 플랫폼팀</strong> — 오픈클로 = 지피터스</p>
+  <p class="bot-note">🐱 뽀짝이 자동 생성 | 2026.03.28 10:15 KST | 데이터: KakaoTalk Local DB (kakaocli) · 운영진 기준: 운영진 카톡방 멤버 6명</p>
+</footer>
+
+<script>
+(function() {
+  var saved = localStorage.getItem('theme');
+  if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+  var btn = document.getElementById('theme-toggle');
+  function update() {
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    btn.textContent = isDark ? '☀️' : '🌙';
+  }
+  update();
+  btn.addEventListener('click', function() {
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+    }
+    update();
+  });
+})();
+</script>
+
 </body>
 </html>
