@@ -3,8 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Q&A 정리 — [지피터스] OpenClaw 뽀짝이, AI를 '진짜' 팀원으로 만드는 법</title>
+<title>Q&A 정리 — [지피터스] OpenClaw 뽀짝이, AI를 '진짜' 팀원으로 만드는 법 | OpenClaw 플랫폼팀</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
+  /* ── 플랫폼 네비게이션 바 ── */
+  .platform-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(245,243,238,0.92);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid #DDD8CE;
+    padding: 0 20px;
+  }
+  [data-theme="dark"] .platform-nav {
+    background: rgba(30,32,40,0.92);
+    border-bottom-color: #3A3D48;
+  }
+  .platform-nav-inner {
+    max-width: 860px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 52px;
+  }
+  .platform-nav .nav-logo {
+    font-size: 15px; font-weight: 700; color: #1A2332;
+    text-decoration: none; display: flex; align-items: center; gap: 6px;
+  }
+  [data-theme="dark"] .platform-nav .nav-logo { color: #E8EAED; }
+  .platform-nav .nav-links { display: flex; gap: 16px; align-items: center; }
+  .platform-nav .nav-links a {
+    font-size: 13px; color: #6B7A8F; text-decoration: none; font-weight: 500;
+  }
+  .platform-nav .nav-links a:hover { color: #2D9C8F; }
+  [data-theme="dark"] .platform-nav .nav-links a { color: #7B8698; }
+  [data-theme="dark"] .platform-nav .nav-links a:hover { color: #3DB8A9; }
+  .nav-theme-btn {
+    background: none; border: 1px solid #DDD8CE; border-radius: 8px;
+    padding: 4px 8px; cursor: pointer; font-size: 16px; line-height: 1;
+    color: #6B7A8F;
+  }
+  .nav-theme-btn:hover { border-color: #2D9C8F; background: rgba(45,156,143,0.08); }
+  [data-theme="dark"] .nav-theme-btn { border-color: #3A3D48; color: #7B8698; }
+  .back-link {
+    max-width: 860px; margin: 0 auto; padding: 16px 20px 0;
+    font-size: 14px;
+  }
+  .back-link a {
+    color: #2D9C8F; text-decoration: none; font-weight: 500;
+  }
+  .back-link a:hover { color: #3DB8A9; }
+  [data-theme="dark"] .back-link a { color: #3DB8A9; }
+  @media (max-width: 600px) {
+    .platform-nav .nav-links a { font-size: 12px; }
+    .platform-nav .nav-links { gap: 10px; }
+  }
   :root {
     --primary: #6C5CE7;
     --primary-light: #a29bfe;
@@ -24,7 +74,7 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
     background: var(--bg);
     color: var(--gray-900);
     line-height: 1.7;
@@ -176,6 +226,19 @@
 </style>
 </head>
 <body>
+
+<nav class="platform-nav">
+  <div class="platform-nav-inner">
+    <a href="/" class="nav-logo"><span>🚀</span> OpenClaw 플랫폼팀</a>
+    <div class="nav-links">
+      <a href="/overview">전체 그림</a>
+      <a href="/insights">인사이트</a>
+      <a href="/reports">보고서</a>
+      <button class="nav-theme-btn" id="nav-theme-toggle" aria-label="테마 전환">🌙</button>
+    </div>
+  </div>
+</nav>
+<div class="back-link"><a href="/reports">← 보고서 목록</a></div>
 
 <header>
   <div class="container">
@@ -646,6 +709,30 @@
     <p class="bot-note">2026년 3월 28일 · GPTers × OpenClaw</p>
   </div>
 </footer>
+
+<script>
+(function() {
+  var saved = localStorage.getItem('theme');
+  if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+  var btn = document.getElementById('nav-theme-toggle');
+  function update() {
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    btn.textContent = isDark ? '☀️' : '🌙';
+  }
+  update();
+  btn.addEventListener('click', function() {
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+    }
+    update();
+  });
+})();
+</script>
 
 </body>
 </html>
