@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+let reports: any[] = [];
+try { reports = await getCollection('reports'); } catch {}
+reports.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+---
+<BaseLayout title="보고서">
+  <div class="list-page">
+    <header class="list-header">
+      <h1>📊 보고서</h1>
+      <p>설문 분석, 운영 모니터링, 콘텐츠 패턴 — 인사이트 보고서 모음</p>
+    </header>
+    {reports.length === 0 ? (
+      <p class="empty">아직 보고서가 없습니다.</p>
+    ) : (
+      <div class="list-grid">
+        {reports.map((doc, i) => (
+          <a href={doc.data.htmlFile ? `/reports/${doc.data.htmlFile}` : `/reports/${doc.slug}`} class="list-card">
+            <div class="card-top">
+              <span class="card-num">#{i + 1}</span>
+              <span class="card-date">{doc.data.date}</span>
+            </div>
+            <h2 class="card-title">{doc.data.title}</h2>
+            {doc.data.description && <p class="card-desc">{doc.data.description}</p>}
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</BaseLayout>
+<style>
+  .list-page { max-width: 800px; margin: 0 auto; padding: 0 24px 80px; }
+  .list-header { text-align: center; padding: 60px 0 40px; }
+  .list-header h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+  .list-header p { font-size: 17px; color: var(--text-secondary); }
+  .list-grid { display: flex; flex-direction: column; gap: 12px; }
+  .list-card { display: block; padding: 20px 24px; background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
+  .list-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .card-num { font-size: 13px; font-weight: 700; color: var(--accent); }
+  .card-date { font-size: 12px; font-weight: 600; color: var(--text-muted); background: var(--bg-code, var(--accent-bg)); padding: 2px 10px; border-radius: 10px; }
+  .card-title { font-size: 19px; font-weight: 700; color: var(--text-primary); }
+  .card-desc { font-size: 14px; color: var(--text-secondary); margin-top: 6px; line-height: 1.5; }
+  .empty { text-align: center; color: var(--text-muted); padding: 40px 0; }
+</style>

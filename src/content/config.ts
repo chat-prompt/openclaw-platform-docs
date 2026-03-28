@@ -33,4 +33,15 @@ const insights = defineCollection({
   }),
 });
 
-export const collections = { overview, platform, content, lecture, meetings, insights };
+const reports = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    date: z.string(),
+    description: z.string().optional(),
+    htmlFile: z.string().optional(),
+    order: z.number().optional(),
+  }),
+});
+
+export const collections = { overview, platform, content, lecture, meetings, insights, reports };

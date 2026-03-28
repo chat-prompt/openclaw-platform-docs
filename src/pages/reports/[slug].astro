@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  let reports: any[] = [];
+  try { reports = await getCollection('reports'); } catch {}
+  return reports.map((doc) => ({ params: { slug: doc.slug }, props: { doc } }));
+}
+
+const { doc } = Astro.props;
+const { Content } = await doc.render();
+---
+<BaseLayout title={doc.data.title}>
+  <div class="back-to-list top"><a href="/reports">← 보고서</a></div>
+  <article>
+    <header class="article-header">
+      <span class="series-badge">📊 보고서</span>
+      <h1>{doc.data.title}</h1>
+      {doc.data.date && <p class="article-date">{doc.data.date}</p>}
+    </header>
+    <div class="article-body"><Content /></div>
+  </article>
+</BaseLayout>

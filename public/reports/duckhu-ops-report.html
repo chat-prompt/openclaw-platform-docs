@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐱 OpenClaw 덕후방 운영진 활동현황 모니터링 보고서</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; background: #0f0f0f; color: #e0e0e0; line-height: 1.7; }
+  .container { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
+  
+  .header { text-align: center; margin-bottom: 48px; padding: 40px 24px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); border-radius: 16px; border: 1px solid #2a2a4a; }
+  .header h1 { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+  .header .subtitle { font-size: 15px; color: #8a8aaa; }
+  .header .period { display: inline-block; margin-top: 12px; padding: 6px 16px; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 20px; font-size: 13px; color: #a5b4fc; }
+  
+  .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 40px; }
+  .summary-card { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 20px 16px; text-align: center; }
+  .summary-card .number { font-size: 32px; font-weight: 800; color: #fff; }
+  .summary-card .label { font-size: 12px; color: #8a8aaa; margin-top: 4px; }
+  .summary-card.highlight { border-color: rgba(99, 102, 241, 0.4); background: linear-gradient(135deg, #1a1a3e, #1a1a2e); }
+  .summary-card.highlight .number { color: #a5b4fc; }
+  
+  .section { margin-bottom: 40px; }
+  .section-title { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #2a2a4a; }
+  
+  .chart-container { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 24px; margin-bottom: 40px; }
+  .chart-row { display: flex; align-items: center; margin-bottom: 8px; }
+  .chart-label { width: 70px; font-size: 12px; color: #8a8aaa; flex-shrink: 0; }
+  .chart-bar-wrapper { flex: 1; height: 24px; background: #0f0f1f; border-radius: 4px; overflow: hidden; }
+  .chart-bar { height: 100%; border-radius: 4px; }
+  .chart-bar.normal { background: linear-gradient(90deg, #4338ca, #6366f1); }
+  .chart-bar.peak { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .chart-value { width: 55px; font-size: 12px; color: #a5b4fc; text-align: right; flex-shrink: 0; margin-left: 8px; }
+
+  /* Stacked bar for operators */
+  .stack-row { display: flex; align-items: center; margin-bottom: 6px; }
+  .stack-label { width: 70px; font-size: 12px; color: #8a8aaa; flex-shrink: 0; }
+  .stack-bar-wrapper { flex: 1; height: 20px; background: #0f0f1f; border-radius: 4px; overflow: hidden; display: flex; }
+  .stack-seg { height: 100%; min-width: 1px; }
+  .seg-dahye { background: #f59e0b; }
+  .seg-tata { background: #8b5cf6; }
+  .seg-sofa { background: #06b6d4; }
+  .seg-jun { background: #22c55e; }
+  .seg-noonoji { background: #f97316; }
+  .seg-park { background: #ec4899; }
+  .seg-others { background: #374151; }
+  .stack-total { width: 55px; font-size: 12px; color: #8a8aaa; text-align: right; flex-shrink: 0; margin-left: 8px; }
+  
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; padding: 12px; background: #0f0f1f; border-radius: 8px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #c0c0d0; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+  .op-card { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 24px; margin-bottom: 16px; transition: border-color 0.2s; }
+  .op-card:hover { border-color: #4338ca; }
+  .op-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+  .op-name { font-size: 18px; font-weight: 700; color: #fff; }
+  .op-role { font-size: 12px; padding: 3px 10px; border-radius: 12px; font-weight: 600; }
+  .role-lead { background: rgba(234, 179, 8, 0.15); color: #fbbf24; border: 1px solid rgba(234, 179, 8, 0.3); }
+  .role-core { background: rgba(139, 92, 246, 0.15); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.3); }
+  .role-member { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+  
+  .op-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+  .op-stat { background: #0f0f1f; border-radius: 8px; padding: 12px; text-align: center; }
+  .op-stat .val { font-size: 22px; font-weight: 800; color: #fff; }
+  .op-stat .lbl { font-size: 11px; color: #6b6b8a; margin-top: 2px; }
+  
+  .grade { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+  .grade-s { background: rgba(234, 179, 8, 0.15); color: #fbbf24; }
+  .grade-a { background: rgba(139, 92, 246, 0.15); color: #c4b5fd; }
+  .grade-b { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+  .grade-c { background: rgba(251, 146, 60, 0.15); color: #fb923c; }
+  .grade-d { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+  
+  .activity-heatmap { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; margin-bottom: 16px; }
+  .heat-cell { aspect-ratio: 1; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #fff; font-weight: 700; }
+  .heat-0 { background: #1a1a2e; color: #3a3a5a; }
+  .heat-1 { background: #1e3a5f; }
+  .heat-2 { background: #2563eb; }
+  .heat-3 { background: #7c3aed; }
+  .heat-4 { background: #dc2626; }
+  .heat-labels { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; margin-bottom: 4px; }
+  .heat-labels span { font-size: 9px; color: #6b6b8a; text-align: center; }
+
+  .comment { background: #0f0f1f; border-left: 3px solid #4338ca; border-radius: 0 8px 8px 0; padding: 16px; margin-top: 12px; }
+  .comment-title { font-size: 13px; font-weight: 700; color: #a5b4fc; margin-bottom: 6px; }
+  .comment p { font-size: 14px; color: #c0c0d0; margin-bottom: 8px; }
+  .comment .strength { color: #4ade80; }
+  .comment .improve { color: #fb923c; }
+  .comment .action { color: #60a5fa; }
+  .comment .quote { font-style: italic; color: #8a8aaa; border-left: 2px solid #3a3a5a; padding-left: 10px; margin: 8px 0; }
+
+  .ranking-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .ranking-table th { text-align: left; padding: 10px 12px; color: #8a8aaa; font-weight: 600; border-bottom: 1px solid #2a2a4a; font-size: 12px; }
+  .ranking-table td { padding: 10px 12px; border-bottom: 1px solid #1a1a2e; }
+  .ranking-table tr:hover td { background: rgba(99, 102, 241, 0.05); }
+  .rank-bar { height: 6px; border-radius: 3px; background: #2a2a4a; position: relative; }
+  .rank-fill { height: 100%; border-radius: 3px; }
+
+  .footer { text-align: center; padding: 24px; color: #4a4a6a; font-size: 12px; margin-top: 40px; }
+  
+  @media (max-width: 640px) {
+    .summary-grid { grid-template-columns: repeat(2, 1fr); }
+    .op-stats { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  
+  <div class="header">
+    <h1>🐱 OpenClaw 덕후방</h1>
+    <div class="subtitle">운영진 활동현황 모니터링 보고서</div>
+    <div class="period">📅 2026.03.17 ~ 03.28 (12일간) | 운영진 6명 분석</div>
+  </div>
+
+  <!-- Summary -->
+  <div class="summary-grid">
+    <div class="summary-card highlight">
+      <div class="number">4,023</div>
+      <div class="label">총 메시지</div>
+    </div>
+    <div class="summary-card">
+      <div class="number">229</div>
+      <div class="label">고유 참여자</div>
+    </div>
+    <div class="summary-card highlight">
+      <div class="number">1,368</div>
+      <div class="label">운영진 메시지</div>
+    </div>
+    <div class="summary-card">
+      <div class="number">34%</div>
+      <div class="label">운영진 비중</div>
+    </div>
+  </div>
+
+  <!-- Daily Stacked Chart -->
+  <div class="section">
+    <div class="section-title">📊 일별 메시지 추이 (운영진 기여 비율)</div>
+    <div class="chart-container">
+      <div class="stack-row">
+        <div class="stack-label">3/17</div>
+        <div class="stack-bar-wrapper">
+          <div class="stack-seg seg-dahye" style="width:12.3%" title="다혜 34"></div>
+          <div class="stack-seg seg-sofa" style="width:5.1%" title="소파 14"></div>
+          <div class="stack-seg seg-jun" style="width:1.4%" title="Jun 4"></div>
+          <div class="stack-seg seg-tata" style="width:0.4%" title="타타 1"></div>
+          <div class="stack-seg seg-others" style="width:80.8%"></div>
+        </div>
+        <div class="stack-total">277</div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-label">3/18</div>
+        <div class="stack-bar-wrapper">
+          <div class="stack-seg seg-dahye" style="width:28.3%" title="다혜 91"></div>
+          <div class="stack-seg seg-jun" style="width:1.9%" title="Jun 6"></div>
+          <div class="stack-seg seg-tata" style="width:0.9%" title="타타 3"></div>
+          <div class="stack-seg seg-sofa" style="width:0.6%" title="소파 2"></div>
+          <div class="stack-seg seg-others" style="width:68.3%"></div>
+        </div>
+        <div class="stack-total">321</div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-label">3/19</div>
+        <div class="stack-bar-wrapper">
+          <div class="stack-seg seg-dahye" style="width:18.6%" title="다혜 26"></div>
+          <div class="stack-seg seg-sofa" style="width:18.6%" title="소파 26"></div>
+          <div class="stack-seg seg-tata" style="width:3.6%" title="타타 5"></div>
+          <div class="stack-seg seg-others" style="width:59.2%"></div>
+        </div>
+        <div class="stack-total">140</div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-label">3/20</div>
+        <div class="stack-bar-wrapper">
+          <div class="stack-seg seg-dahye" style="width:46.6%" title="다혜 48"></div>
+          <div class="stack-seg seg-sofa" style="width:1.9%" title="소파 2"></div>
+          <div class="stack-seg seg-park" style="width:1%" title="박정기 1"></div>
+          <div class="stack-seg seg-others" style="width:50.5%"></div>
+        </div>
+        <div class="stack-total">103</div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-label">3/21</div>
+        <div class="stack-bar-wrapper">
+          <div class="stack-seg seg-dahye" style="width:7.7%" title="다혜 1"></div>
+          <div class="stack-seg seg-others" style="width:92.3%"></div>
+        </div>
+        <div class="stack-total">13</div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-label">3/22</div>
+        <div class="stack-bar-wrapper">
+          <div class="stack-seg seg-dahye" style="width:26%" title="다혜 20"></div>
+          <div class="stack-seg seg-jun" style="width:26%" title="Jun 20"></div>
+          <div class="stack-seg seg-noonoji" style="width:7.8%" title="눈오지 6"></div>
+          <div class="stack-seg seg-tata" style="width:2.6%" title="타타 2"></div>
+          <div class="stack-seg seg-others" style="width:37.6%"></div>
+        </div>
+        <div class="stack-total">77</div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-label">3/23</div>
+        <div class="stack-bar-wrapper">
+          <div class="stack-seg seg-dahye" style="width:45.8%" title="다혜 82"></div>
+          <div class="stack-seg seg-noonoji" style="width:2.2%" title="눈오지 4"></div>
+          <div class="stack-seg seg-sofa" style="width:0.6%" title="소파 1"></div>
+          <div class="stack-seg seg-others" style="width:51.4%"></div>
+        </div>
+        <div class="stack-total">179</div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-label">3/24</div>
+        <div class="stack-bar-wrapper">
+          <div class="stack-seg seg-dahye" style="width:26.5%" title="다혜 49"></div>
+          <div class="stack-seg seg-jun" style="width:5.4%" title="Jun 10"></div>
+          <div class="stack-seg seg-others" style="width:68.1%"></div>
+        </div>
+        <div class="stack-total">185</div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-label">3/25</div>
+        <div class="stack-bar-wrapper">
+          <div class="stack-seg seg-dahye" style="width:32%" title="다혜 57"></div>
+          <div class="stack-seg seg-tata" style="width:5.1%" title="타타 9"></div>
+          <div class="stack-seg seg-sofa" style="width:1.1%" title="소파 2"></div>
+          <div class="stack-seg seg-jun" style="width:0.6%" title="Jun 1"></div>
+          <div class="stack-seg seg-noonoji" style="width:0.6%" title="눈오지 1"></div>
+          <div class="stack-seg seg-others" style="width:60.6%"></div>
+        </div>
+        <div class="stack-total">178</div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-label">3/26</div>
+        <div class="stack-bar-wrapper">
+          <div class="stack-seg seg-dahye" style="width:31.2%" title="다혜 197"></div>
+          <div class="stack-seg seg-sofa" style="width:7.4%" title="소파 47"></div>
+          <div class="stack-seg seg-tata" style="width:7.1%" title="타타 45"></div>
+          <div class="stack-seg seg-jun" style="width:1.9%" title="Jun 12"></div>
+          <div class="stack-seg seg-noonoji" style="width:0.2%" title="눈오지 1"></div>
+          <div class="stack-seg seg-others" style="width:52.2%"></div>
+        </div>
+        <div class="stack-total">632</div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-label" style="color:#f87171; font-weight:700;">3/27 🔥</div>
+        <div class="stack-bar-wrapper">
+          <div class="stack-seg seg-dahye" style="width:18.2%" title="다혜 280"></div>
+          <div class="stack-seg seg-tata" style="width:7.9%" title="타타 121"></div>
+          <div class="stack-seg seg-sofa" style="width:3.3%" title="소파 51"></div>
+          <div class="stack-seg seg-jun" style="width:0.5%" title="Jun 8"></div>
+          <div class="stack-seg seg-noonoji" style="width:0.2%" title="눈오지 3"></div>
+          <div class="stack-seg seg-park" style="width:0.1%" title="박정기 2"></div>
+          <div class="stack-seg seg-others" style="width:69.8%"></div>
+        </div>
+        <div class="stack-total">1,539</div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-label">3/28*</div>
+        <div class="stack-bar-wrapper">
+          <div class="stack-seg seg-dahye" style="width:8.2%" title="다혜 31"></div>
+          <div class="stack-seg seg-sofa" style="width:6.1%" title="소파 23"></div>
+          <div class="stack-seg seg-tata" style="width:4.7%" title="타타 18"></div>
+          <div class="stack-seg seg-noonoji" style="width:0.3%" title="눈오지 1"></div>
+          <div class="stack-seg seg-others" style="width:80.7%"></div>
+        </div>
+        <div class="stack-total">379</div>
+      </div>
+      <div style="font-size:11px; color:#6b6b8a; margin-top:8px;">* 3/28은 오전 10시 기준 · 3/27은 AI토크 웨비나 진행일 (역대 최대 트래픽)</div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div>다혜</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#8b5cf6;"></div>타타</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#06b6d4;"></div>소파</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#22c55e;"></div>Jun</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f97316;"></div>눈오지</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ec4899;"></div>박정기</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#374151;"></div>일반 멤버</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ranking Table -->
+  <div class="section">
+    <div class="section-title">🏆 운영진 활동 순위</div>
+    <div class="op-card" style="padding:0; overflow:hidden;">
+      <table class="ranking-table">
+        <thead>
+          <tr><th>#</th><th>이름</th><th>메시지</th><th>활동일</th><th>일평균</th><th style="width:30%">점유율</th><th>등급</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:#fbbf24; font-weight:800;">1</td>
+            <td style="color:#fff; font-weight:700;">다혜 (닿)</td>
+            <td style="color:#fff; font-weight:700;">916</td>
+            <td>12/12</td>
+            <td>76.3</td>
+            <td><div class="rank-bar"><div class="rank-fill" style="width:100%; background:#f59e0b;"></div></div></td>
+            <td><span class="grade grade-s" style="margin:0;">S</span></td>
+          </tr>
+          <tr>
+            <td style="color:#c4b5fd; font-weight:800;">2</td>
+            <td style="color:#fff; font-weight:700;">타타</td>
+            <td style="color:#fff; font-weight:700;">204</td>
+            <td>8/12</td>
+            <td>17.0</td>
+            <td><div class="rank-bar"><div class="rank-fill" style="width:22.3%; background:#8b5cf6;"></div></div></td>
+            <td><span class="grade grade-a" style="margin:0;">A</span></td>
+          </tr>
+          <tr>
+            <td style="color:#22d3ee; font-weight:800;">3</td>
+            <td style="color:#fff; font-weight:700;">소파</td>
+            <td style="color:#fff; font-weight:700;">168</td>
+            <td>9/12</td>
+            <td>14.0</td>
+            <td><div class="rank-bar"><div class="rank-fill" style="width:18.3%; background:#06b6d4;"></div></div></td>
+            <td><span class="grade grade-a" style="margin:0;">A</span></td>
+          </tr>
+          <tr>
+            <td style="color:#4ade80; font-weight:800;">4</td>
+            <td style="color:#fff; font-weight:700;">Jun</td>
+            <td style="color:#fff; font-weight:700;">61</td>
+            <td>7/12</td>
+            <td>5.1</td>
+            <td><div class="rank-bar"><div class="rank-fill" style="width:6.7%; background:#22c55e;"></div></div></td>
+            <td><span class="grade grade-b" style="margin:0;">B</span></td>
+          </tr>
+          <tr>
+            <td style="color:#fb923c; font-weight:800;">5</td>
+            <td style="color:#fff; font-weight:700;">눈오지</td>
+            <td style="color:#fff; font-weight:700;">16</td>
+            <td>6/12</td>
+            <td>1.3</td>
+            <td><div class="rank-bar"><div class="rank-fill" style="width:1.7%; background:#f97316;"></div></div></td>
+            <td><span class="grade grade-c" style="margin:0;">C</span></td>
+          </tr>
+          <tr>
+            <td style="color:#f87171; font-weight:800;">6</td>
+            <td style="color:#fff; font-weight:700;">박정기</td>
+            <td style="color:#fff; font-weight:700;">3</td>
+            <td>2/12</td>
+            <td>0.3</td>
+            <td><div class="rank-bar"><div class="rank-fill" style="width:0.3%; background:#ec4899;"></div></div></td>
+            <td><span class="grade grade-d" style="margin:0;">D</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Individual Cards -->
+  <div class="section">
+    <div class="section-title">👤 운영진별 상세 분석 + 개별 코멘트</div>
+
+    <!-- 다혜 -->
+    <div class="op-card" style="border-color: rgba(245, 158, 11, 0.4);">
+      <div class="op-card-header">
+        <div class="op-name">🌟 다혜 (닿)</div>
+        <span class="op-role role-lead">방장 · 운영 총괄</span>
+      </div>
+      <div class="op-stats">
+        <div class="op-stat"><div class="val">916</div><div class="lbl">총 메시지</div></div>
+        <div class="op-stat"><div class="val">76.3</div><div class="lbl">일평균</div></div>
+        <div class="op-stat"><div class="val">12/12</div><div class="lbl">활동일</div></div>
+        <div class="op-stat"><div class="val">22.8%</div><div class="lbl">전체 점유율</div></div>
+      </div>
+      <div class="heat-labels"><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span><span>28</span></div>
+      <div class="activity-heatmap">
+        <div class="heat-cell heat-2">34</div>
+        <div class="heat-cell heat-3">91</div>
+        <div class="heat-cell heat-1">26</div>
+        <div class="heat-cell heat-2">48</div>
+        <div class="heat-cell heat-1">1</div>
+        <div class="heat-cell heat-1">20</div>
+        <div class="heat-cell heat-3">82</div>
+        <div class="heat-cell heat-2">49</div>
+        <div class="heat-cell heat-2">57</div>
+        <div class="heat-cell heat-4">197</div>
+        <div class="heat-cell heat-4">280</div>
+        <div class="heat-cell heat-2">31</div>
+      </div>
+      <div class="grade grade-s">🏆 S등급 — 방의 핵심 엔진, 무결석 출근</div>
+      <div class="comment">
+        <div class="comment-title">🐱 뽀짝이 코멘트</div>
+        <p class="strength">✅ <strong>강점:</strong> 12일 개근에 전체 메시지의 22.8%. 신규 멤버 환영, 기술 질문 응대, AI토크 안내, 서재 홍보까지 운영 전 영역을 1인 다역으로 커버하고 있어요. 특히 3/26~27 이틀간 477건으로 AI토크 전후 분위기를 완전히 리드했어요.</p>
+        <p class="quote">"우리뽀짝이 일 잘한 것좀 보실래요?" — 뽀짝이를 자연스럽게 방 아이덴티티로 녹여내는 커뮤니케이션 👍</p>
+        <p class="improve">⚠️ <strong>유의점:</strong> 운영진 6명 중 사실상 3명(다혜+타타+소파)이 전체 기여의 94%를 차지. 닿이 하루라도 빠지면 방 활력이 급감할 수 있어요 (3/21 닿 1건 → 방 전체 13건). 번아웃 위험도 있으니 운영 부담을 분산할 구조가 필요해요.</p>
+      </div>
+    </div>
+
+    <!-- 타타 -->
+    <div class="op-card" style="border-color: rgba(139, 92, 246, 0.4);">
+      <div class="op-card-header">
+        <div class="op-name">⚡ 타타</div>
+        <span class="op-role role-core">핵심 운영진</span>
+      </div>
+      <div class="op-stats">
+        <div class="op-stat"><div class="val">204</div><div class="lbl">총 메시지</div></div>
+        <div class="op-stat"><div class="val">17.0</div><div class="lbl">일평균</div></div>
+        <div class="op-stat"><div class="val">8/12</div><div class="lbl">활동일</div></div>
+        <div class="op-stat"><div class="val">5.1%</div><div class="lbl">전체 점유율</div></div>
+      </div>
+      <div class="heat-labels"><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span><span>28</span></div>
+      <div class="activity-heatmap">
+        <div class="heat-cell heat-1">1</div>
+        <div class="heat-cell heat-1">3</div>
+        <div class="heat-cell heat-1">5</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-1">2</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-1">9</div>
+        <div class="heat-cell heat-2">45</div>
+        <div class="heat-cell heat-4">121</div>
+        <div class="heat-cell heat-1">18</div>
+      </div>
+      <div class="grade grade-a">🅰️ A등급 — AI토크 전후 폭발적 기여, 기술 질문 응대 우수</div>
+      <div class="comment">
+        <div class="comment-title">🐱 뽀짝이 코멘트</div>
+        <p class="strength">✅ <strong>강점:</strong> 3/26~28 사이에 184건으로 전체 기여의 90%를 쏟아부었어요. 특히 AI토크 당일(3/27) 121건으로 닿 다음 2위. 기술 질문에 실질적으로 답변하는 역할이 돋보여요.</p>
+        <p class="quote">"처음엔 어려워보이긴하지만 막상해보면 진짜 해볼만하다라는 생각이 드실거예요 제가 진짜 0에서 시작한사람이라,,,"</p>
+        <p class="quote">"얼마나 봇갯수보단 하드하게 쓰느냐!!! 그게 중요한거같아요 ㅋㅋㅋ"</p>
+        <p class="strength">✅ 비개발자 관점에서 OpenClaw 접근성을 높여주는 메시지가 많아서, 신규 멤버에게 심리적 허들을 낮춰주는 역할이에요.</p>
+        <p class="improve">⚠️ <strong>개선 포인트:</strong> 3/20~24 (5일간) 활동 공백. 이벤트가 없는 평일에도 꾸준히 1~2건 참여하면 방의 일상적 활력에 도움이 될 거예요.</p>
+        <p class="action">💡 <strong>제안:</strong> "오늘의 OpenClaw 팁" 같은 짧은 콘텐츠를 주 2~3회 공유하면 비이벤트 기간에도 존재감을 유지할 수 있어요.</p>
+      </div>
+    </div>
+
+    <!-- 소파 -->
+    <div class="op-card" style="border-color: rgba(6, 182, 212, 0.4);">
+      <div class="op-card-header">
+        <div class="op-name">🛋️ 소파</div>
+        <span class="op-role role-core">핵심 운영진</span>
+      </div>
+      <div class="op-stats">
+        <div class="op-stat"><div class="val">168</div><div class="lbl">총 메시지</div></div>
+        <div class="op-stat"><div class="val">14.0</div><div class="lbl">일평균</div></div>
+        <div class="op-stat"><div class="val">9/12</div><div class="lbl">활동일</div></div>
+        <div class="op-stat"><div class="val">4.2%</div><div class="lbl">전체 점유율</div></div>
+      </div>
+      <div class="heat-labels"><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span><span>28</span></div>
+      <div class="activity-heatmap">
+        <div class="heat-cell heat-1">14</div>
+        <div class="heat-cell heat-1">2</div>
+        <div class="heat-cell heat-1">26</div>
+        <div class="heat-cell heat-1">2</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-1">1</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-1">2</div>
+        <div class="heat-cell heat-2">47</div>
+        <div class="heat-cell heat-2">51</div>
+        <div class="heat-cell heat-1">23</div>
+      </div>
+      <div class="grade grade-a">🅰️ A등급 — 기술 심화 대화 리더, 늦은 시간대 커버</div>
+      <div class="comment">
+        <div class="comment-title">🐱 뽀짝이 코멘트</div>
+        <p class="strength">✅ <strong>강점:</strong> 기술적으로 가장 깊이 있는 대화를 이끄는 멤버. 모델 폴백 설정, OAuth 연동, 메모리 관리, 임베딩 등 실질적인 기술 답변이 많아요. 새벽 시간대(0~2시)에도 활동해서 닿이 커버 못하는 시간대를 메워줘요.</p>
+        <p class="quote">"메인은 오푸스, 폴백 지피티 5.4, 소넷 4.6 순으로 폴백 걸어놨어요"</p>
+        <p class="quote">"바이브코딩시대 비개발자들은 열심히 남들이 만들어놓은 스킬이나 플러그인 가져다 써야합니다 ㅎㅎ"</p>
+        <p class="improve">⚠️ <strong>개선 포인트:</strong> 3/21~24 (4일간) 공백. 타타와 비슷하게 이벤트 중심으로 활동이 몰리는 패턴이에요.</p>
+        <p class="action">💡 <strong>제안:</strong> 소파의 기술 답변을 Q&A 형태로 아카이빙하면 서재 콘텐츠로 재활용 가능. "소파의 OpenClaw 기술 노트" 같은 시리즈도 좋을 것 같아요.</p>
+      </div>
+    </div>
+
+    <!-- Jun -->
+    <div class="op-card" style="border-color: rgba(34, 197, 94, 0.4);">
+      <div class="op-card-header">
+        <div class="op-name">🔧 Jun | IT잡부 | 세계관설정중</div>
+        <span class="op-role role-member">운영진</span>
+      </div>
+      <div class="op-stats">
+        <div class="op-stat"><div class="val">61</div><div class="lbl">총 메시지</div></div>
+        <div class="op-stat"><div class="val">5.1</div><div class="lbl">일평균</div></div>
+        <div class="op-stat"><div class="val">7/12</div><div class="lbl">활동일</div></div>
+        <div class="op-stat"><div class="val">1.5%</div><div class="lbl">전체 점유율</div></div>
+      </div>
+      <div class="heat-labels"><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span><span>28</span></div>
+      <div class="activity-heatmap">
+        <div class="heat-cell heat-1">4</div>
+        <div class="heat-cell heat-1">6</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-1">20</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-1">10</div>
+        <div class="heat-cell heat-1">1</div>
+        <div class="heat-cell heat-1">12</div>
+        <div class="heat-cell heat-1">8</div>
+        <div class="heat-cell heat-0">-</div>
+      </div>
+      <div class="grade grade-b">🅱️ B등급 — IoT/하드웨어 전문성 독보적, 안정적 참여</div>
+      <div class="comment">
+        <div class="comment-title">🐱 뽀짝이 코멘트</div>
+        <p class="strength">✅ <strong>강점:</strong> IoT·하드웨어 관련 질문에 즉시 답변하는 전문가 포지션. 라즈베리파이, ESP32, IR센서 등 다른 운영진이 커버 못하는 영역을 담당하고 있어요. 닉네임에 "세계관설정중"이라 되어있는 만큼 봇 세계관 구축에도 관심이 있어서, 다음 AI토크 연사 후보로도 적합해요.</p>
+        <p class="quote">"TV는 IR센서일거고 RF인 경우도 있으니 센서 컨트롤 가능한 보드가 필요할꺼애요"</p>
+        <p class="improve">⚠️ <strong>개선 포인트:</strong> 3/28에 활동 없음. AI토크 당일(3/27)에도 8건으로 다소 소극적이었어요. 이벤트 당일 좀 더 적극적으로 참여하면 멤버 반응을 끌어낼 수 있을 거예요.</p>
+        <p class="action">💡 <strong>제안:</strong> AI토크에서 "OpenClaw × IoT" 주제로 발표하면 차별화된 콘텐츠가 될 거예요. Jun의 세계관 소개(포켓몬🔴)도 기대가 돼요!</p>
+      </div>
+    </div>
+
+    <!-- 눈오지 -->
+    <div class="op-card" style="border-color: rgba(249, 115, 22, 0.4);">
+      <div class="op-card-header">
+        <div class="op-name">📝 눈오지 (noon.oji) / 작가</div>
+        <span class="op-role role-member">운영진</span>
+      </div>
+      <div class="op-stats">
+        <div class="op-stat"><div class="val">16</div><div class="lbl">총 메시지</div></div>
+        <div class="op-stat"><div class="val">1.3</div><div class="lbl">일평균</div></div>
+        <div class="op-stat"><div class="val">6/12</div><div class="lbl">활동일</div></div>
+        <div class="op-stat"><div class="val">0.4%</div><div class="lbl">전체 점유율</div></div>
+      </div>
+      <div class="heat-labels"><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span><span>28</span></div>
+      <div class="activity-heatmap">
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-1">6</div>
+        <div class="heat-cell heat-1">4</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-1">1</div>
+        <div class="heat-cell heat-1">1</div>
+        <div class="heat-cell heat-1">3</div>
+        <div class="heat-cell heat-1">1</div>
+      </div>
+      <div class="grade grade-c">🟠 C등급 — 성실한 환영·안내 역할, 양적 참여는 부족</div>
+      <div class="comment">
+        <div class="comment-title">🐱 뽀짝이 코멘트</div>
+        <p class="strength">✅ <strong>강점:</strong> 메시지 수는 적지만, 질적으로 가장 "운영자다운" 활동을 해요. 신규 입장자 환영 + 공지 확인 요청 + AI토크 안내까지 운영 매뉴얼에 맞는 대응이 인상적이에요.</p>
+        <p class="quote">"안녕하세요! 다들 환영합니다! 위에 공지 한 번 확인 부탁드릴게요 :) 또 오늘 오후 9시에 다혜님이 직접 진행하시는 openclaw 무료 웨비나가 계획되어있습니다~!"</p>
+        <p class="quote">"안녕하세요! 다들 환영합니다! 상단 공지 확인해주시면 감사하겠습니다:)"</p>
+        <p class="strength">✅ 콘텐츠 공유력도 좋아요. 클로드 채널 vs OpenClaw 비교, 텔레그램 연동 영상 링크 등 외부 콘텐츠를 적극 큐레이션하고 있어요.</p>
+        <p class="improve">⚠️ <strong>개선 포인트:</strong> 16건은 운영진으로서 너무 적어요. 환영 메시지만으로는 방의 일상적 활력을 유지하기 어렵고, 질문에 대한 기술 응대 비중을 높이면 좋겠어요.</p>
+        <p class="action">💡 <strong>제안:</strong> "신규 입장자 환영 + 닉네임 변경 안내"를 눈오지의 공식 역할로 지정하고, 매일 1회 이상 환영 메시지 루틴을 만들면 활동일이 늘어날 거예요.</p>
+      </div>
+    </div>
+
+    <!-- 박정기 -->
+    <div class="op-card" style="border-color: rgba(239, 68, 68, 0.4);">
+      <div class="op-card-header">
+        <div class="op-name">🔴 박정기</div>
+        <span class="op-role role-member">운영진</span>
+      </div>
+      <div class="op-stats">
+        <div class="op-stat"><div class="val">3</div><div class="lbl">총 메시지</div></div>
+        <div class="op-stat"><div class="val">0.3</div><div class="lbl">일평균</div></div>
+        <div class="op-stat"><div class="val">2/12</div><div class="lbl">활동일</div></div>
+        <div class="op-stat"><div class="val">0.07%</div><div class="lbl">전체 점유율</div></div>
+      </div>
+      <div class="heat-labels"><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span><span>28</span></div>
+      <div class="activity-heatmap">
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-1">1</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-0">-</div>
+        <div class="heat-cell heat-1">2</div>
+        <div class="heat-cell heat-0">-</div>
+      </div>
+      <div class="grade grade-d">🔴 D등급 — 사실상 미활동 상태</div>
+      <div class="comment">
+        <div class="comment-title">🐱 뽀짝이 코멘트</div>
+        <p>12일간 총 3건: "정기가 저 말씀일까요 ㅎㅎㅎ"(3/20), "엑사서치mcp 써보세요"(3/27), "무료로가능해유"(3/27). AI토크 당일에 짧게 참여한 정도예요.</p>
+        <p class="improve">⚠️ <strong>상태:</strong> 운영진 역할을 수행하고 있다고 보기 어려운 수준이에요. 환영 메시지, 질문 응대, 공지 전달 등 운영 활동이 전혀 없어요.</p>
+        <p class="action">💡 <strong>제안:</strong> 박정기님이 n8n·MCP 쪽 전문성이 있으시니, "이번 주의 MCP 추천" 같은 정기 콘텐츠 역할을 맡기거나, 바쁘시면 운영진 역할 조정을 논의해보는 게 좋겠어요.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overall -->
+  <div class="section">
+    <div class="section-title">🔍 종합 평가 및 권고사항</div>
+    <div class="op-card" style="border-color: rgba(234, 179, 8, 0.3);">
+      
+      <h3 style="color:#fbbf24; margin-bottom:16px;">📊 핵심 발견</h3>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:24px;">
+        <div style="background:#0f0f1f; border-radius:8px; padding:16px;">
+          <div style="font-size:13px; color:#8a8aaa; margin-bottom:4px;">상위 3인 기여도</div>
+          <div style="font-size:28px; font-weight:800; color:#fbbf24;">94%</div>
+          <div style="font-size:12px; color:#6b6b8a;">다혜 916 + 타타 204 + 소파 168 = 1,288 / 1,368</div>
+        </div>
+        <div style="background:#0f0f1f; border-radius:8px; padding:16px;">
+          <div style="font-size:13px; color:#8a8aaa; margin-bottom:4px;">하위 3인 기여도</div>
+          <div style="font-size:28px; font-weight:800; color:#f87171;">6%</div>
+          <div style="font-size:12px; color:#6b6b8a;">Jun 61 + 눈오지 16 + 박정기 3 = 80 / 1,368</div>
+        </div>
+      </div>
+
+      <h3 style="color:#60a5fa; margin-bottom:12px;">💡 권고사항</h3>
+      <ol style="padding-left:20px; font-size:14px; line-height:2;">
+        <li><strong>역할 명시화</strong>: 각 운영진에게 구체적 역할을 배분. 예) 눈오지=환영·공지, Jun=기술Q&A, 타타=비개발자 가이드, 소파=심화 기술, 박정기=MCP·자동화 큐레이션</li>
+        <li><strong>주간 최소 활동 기준</strong>: 운영진은 주 5건 이상 메시지 참여 (환영, 답변, 콘텐츠 공유 포함). 2주 연속 미달 시 역할 재논의</li>
+        <li><strong>AI토크 레버리지 극대화</strong>: 3/27 AI토크가 1,539건 폭발을 일으킨 만큼, 2주 1회 주기를 유지하되 다음 AI토크 진행자를 미리 정해서 준비 기간 확보</li>
+        <li><strong>운영진 AI토크 순번</strong>: 공지에 "타타 ⚔️ 진격의 거인 / 소파 🏴‍☠️ 원피스 / Jun 🔴 포켓몬" 세계관이 예고되어 있으니, 다음 회차부터 실제 진행 일정 확정 필요</li>
+        <li><strong>비이벤트 기간 활성화</strong>: 3/21(금)~3/22(토) 같이 이벤트 없는 날 방이 13~77건으로 급락. "일일 질문", "오늘의 봇 자랑" 같은 소규모 루틴을 도입하면 평시 활력 유지에 도움</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="footer">
+    🐱 뽀짝이 자동 생성 | 2026.03.28 10:15 KST | 데이터: KakaoTalk Local DB (kakaocli) · 운영진 기준: 운영진 카톡방 멤버 6명
+  </div>
+
+</div>
+</body>
+</html>

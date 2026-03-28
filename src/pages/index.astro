@@ -12,6 +12,9 @@ const meetings = (await getCollection('meetings')).sort((a, b) =>
 
 let insights: any[] = [];
 try { insights = await getCollection('insights'); } catch {}
+
+let reports: any[] = [];
+try { reports = await getCollection('reports'); } catch {}
 ---
 
 <BaseLayout title="홈">
@@ -116,6 +119,16 @@ try { insights = await getCollection('insights'); } catch {}
             <p>니즈 시그널, 봇 생태계, FAQ, 주간 리포트</p>
           </div>
           <span class="series-count">{insights.length}편</span>
+        </div>
+      </a>
+      <a href="/reports" class="series-card">
+        <div class="series-row">
+          <span class="series-icon">📊</span>
+          <div class="series-info">
+            <h2>보고서</h2>
+            <p>설문 분석, 운영 모니터링, 콘텐츠 패턴 보고서</p>
+          </div>
+          <span class="series-count">{reports.length}편</span>
         </div>
       </a>
     </section>
