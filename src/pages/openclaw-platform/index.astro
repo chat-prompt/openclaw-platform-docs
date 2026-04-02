@@ -4,42 +4,27 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const allDocs = await getCollection('openclaw-platform');
 
-// Group by subfolder
-const topLevel: typeof allDocs = [];
-const meetings: typeof allDocs = [];
-const duckhuArchive: typeof allDocs = [];
-const reports: typeof allDocs = [];
-
-for (const doc of allDocs) {
-  if (doc.slug.startsWith('meetings/')) meetings.push(doc);
-  else if (doc.slug.startsWith('duckhu-archive/')) duckhuArchive.push(doc);
-  else if (doc.slug.startsWith('reports/')) reports.push(doc);
-  else if (doc.slug.toLowerCase() !== 'readme') topLevel.push(doc);
-}
-
-topLevel.sort((a, b) => a.slug.localeCompare(b.slug));
+const topLevel = allDocs.filter(d => !d.slug.startsWith('meetings/') && !d.slug.startsWith('duckhu-archive/') && !d.slug.startsWith('reports/') && d.slug.toLowerCase() !== 'readme');
+const meetings = allDocs.filter(d => d.slug.startsWith('meetings/'));
+const duckhuArchive = allDocs.filter(d => d.slug.startsWith('duckhu-archive/'));
+const reports = allDocs.filter(d => d.slug.startsWith('reports/'));
 ---
 
 <BaseLayout title="openclaw-platform">
   <div class="list-page">
     <header class="list-header">
       <h1>🤖 openclaw-platform</h1>
-      <p>플랫폼 전략, 채널 설계, 봇 코칭 모델, KPI — 오픈클로 실사용자 니즈 검증 프로젝트</p>
+      <p>오픈클로 실사용자 니즈 검증 — 플랫폼 전략, 채널 설계, 봇 코칭, KPI</p>
     </header>
 
-    <h2 class="section-title">📝 전략 문서 <span class="count">{topLevel.length}편</span></h2>
-    <div class="list-grid">
-      {topLevel.map((doc) => (
-        <a href={`/openclaw-platform/${doc.slug}`} class="list-card">
-          <h3 class="card-title">{doc.data.title}</h3>
-          {doc.data.date && <span class="card-date">{doc.data.date}</span>}
-          {doc.data.description && <p class="card-desc">{doc.data.description}</p>}
-        </a>
-      ))}
-    </div>
-
-    <h2 class="section-title">📂 하위 폴더</h2>
     <div class="folder-grid">
+      <a href="/openclaw-platform/strategy" class="folder-card">
+        <span class="folder-icon">📝</span>
+        <div>
+          <h3>전략 문서</h3>
+          <p>{topLevel.length}편 — 개요, 채널전략, 봇코칭, KPI, 강의, Q&A 등</p>
+        </div>
+      </a>
       <a href="/openclaw-platform/meetings" class="folder-card">
         <span class="folder-icon">🗓️</span>
         <div>
@@ -67,31 +52,11 @@ topLevel.sort((a, b) => a.slug.localeCompare(b.slug));
 
 <style>
   .list-page { max-width: 800px; margin: 0 auto; padding: 0 24px 80px; }
-  .list-header { text-align: center; padding: 60px 0 24px; }
+  .list-header { text-align: center; padding: 60px 0 32px; }
   .list-header h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; font-family: var(--font-mono); }
   .list-header p { font-size: 16px; color: var(--text-secondary); }
 
-  .section-title {
-    font-size: 17px; font-weight: 700; margin: 32px 0 12px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .count {
-    font-size: 12px; font-weight: 600; color: var(--accent);
-    background: var(--accent-bg); padding: 2px 8px; border-radius: 10px;
-  }
-
-  .list-grid { display: flex; flex-direction: column; gap: 10px; }
-  .list-card {
-    display: block; padding: 16px 20px;
-    background: var(--bg-card); border: 1px solid var(--border-card);
-    border-radius: 12px; text-decoration: none; transition: all 0.2s;
-  }
-  .list-card:hover { border-color: var(--accent); transform: translateY(-1px); }
-  .card-title { font-size: 16px; font-weight: 700; color: var(--text-primary); }
-  .card-date { font-size: 12px; color: var(--text-muted); margin-top: 2px; display: inline-block; }
-  .card-desc { font-size: 13px; color: var(--text-secondary); margin-top: 4px; line-height: 1.5; }
-
-  .folder-grid { display: flex; flex-direction: column; gap: 10px; }
+  .folder-grid { display: flex; flex-direction: column; gap: 12px; }
   .folder-card {
     display: flex; align-items: center; gap: 16px;
     padding: 20px 24px;
