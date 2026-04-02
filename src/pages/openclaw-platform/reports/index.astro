@@ -15,7 +15,7 @@ const reports = allDocs.filter(d => d.slug.startsWith('reports/')).sort((a, b) =
     </header>
     <div class="list-grid">
       {reports.map((doc) => (
-        <a href={`/openclaw-platform/${doc.slug}`} class="list-card">
+        <a href={doc.data.htmlFile ? `/reports/${doc.data.htmlFile}` : `/openclaw-platform/${doc.slug}`} class="list-card" target={doc.data.htmlFile ? "_self" : undefined}>
           <h3 class="card-title">{doc.data.title}</h3>
           {doc.data.date && <span class="card-date">{doc.data.date}</span>}
           {doc.data.description && <p class="card-desc">{doc.data.description}</p>}
