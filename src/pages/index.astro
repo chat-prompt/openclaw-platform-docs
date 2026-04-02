@@ -2,7 +2,6 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const duckhuArchive = await getCollection('duckhu-archive');
 const openclawContent = await getCollection('openclaw-content');
 const openclawPlatform = await getCollection('openclaw-platform');
 ---
@@ -39,15 +38,6 @@ const openclawPlatform = await getCollection('openclaw-platform');
           <span class="project-count">{openclawContent.length}편</span>
         </div>
         <p>콘텐츠 전략, SNS 채널 전략, SEO 선점</p>
-      </a>
-
-      <a href="/duckhu-archive" class="project-card" style="--project-color: #10b981;">
-        <div class="project-header">
-          <span class="project-icon">📊</span>
-          <h2>duckhu-archive</h2>
-          <span class="project-count">{duckhuArchive.length}편</span>
-        </div>
-        <p>뽀둥이 분석 파이프라인 — 덕후방 데이터 취합·분석·인사이트</p>
       </a>
     </section>
   </div>

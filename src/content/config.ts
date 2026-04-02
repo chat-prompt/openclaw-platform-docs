@@ -13,12 +13,10 @@ const flexSchema = z.object({
   htmlFile: z.string().optional(),
 });
 
-const duckhuArchive = defineCollection({ type: 'content', schema: flexSchema });
 const openclawContent = defineCollection({ type: 'content', schema: flexSchema });
 const openclawPlatform = defineCollection({ type: 'content', schema: flexSchema });
 
 export const collections = {
-  'duckhu-archive': duckhuArchive,
   'openclaw-content': openclawContent,
   'openclaw-platform': openclawPlatform,
 };
