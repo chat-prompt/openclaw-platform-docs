@@ -74,8 +74,11 @@ code,.cmd{font-family:'SF Mono','Fira Code',monospace;background:#f1f2f6;padding
 .qa-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:12px;border:1px solid var(--border);overflow:hidden}
 .qa-card summary{padding:16px 20px;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:600;font-size:.95rem;list-style:none;user-select:none;transition:background .2s}
 .qa-card summary::-webkit-details-marker{display:none}
-.qa-card summary::marker{display:none;content:''}
+.qa-card summary::marker{display:none;content:none}
+.qa-card>summary{list-style-type:none}
+.qa-card>summary::-moz-list-bullet{list-style-type:none}
 details.qa-card summary::before{display:none}
+details.qa-card::details-content{display:block}
 .qa-card summary:hover{background:#f8f9fa}
 .qa-card summary .arrow{transition:transform .2s;font-size:.75rem;color:var(--text-light);flex-shrink:0}
 .qa-card[open] summary .arrow{transform:rotate(90deg)}
@@ -409,7 +412,7 @@ details .qa-body{display:block!important}
 </div>
 </details>
 
-<details class="qa-card" data-qa></section>
+</section>
 
 <!-- SECTION 3 -->
 <section class="section" id="section-3" data-section>
@@ -906,7 +909,7 @@ Claude는 OpenClaw 연결 시 계정 정지(밴) 당하지 않나요?
 </div>
 </details>
 
-<details class="qa-card" data-qa></section>
+</section>
 
 <!-- SECTION 7 -->
 <section class="section" id="section-7" data-section>
@@ -994,7 +997,7 @@ OpenClaw를 설치하면 지피터스 같은 사이트를 개발하는 것부터
 </div>
 </details>
 
-<details class="qa-card" data-qa></section>
+</section>
 
 <!-- SECTION 8 -->
 <section class="section" id="section-8" data-section>
@@ -1042,7 +1045,7 @@ OpenClaw를 설치하면 지피터스 같은 사이트를 개발하는 것부터
 </div>
 </details>
 
-<details class="qa-card" data-qa></section>
+</section>
 
 <!-- SECTION 9 -->
 <section class="section" id="section-9" data-section>
