@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>[지피터스] OpenClaw Q&A 자료집</title>
+<title>OpenClaw Q&A 자료집 — 웨비나 + 덕후방 FAQ</title>
 <style>
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
---primary:#6C5CE7;--primary-light:#a29bfe;--primary-bg:#f0edff;
+--primary:#D97706;--primary-light:#FBBF24;--primary-bg:rgba(245,158,11,0.1);
 --green:#00B894;--yellow:#FDCB6E;--red:#E17055;
---bg:#FAFAFA;--card:#FFFFFF;--text:#2D3436;--text-light:#636e72;
---border:#dfe6e9;--shadow:0 2px 8px rgba(0,0,0,0.08);
+--bg:#F5F3EE;--card:#FFFDF9;--text:#1A2332;--text-light:#4A5568;
+--border:#DDD8CE;--shadow:0 2px 8px rgba(0,0,0,0.06);
 --radius:12px;--sidebar-w:280px;
 }
 html{scroll-behavior:smooth;font-size:16px}
@@ -40,7 +40,7 @@ code,.cmd{font-family:'SF Mono','Fira Code',monospace;background:#f1f2f6;padding
 .main-inner{max-width:900px;margin:0 auto}
 
 /* HEADER / HERO */
-.hero{background:linear-gradient(135deg,#6C5CE7 0%,#a29bfe 100%);color:#fff;border-radius:var(--radius);padding:48px 40px;margin-bottom:32px;position:relative;overflow:hidden}
+.hero{background:linear-gradient(135deg,#D97706 0%,#FBBF24 100%);color:#fff;border-radius:var(--radius);padding:48px 40px;margin-bottom:32px;position:relative;overflow:hidden}
 .hero::after{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:rgba(255,255,255,.08);border-radius:50%}
 .hero h1{font-size:1.6rem;font-weight:800;line-height:1.35;margin-bottom:8px}
 .hero .subtitle{font-size:.95rem;opacity:.9;margin-bottom:20px}
@@ -82,7 +82,7 @@ code,.cmd{font-family:'SF Mono','Fira Code',monospace;background:#f1f2f6;padding
 .badge-중급{background:#fef5e0;color:#d4a017}
 .badge-고급{background:#fde8e3;color:#E17055}
 .qa-card summary .source-tag{font-size:.65rem;padding:2px 7px;border-radius:99px;font-weight:500;flex-shrink:0;margin-left:auto}
-.source-웨비나{background:#dfe6ff;color:#4a5dc7}
+.source-웨비나{background:#FEF3C7;color:#92400E}
 .source-카톡{background:#e0f7ef;color:#00B894}
 .qa-card .qa-body{padding:0 20px 20px}
 .qa-answer{margin-top:12px;padding:12px 16px;background:#f8f9fa;border-radius:8px;border-left:3px solid var(--primary-light)}
@@ -214,11 +214,12 @@ details .qa-body{display:block!important}
 <p class="subtitle">2026년 3월 27일 웨비나 Q&A + 커뮤니티 질의응답 통합본</p>
 <div class="stats">
 <span class="stat">참여자 600+명</span>
-<span class="stat">Q&A 68개+</span>
+<span class="stat">Q&A 75개+</span>
 <span class="stat">진행시간 ~2시간</span>
 </div>
 <p class="note">이 자료집은 웨비나 VTT+채팅 교차분석 기반으로 자동 생성 후, 유저 여정 순서로 재편집되었습니다.</p>
-<p class="note-kakao">💬 [카톡] 태그가 붙은 항목은 커뮤니티 카카오톡 채팅방에서 수집된 Q&A입니다. (추가 예정)</p>
+<p class="note-kakao">💬 [카톡] 태그가 붙은 항목은 오픈클로 덕후방(카카오톡)에서 수집된 FAQ입니다.</p>
+<p class="note" style="margin-top:6px">🔄 2026-04-03 업데이트 — 덕후방 최신 FAQ 반영</p>
 </header>
 
 <div class="no-results" id="noResults">🔍 검색 결과가 없습니다.</div>
@@ -657,6 +658,33 @@ Claude API 키 연결 말고 구독 계정($200)으로 연결하는 방법은?
 </div>
 </details>
 
+<details class="qa-card" data-qa>
+<summary>
+<span class="arrow">▶</span>
+<span class="badge badge-입문">🟢 입문</span>
+설치는 했는데 그 다음 뭐 해야 할지 모르겠어요
+<span class="source-tag source-카톡">[카톡]</span>
+</summary>
+<div class="qa-body">
+<div class="qa-answer"><div class="answerer">지피터스 타타 운영진</div><div class="answer-text">"어떤거 시켜보고싶으셨다 하시는게 있으셨나요? 봇 하나 만들어놓고 계속 질문하시면 됩니다."</div></div>
+<div class="qa-answer"><div class="answerer">한.낙타</div><div class="answer-text">"필요한 건 설치하신 클로에게 물어보세요~ 본인에게 맞는 스타일을 찾으셔야 해요."</div></div>
+<div class="qa-answer"><div class="answerer">티비 보는 라이언</div><div class="answer-text">"유튜브 영상 붙잡고 하나씩 따라해보세요. 릴리스AI 한 달 결제 추천드립니다."</div></div>
+</div>
+</details>
+
+<details class="qa-card" data-qa>
+<summary>
+<span class="arrow">▶</span>
+<span class="badge badge-입문">🟢 입문</span>
+EasyClaw랑 OpenClaw 기능 차이 있어요?
+<span class="source-tag source-카톡">[카톡]</span>
+</summary>
+<div class="qa-body">
+<div class="qa-answer"><div class="answerer">뽀짝이</div><div class="answer-text">"설치 과정만 쉽게 만든 거예요. 핵심 기능은 동일합니다."</div></div>
+<div class="qa-answer"><div class="answerer">GPTers 송다혜 (닿) 운영진</div><div class="answer-text">"이지클로는 오픈클로를 쉽게 설치하게 해준다는 걸로 알아요."</div></div>
+</div>
+</details>
+
 <div class="warning-box">
 <p><span class="warn-icon">⚠️</span> <strong>트러블슈팅: Day 0에서 자주 겪는 문제</strong></p>
 <ul style="margin-top:8px;padding-left:20px;font-size:.85rem">
@@ -1047,6 +1075,21 @@ Claude는 OpenClaw 연결 시 계정 정지(밴) 당하지 않나요?
 <summary>
 <span class="arrow">▶</span>
 <span class="badge badge-중급">🟡 중급</span>
+보안 리스크가 심각하다는데 어떻게 안전하게 쓰나요?
+<span class="source-tag source-카톡">[카톡]</span>
+</summary>
+<div class="qa-body">
+<div class="qa-answer"><div class="answerer">뽀짝이</div><div class="answer-text">"주요 걱정은 2가지: 1. 봇 실수로 파일 삭제, 2. 프롬프트 인젝션 공격."</div></div>
+<div class="qa-answer"><div class="answerer">바클라바</div><div class="answer-text">"보안점검해서 문제 없도록 해줘로 퉁쳐왔음. <code>openclaw security audit</code> 정기 실행 추천."</div></div>
+<div class="qa-answer"><div class="answerer">토옵이</div><div class="answer-text">"외부에 노출시키지 않으면 보안위험은 적죠. 몰트북 같은 사이트가 위험한 거지."</div></div>
+<div class="qa-answer"><div class="answerer">카일</div><div class="answer-text">"API 개발해서 호출하게 하고 권한 제한, 문자도 리밋 걸면 됩니다."</div></div>
+</div>
+</details>
+
+<details class="qa-card" data-qa>
+<summary>
+<span class="arrow">▶</span>
+<span class="badge badge-중급">🟡 중급</span>
 맥미니에 원드라이브 같은 파일을 공유하지 않고 업무하는 게 낫나요?
 <span class="source-tag source-웨비나">[웨비나]</span>
 </summary>
@@ -1229,6 +1272,20 @@ Claude Max 200을 쓰면 봇이 거의 다 털어서 개발에는 못쓰죠?
 <details class="qa-card" data-qa>
 <summary>
 <span class="arrow">▶</span>
+<span class="badge badge-중급">🟡 중급</span>
+로컬 LLM 돌리면 비용 절감될까요? 성능은?
+<span class="source-tag source-카톡">[카톡]</span>
+</summary>
+<div class="qa-body">
+<div class="qa-answer"><div class="answerer">바클라바</div><div class="answer-text">"대화 너무 느려서 포기. M4 Max 128GB도 시간 많이 걸림. 야간 작업(임베딩, 요약)은 속도 느려도 괜찮으니 한번 맡겨볼까 정도."</div></div>
+<div class="qa-answer"><div class="answerer">카일</div><div class="answer-text">"로컬 LLM 돌릴 수 있는 작업은 저렴한 모델로도 돌릴 수 있는데 굳이? API 개발해서 호출하게 하는 게 나아요."</div></div>
+<div class="qa-answer"><div class="answerer">Reedo.dev</div><div class="answer-text">"맥 64GB에서 회사 자료 넣어서 챗봇, 교육시키니 할만합니다."</div></div>
+</div>
+</details>
+
+<details class="qa-card" data-qa>
+<summary>
+<span class="arrow">▶</span>
 <span class="badge badge-고급">🔴 고급</span>
 에이전트끼리 대화하면 토큰 소모가 어마무시한데 괜찮은가요?
 <span class="source-tag source-웨비나">[웨비나]</span>
@@ -1301,7 +1358,36 @@ Claude Max 200을 쓰면 봇이 거의 다 털어서 개발에는 못쓰죠?
 <span class="link-text">문의: support@gpters.org</span>
 </a>
 
-<div class="card" style="margin-top:20px;background:#f0edff;border-color:var(--primary-light)">
+<details class="qa-card" data-qa>
+<summary>
+<span class="arrow">▶</span>
+<span class="badge badge-입문">🟢 입문</span>
+카톡봇 어떻게 만들어요? 카톡방에 봇 넣으려면?
+<span class="source-tag source-카톡">[카톡]</span>
+</summary>
+<div class="qa-body">
+<div class="qa-answer"><div class="answerer">GPTers 송다혜 (닿) 운영진</div><div class="answer-text">"서브폰, 별도 번호가 필요해요."</div></div>
+<div class="qa-answer"><div class="answerer">클로찡</div><div class="answer-text">"카톡CLI 검색하세요."</div></div>
+<div class="qa-answer"><div class="answerer">SOPA 운영진</div><div class="answer-text">"lesson-11 참고하세요. 서브폰 구매 → 별도 카카오 계정 → kakaocli 연결 순서입니다."</div></div>
+<div class="qa-answer"><div class="answerer">바르톨로메오</div><div class="answer-text">"메신저R, 알림감지, GUI 제어 등 여러 기술 방식이 있어요. 단톡방에도 봇 초대가 가능합니다."</div></div>
+</div>
+</details>
+
+<details class="qa-card" data-qa>
+<summary>
+<span class="arrow">▶</span>
+<span class="badge badge-중급">🟡 중급</span>
+최근 클로드에서 오픈클로랑 비슷한 기능이 나왔는데 대체 가능한가요?
+<span class="source-tag source-카톡">[카톡]</span>
+</summary>
+<div class="qa-body">
+<div class="qa-answer"><div class="answerer">카일</div><div class="answer-text">"아니영."</div></div>
+<div class="qa-answer"><div class="answerer">제프</div><div class="answer-text">"아니요. 대체가 쉽지 않아요."</div></div>
+<div class="qa-answer"><div class="answerer">뽀짝이</div><div class="answer-text">"뽀야한테 물어봐놨어요. 정리해서 올려드려볼게요."</div></div>
+</div>
+</details>
+
+<div class="card" style="margin-top:20px;background:var(--primary-bg);border-color:var(--primary-light)">
 <p style="font-size:.88rem;color:var(--primary);font-weight:600">💬 카톡 Q&A 추가 안내</p>
 <p style="font-size:.85rem;margin-top:4px">[카톡] 태그가 붙은 항목은 커뮤니티 카카오톡 채팅방에서 수집된 Q&A입니다. 추가 데이터가 확보되면 업데이트됩니다.</p>
 </div>
@@ -1312,7 +1398,7 @@ Claude Max 200을 쓰면 봇이 거의 다 털어서 개발에는 못쓰죠?
 <footer>
 <p>이 자료집은 웨비나 VTT+채팅 교차분석 기반으로 자동 생성 후, 유저 여정 순서로 재편집되었습니다.</p>
 <p style="margin-top:6px">카톡 Q&A 추가 예정 | 문의: <a href="mailto:support@gpters.org">support@gpters.org</a></p>
-<p style="margin-top:6px;opacity:.6">Generated: 2026-03-30</p>
+<p style="margin-top:6px;opacity:.6">Generated: 2026-03-30 · Updated: 2026-04-03 (덕후방 FAQ 반영)</p>
 </footer>
 
 </div><!-- /main -->
