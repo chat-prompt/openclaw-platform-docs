@@ -38,51 +38,57 @@ const claudeCode = (await getCollection('claude-code')).sort((a, b) => a.data.ep
     <!-- 시리즈 카드 -->
     <section class="series-grid">
       <a href="/setup-guides" class="series-card setup-card">
-        <span class="series-icon">🔒</span>
+        <span class="series-icon">🛠️</span>
         <div class="series-body">
           <h2>OpenClaw 실전 가이드</h2>
           <p>Claw 비교, Slack 연동, 세부 설정, Syncthing, Google 연결</p>
         </div>
+        <span class="series-lock">🔒</span>
         <span class="series-count">{setupGuides.length}편 →</span>
       </a>
       <a href="/notes" class="series-card note-card">
-        <span class="series-icon">🔒</span>
+        <span class="series-icon">📚</span>
         <div class="series-body">
           <h2>봇키우기 교실</h2>
           <p>세션, 정체성, 보안, 메모리, 스킬, 멀티에이전트… 봇을 잘 키우는 실전 노하우</p>
         </div>
+        <span class="series-lock">🔒</span>
         <span class="series-count">{notes.length}편 →</span>
       </a>
       <a href="/training" class="series-card training-card">
-        <span class="series-icon">🔒</span>
+        <span class="series-icon">🏫</span>
         <div class="series-body">
           <h2>뽀피터스 훈련일지</h2>
           <p>4남매가 팀으로 일하는 법을 배우는 실전 기록.</p>
         </div>
+        <span class="series-lock">🔒</span>
         <span class="series-count">{training.length}편 →</span>
       </a>
       <a href="/academy" class="series-card academy-card">
-        <span class="series-icon">🔒</span>
+        <span class="series-icon">🎖️</span>
         <div class="series-body">
           <h2>뽀야의 사관학교</h2>
           <p>멀티에이전트 팀의 규율과 체계가 만들어지는 과정.</p>
         </div>
+        <span class="series-lock">🔒</span>
         <span class="series-count">{academy.length}편 →</span>
       </a>
       <a href="/case-studies" class="series-card case-studies-card">
-        <span class="series-icon">🔒</span>
+        <span class="series-icon">📖</span>
         <div class="series-body">
           <h2>후기리워드 자료집</h2>
           <p>봇을 키우고 팀을 만든 실전 이야기. 사내 적용기, 삽질과 설정, 그리고 교훈.</p>
         </div>
+        <span class="series-lock">🔒</span>
         <span class="series-count">{caseStudies.length}편 →</span>
       </a>
       <a href="/claude-code" class="series-card claude-code-card">
-        <span class="series-icon">🔒</span>
+        <span class="series-icon">💻</span>
         <div class="series-body">
           <h2>클로드코드 구독이 막혔을 때 대응법</h2>
           <p>API 크레딧 소진 대응, 구독 뽙뽑기, Claude Code 분신 만들기, 슬랙 실시간 연결</p>
         </div>
+        <span class="series-lock">🔒</span>
         <span class="series-count">{claudeCode.length}편 →</span>
       </a>
     </section>
@@ -274,6 +280,12 @@ const claudeCode = (await getCollection('claude-code')).sort((a, b) => a.data.ep
     font-size: 13px;
     color: var(--text-secondary);
     line-height: 1.5;
+  }
+
+  .series-lock {
+    font-size: 16px;
+    flex-shrink: 0;
+    opacity: 0.5;
   }
 
   .series-count {
