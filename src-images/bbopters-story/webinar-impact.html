@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1200, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1200px;
+      height: 360px;
+      background: linear-gradient(135deg, #F8F6F3 0%, #EDE8E1 100%);
+      font-family: 'Pretendard', -apple-system, system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      padding: 40px 60px;
+    }
+    .header {
+      margin-bottom: 28px;
+    }
+    .badge {
+      display: inline-flex;
+      background: #1a1f2e;
+      color: #c4b5fd;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .stats {
+      display: flex;
+      gap: 20px;
+      flex: 1;
+    }
+    .stat-box {
+      flex: 1;
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      border: 1px solid #E8E4DE;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 52px;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-number.purple { color: #7c3aed; }
+    .stat-number.blue { color: #3b82f6; }
+    .stat-number.orange { color: #f59e0b; }
+    .stat-unit {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+    }
+    .stat-desc {
+      font-size: 13px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="badge">📣 무료 웨비나 반응</div>
+  </div>
+  <div class="stats">
+    <div class="stat-box">
+      <div class="stat-number purple">1,200+</div>
+      <div class="stat-unit">명 신청</div>
+      <div class="stat-desc">"뽀짝이가 어떻게 일하는지<br>보여드릴게요" 한 마디로</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number blue">800+</div>
+      <div class="stat-unit">명 동시접속</div>
+      <div class="stat-desc">당일 라이브 참여</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number orange">68</div>
+      <div class="stat-unit">개 질문</div>
+      <div class="stat-desc">설치, 비용, 보안, 협업,<br>활용 사례까지</div>
+    </div>
+  </div>
+</body>
+</html>

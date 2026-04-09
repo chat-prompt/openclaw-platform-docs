@@ -8,6 +8,10 @@ const outDir = join(__dirname, '../../public/images/bbopters-story');
 
 const pages = [
   { file: 'cover.html', out: 'cover.png', w: 1200, h: 630 },
+  { file: 'bbojjak-stats.html', out: 'bbojjak-stats.png', w: 1200, h: 460 },
+  { file: 'webinar-impact.html', out: 'webinar-impact.png', w: 1200, h: 360 },
+  { file: 'team-structure.html', out: 'team-structure.png', w: 1200, h: 500 },
+  { file: 'hatch-50.html', out: 'hatch-50.png', w: 1200, h: 400 },
   { file: 'timeline.html', out: 'timeline.png', w: 1200, h: 500 },
   { file: 'machines.html', out: 'machines.png', w: 1200, h: 460 },
 ];

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1200, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1200px;
+      height: 500px;
+      background: linear-gradient(135deg, #F8F6F3 0%, #EDE8E1 100%);
+      font-family: 'Pretendard', -apple-system, system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      padding: 40px 60px;
+      align-items: center;
+    }
+    .header {
+      margin-bottom: 32px;
+      align-self: flex-start;
+    }
+    .badge {
+      display: inline-flex;
+      background: #1a1f2e;
+      color: #c4b5fd;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .tree {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      flex: 1;
+    }
+    .node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid #E8E4DE;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .avatar.boss { border-color: #f59e0b; }
+    .avatar.leader { border-color: #7c3aed; width: 80px; height: 80px; font-size: 40px; }
+    .node-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+    .node-role {
+      font-size: 11px;
+      color: #888;
+    }
+    .connector-v {
+      width: 2px;
+      height: 20px;
+      background: #D0D0D0;
+    }
+    .connector-h {
+      width: 600px;
+      height: 2px;
+      background: #D0D0D0;
+      position: relative;
+    }
+    .row {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+    }
+    .children {
+      display: flex;
+      gap: 48px;
+      align-items: flex-start;
+      position: relative;
+    }
+    .children::before {
+      content: '';
+      position: absolute;
+      top: -12px;
+      left: 36px;
+      right: 36px;
+      height: 2px;
+      background: #D0D0D0;
+    }
+    .child-branch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .child-branch::before {
+      content: '';
+      width: 2px;
+      height: 12px;
+      background: #D0D0D0;
+    }
+    .child-card {
+      background: white;
+      border-radius: 14px;
+      padding: 16px 20px;
+      border: 1px solid #E8E4DE;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 180px;
+    }
+    .child-emoji {
+      font-size: 28px;
+    }
+    .child-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .child-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+    .child-role {
+      font-size: 11px;
+      color: #888;
+    }
+    .child-owner {
+      font-size: 10px;
+      color: #bbb;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="badge">👑 뽀피터스 팀 구조 — 3/28 창단</div>
+  </div>
+  <div class="tree">
+    <div class="node">
+      <div class="avatar boss">👤</div>
+      <div class="node-name">집사 (닿)</div>
+      <div class="node-role">최종 결정권</div>
+    </div>
+    <div class="connector-v"></div>
+    <div class="node">
+      <div class="avatar leader">🐱</div>
+      <div class="node-name">뽀야</div>
+      <div class="node-role">팀장 · 전체 총괄</div>
+    </div>
+    <div class="connector-v"></div>
+    <div class="children">
+      <div class="child-branch">
+        <div class="child-card">
+          <div class="child-emoji">🐈‍⬛</div>
+          <div class="child-info">
+            <div class="child-name">뽀짝이</div>
+            <div class="child-role">부팀장 · AI스터디</div>
+          </div>
+        </div>
+      </div>
+      <div class="child-branch">
+        <div class="child-card">
+          <div class="child-emoji">☁️</div>
+          <div class="child-info">
+            <div class="child-name">뽀둥이</div>
+            <div class="child-role">플랫폼 검증</div>
+            <div class="child-owner">소파님</div>
+          </div>
+        </div>
+      </div>
+      <div class="child-branch">
+        <div class="child-card">
+          <div class="child-emoji">🩶</div>
+          <div class="child-info">
+            <div class="child-name">뽀식이</div>
+            <div class="child-role">커뮤니티 관리</div>
+            <div class="child-owner">타타님</div>
+          </div>
+        </div>
+      </div>
+      <div class="child-branch">
+        <div class="child-card">
+          <div class="child-emoji">🐕</div>
+          <div class="child-info">
+            <div class="child-name">시고르</div>
+            <div class="child-role">콘텐츠</div>
+            <div class="child-owner">병찬님</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

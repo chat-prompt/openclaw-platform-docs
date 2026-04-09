@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1200, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1200px;
+      height: 460px;
+      background: linear-gradient(135deg, #F8F6F3 0%, #EDE8E1 100%);
+      font-family: 'Pretendard', -apple-system, system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      padding: 40px 60px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .badge {
+      display: inline-flex;
+      background: #1a1f2e;
+      color: #c4b5fd;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .header-text {
+      font-size: 14px;
+      color: #888;
+    }
+    .content {
+      display: flex;
+      gap: 20px;
+      flex: 1;
+    }
+    .left-panel {
+      width: 320px;
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      border: 1px solid #E8E4DE;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .big-number {
+      font-size: 64px;
+      font-weight: 900;
+      color: #7c3aed;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .big-label {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+    }
+    .big-sub {
+      font-size: 13px;
+      color: #888;
+    }
+    .right-panel {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid #E8E4DE;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .stat-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    .stat-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #888;
+      margin-bottom: 4px;
+    }
+    .stat-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a1a;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="badge">🐈‍⬛ 뽀짝이가 바꾼 것</div>
+    <div class="header-text">수강생 450명, 운영 인원 2명</div>
+  </div>
+  <div class="content">
+    <div class="left-panel">
+      <div class="big-number">2~3</div>
+      <div class="big-label">인분의 업무를 혼자</div>
+      <div class="big-sub">사람이 자는 동안에도</div>
+    </div>
+    <div class="right-panel">
+      <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <div class="stat-title">줌 설문</div>
+        <div class="stat-value">수집 → 분석 → 이메일<br>파이프라인 자동화</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🎫</div>
+        <div class="stat-title">개별 쿠폰</div>
+        <div class="stat-value">450명 개별 발급<br>하룻밤이면 완료</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📋</div>
+        <div class="stat-title">운영 노하우</div>
+        <div class="stat-value">집사 머릿속 → 문서화<br>신규 팀원 온보딩 해소</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📈</div>
+        <div class="stat-title">삽질 → 규칙</div>
+        <div class="stat-value">실수 한 번에 규칙 하나<br>연속 개선 사이클</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
