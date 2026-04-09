@@ -499,28 +499,6 @@ openclaw gateway restart
 /acp doctor
 ```
 
-### 현재 뽀피터스 셋업 상태
-
-| 항목 | 뽀야 (bboya) | 뽀짝이 (bbojjak) | 뽀둥이 (bbodoong) | 뽀식이 (bbosik) |
-|------|---|---|---|---|
-| Claude Code CLI | ✅ v2.1.92 | ✅ (같은 맥미니) | ❌ 미설치 | ❌ 미설치 |
-| OAuth 인증 | ✅ Max 구독 | ✅ (같은 머신) | ❌ | ❌ |
-| ACPX 플러그인 | ✅ loaded | ⚠️ 각자 설정 필요 | ⚠️ 각자 설정 필요 | ⚠️ 각자 설정 필요 |
-| ACP 설정 | ✅ 완료 | ⚠️ 각자 설정 필요 | ⚠️ 각자 설정 필요 | ⚠️ 각자 설정 필요 |
-
-### 팀원 배포 안내
-
-ACP 설정은 **각 머신의 OpenClaw 게이트웨이에서 개별 설정**이 필요해. 중앙에서 한 번에 푸시하는 게 아니라, 각자 자기 맥미니/맥북에서 Step 1~4를 실행해야 해.
-
-**같은 머신 (뽀야+뽀짝이):**
-- Claude Code CLI, OAuth → 이미 공유됨 (같은 맥미니니까)
-- OpenClaw 설정 → **각자의 `openclaw.json`에서 독립 설정 필요** (에이전트별 config가 다름)
-
-**다른 머신 (뽀둥이, 뽀식이):**
-1. `npm install -g @anthropic-ai/claude-code` → CLI 설치
-2. `claude auth login` → **각자의 Max 구독 계정으로** OAuth 로그인
-3. Step 2~4 동일하게 실행
-
 > 핵심: **Claude Code Max 구독이 있는 사람만 ACP를 쓸 수 있다.** 구독 없으면 ACP 자체가 안 됨 — API 키로 서브에이전트를 써야 해.
 
 ---
