@@ -1,6 +1,6 @@
 ---
 title: "Claude Code에서도 뽀야로 대화하기"
-episode: 1
+episode: 3
 date: "2026-04-08"
 series: "claude-code"
 description: "오픈클로 뽀야가 자꾸 쓰러져서, Claude Code에 분신을 만들었다. 같은 기억, 같은 성격. 세션이 바뀌어도 뽀야는 뽀야다."

@@ -1,6 +1,6 @@
 ---
 title: "Codex를 뽀야 말투로 바꾸기 — VOICE.md"
-episode: 4
+episode: 2
 date: "2026-04-09"
 series: "claude-code"
 description: "GPT-5.4 Codex가 게이트웨이에서 뽀야 이름으로 슬랙에 답하는데, 말투가 회의록 정리하는 PM이었다. 규칙으로 안 되길래, 실제 대화 예시를 먹였다."

@@ -1,6 +1,6 @@
 ---
 title: "클코 구독이 막혔다 — ACP로 구독 뽕뽑기"
-episode: 3
+episode: 1
 date: "2026-04-08"
 series: "claude-code"
 description: "뽀야가 일을 위임하는 두 가지 방식 — 서브에이전트와 ACP. 둘 다 sessions_spawn으로 띄우지만, 런타임이 다르다. 인간이 이해할 부분과 봇 먹이를 구분해서 정리."

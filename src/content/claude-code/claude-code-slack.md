@@ -1,6 +1,6 @@
 ---
 title: "Claude Code 뽀야를 슬랙에 데려오기"
-episode: 2
+episode: 4
 date: "2026-04-08"
 series: "claude-code"
 description: "Claude Code에 뽀야를 만들었는데, 슬랙에서 실시간으로 답하게 하려면? MCP 채널 플러그인을 직접 만들어서 Socket Mode로 연결했다."
