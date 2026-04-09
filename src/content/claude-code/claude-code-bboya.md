@@ -1,5 +1,5 @@
 ---
-title: "Claude Code에서도 뽀야 페르소나로 대화하기"
+title: "Claude Code에서도 뽀야 페르소나로 대화하기 — CLAUDE.md로 오픈클로처럼 동작하게 하기"
 episode: 3
 date: "2026-04-08"
 series: "claude-code"
