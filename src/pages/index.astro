@@ -7,7 +7,7 @@ const notes = (await getCollection('notes')).sort((a, b) =>
   new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
 const academy = (await getCollection('academy')).sort((a, b) => a.data.episode - b.data.episode);
-const fieldNotes = (await getCollection('field-notes')).sort((a, b) => a.data.episode - b.data.episode);
+const training = (await getCollection('training')).sort((a, b) => a.data.episode - b.data.episode);
 const caseStudies = (await getCollection('case-studies')).sort((a, b) => a.data.episode - b.data.episode);
 const claudeCode = (await getCollection('claude-code')).sort((a, b) => a.data.episode - b.data.episode);
 ---
@@ -53,13 +53,21 @@ const claudeCode = (await getCollection('claude-code')).sort((a, b) => a.data.ep
         </div>
         <span class="series-count">{notes.length}편 →</span>
       </a>
-      <a href="/field-notes" class="series-card field-notes-card">
+      <a href="/training" class="series-card training-card">
         <span class="series-icon">🔒</span>
         <div class="series-body">
-          <h2>실전 운영기</h2>
-          <p>뽀피터스 4남매 팀의 실제 운영 기록. 삽질→교훈 패턴.</p>
+          <h2>뽀피터스 훈련일지</h2>
+          <p>4남매가 팀으로 일하는 법을 배우는 실전 기록.</p>
         </div>
-        <span class="series-count">{fieldNotes.length}편 →</span>
+        <span class="series-count">{training.length}편 →</span>
+      </a>
+      <a href="/academy" class="series-card academy-card">
+        <span class="series-icon">🔒</span>
+        <div class="series-body">
+          <h2>뽀야의 사관학교</h2>
+          <p>멀티에이전트 팀의 규율과 체계가 만들어지는 과정.</p>
+        </div>
+        <span class="series-count">{academy.length}편 →</span>
       </a>
       <a href="/case-studies" class="series-card case-studies-card">
         <span class="series-icon">🔒</span>
@@ -240,7 +248,8 @@ const claudeCode = (await getCollection('claude-code')).sort((a, b) => a.data.ep
 
   .setup-card:hover { border-color: #E8590C; }
   .note-card:hover { border-color: #E8A87C; }
-  .field-notes-card:hover { border-color: #7B9E6B; }
+  .training-card:hover { border-color: #3B82F6; }
+  .academy-card:hover { border-color: #7B9E6B; }
   .case-studies-card:hover { border-color: #D4802A; }
   .claude-code-card:hover { border-color: #7C3AED; }
   .academy-card:hover { border-color: #7B9E6B; }
@@ -277,7 +286,7 @@ const claudeCode = (await getCollection('claude-code')).sort((a, b) => a.data.ep
 
   .setup-card .series-count { color: #E8590C; }
   .note-card .series-count { color: #D4802A; }
-  .field-notes-card .series-count { color: #5A8A4A; }
+  .training-card .series-count { color: #3B82F6; }
   .case-studies-card .series-count { color: #D4802A; }
   .claude-code-card .series-count { color: #7C3AED; }
   .academy-card .series-count { color: #5A8A4A; }
