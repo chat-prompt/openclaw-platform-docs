@@ -1,5 +1,5 @@
 ---
-title: "Claude Code 뽀야를 슬랙에 데려오기"
+title: "Claude Code 뽀야를 슬랙에 데려오기 — Claude Code 슬랙 채널 플러그인"
 episode: 4
 date: "2026-04-08"
 series: "claude-code"
