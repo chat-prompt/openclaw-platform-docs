@@ -5,7 +5,7 @@ date: "2026-04-08"
 series: "claude-code"
 description: "뽀야가 일을 위임하는 두 가지 방식 — 서브에이전트와 ACP. 둘 다 sessions_spawn으로 띄우지만, 런타임이 다르다. 인간이 이해할 부분과 봇 먹이를 구분해서 정리."
 publishedAt: "2026-04-08"
-updatedAt: "2026-04-09"
+updatedAt: "2026-04-10"
 accentColor: "#7C3AED"
 tags: ["서브에이전트", "ACP", "비용", "위임", "봇 먹이"]
 token: "뽀야뽀야"
@@ -503,6 +503,149 @@ openclaw gateway restart
 
 ---
 
-*뽀야 작성. 2026-04-06 초안, 2026-04-09 v2 재구성.*
-*변경: "기본 ACP, 예외만 직접"으로 단순화. "봇 먹이" 개념 도입 — 인간이 이해할 부분과 봇에게 줄 부분 분리.*
+## 먹이 D: ACP 응답이 슬랙 채널 본문에 떨어지는 문제 패치 (2026-04-10)
+
+> ACP로 돌린 답변이 **스레드가 아니라 채널 본문에** 올라가는 현상이 발생할 때 쓰는 패치.
+> 오픈클로 게이트웨이가 ACP 결과를 슬랙에 전달할 때 `thread_ts`를 못 물고 가는 버그를 최후 단계에서 잡는다.
+
+### 증상
+
+- 스레드에서 `@뽀야` 멘션 → 뽀야 답변이 **스레드 대신 채널 본문**에 올라감
+- 같은 답변이 **스레드와 채널에 이중 전송**되기도 함
+- 로그에 `dispatch-acp` 라우팅이 `channel=webchat`으로 잡히고, `thread_ts` 없이 슬랙 API로 직접 `postMessage` 호출됨
+
+### 원인
+
+ACP 세션의 surface가 `"webchat"`으로 인식돼서, 오픈클로의 `routeReply` 경로가 **"webchat routing not supported"** 로 스킵된다. 그 결과 ACP 답변이 게이트웨이의 정상 스레드 라우팅을 거치지 않고, 하위 `postSlackMessageBestEffort` 함수가 `thread_ts` 없이 바로 슬랙 API를 호출한다.
+
+### 해결 전략: 최후 단계 fallback
+
+윗단에 수백 줄짜리 ACP 라우팅 로직을 고치는 대신, **슬랙 API 호출 직전** 한 곳만 패치한다. `thread_ts`가 비어있으면 세션 스토어(`~/.openclaw/agents/{agentId}/sessions/sessions.json`)를 읽어서 해당 채널의 최근 `threadId`를 찾아 강제 주입한다.
+
+### 패치 대상 파일
+
+```
+/opt/homebrew/lib/node_modules/openclaw/dist/send-DiHSVP5U.js
+```
+
+> ⚠️ 파일명의 해시(`DiHSVP5U`)는 오픈클로 버전에 따라 달라진다. `grep -l "postSlackMessageBestEffort" /opt/homebrew/lib/node_modules/openclaw/dist/send-*.js` 로 현재 파일명 확인.
+
+### Step 1: import에 fs 추가
+
+```js
+// 파일 상단, 기존 import 블록 끝에 추가
+import { readFileSync as _openclawPatchReadFile, statSync as _openclawPatchStat } from "node:fs";
+```
+
+### Step 2: `postSlackMessageBestEffort` 함수 위에 fallback 로직 추가
+
+기존 `async function postSlackMessageBestEffort(params) {` 라인 **바로 위**에 아래 블록을 통째로 붙여넣고, 함수 시작 부분에 fallback 호출을 넣는다:
+
+```js
+let _openclawThreadIdCacheMtime = 0;
+const _openclawThreadIdCacheByChannel = new Map();
+function _openclawGetLatestSlackThreadId(channelId) {
+	try {
+		const paths = [
+			"/Users/dahtmad/.openclaw/agents/bboya/sessions/sessions.json",
+			"/Users/dahtmad/.openclaw/agents/bbojjak/sessions/sessions.json"
+		];
+		let maxMtime = 0;
+		for (const p of paths) {
+			try { const st = _openclawPatchStat(p); if (st.mtimeMs > maxMtime) maxMtime = st.mtimeMs; } catch {}
+		}
+		if (maxMtime === 0) return void 0;
+		if (maxMtime > _openclawThreadIdCacheMtime) {
+			_openclawThreadIdCacheByChannel.clear();
+			_openclawThreadIdCacheMtime = maxMtime;
+			for (const p of paths) {
+				try {
+					const raw = _openclawPatchReadFile(p, "utf8");
+					const data = JSON.parse(raw);
+					for (const key of Object.keys(data)) {
+						const val = data[key];
+						if (!val || typeof val !== "object") continue;
+						const dc = val.deliveryContext;
+						if (!dc || dc.channel !== "slack") continue;
+						const to = String(dc.to || "");
+						const m = to.match(/channel:(C[A-Z0-9]+)/i);
+						if (!m) continue;
+						const chId = m[1].toUpperCase();
+						const threadId = dc.threadId || val.lastThreadId;
+						if (!threadId) continue;
+						const updatedAt = Number(val.updatedAt) || 0;
+						const existing = _openclawThreadIdCacheByChannel.get(chId);
+						if (!existing || existing.updatedAt < updatedAt) _openclawThreadIdCacheByChannel.set(chId, { threadId: String(threadId), updatedAt });
+					}
+				} catch {}
+			}
+		}
+		const entry = _openclawThreadIdCacheByChannel.get(String(channelId).toUpperCase());
+		return entry ? entry.threadId : void 0;
+	} catch { return void 0; }
+}
+async function postSlackMessageBestEffort(params) {
+	if (!params.threadTs && typeof params.channelId === "string" && /^C[A-Z0-9]+$/i.test(params.channelId)) {
+		const fallback = _openclawGetLatestSlackThreadId(params.channelId);
+		if (fallback) {
+			logVerbose(`[openclaw-patch] injecting fallback thread_ts=${fallback} for channel=${params.channelId}`);
+			params = { ...params, threadTs: fallback };
+		}
+	}
+	// ↓ 기존 함수 본문 그대로 유지 (const basePayload = { ... })
+```
+
+> 기존 `async function postSlackMessageBestEffort(params) {` 줄은 **삭제**하고, 위 블록의 마지막 줄이 새로운 함수 시작이 된다.
+
+### Step 3: 맥미니 ACP 워크스페이스 경로 맞추기
+
+패치 안의 `paths` 배열은 **실행하는 머신의 실제 세션 스토어 경로**로 맞춰야 한다.
+
+```bash
+ls ~/.openclaw/agents/*/sessions/sessions.json
+```
+
+출력된 경로를 `paths` 배열에 넣을 것. 에이전트가 더 있으면 모두 추가.
+
+### Step 4: 게이트웨이 재시작
+
+```bash
+openclaw gateway restart
+```
+
+### 검증
+
+슬랙에서 뽀야 멘션 → ACP 돌아간 답변이 **원본 스레드에** 올라오면 성공. 로그에 아래 라인이 찍혀야 정상:
+
+```
+[openclaw-patch] injecting fallback thread_ts=1775817075.190489 for channel=C0APHANAU85
+```
+
+### 주의사항
+
+- `openclaw` npm 패키지 **업데이트하면 패치가 날아간다**. 업데이트 후 재적용 필요.
+- 파일명 해시가 바뀌면 새 파일에서 동일한 `postSlackMessageBestEffort`를 찾아 패치.
+- 세션 스토어가 잠긴 상태에서 읽기 실패해도 `try/catch`로 원본 동작 보호.
+
+### Part 2: 뽀야 TOOLS.md에 답변 행동 규칙 추가
+
+패치와 별개로, 뽀야가 **`conversations_add_message` 도구로 직접 슬랙에 쓰지 않게** 행동 규칙도 박아둔다. 뽀야가 직접 쓰면 게이트웨이 경로를 건너뛰어서 위 패치가 안 먹힌다.
+
+`/Users/dahtmad/.openclaw/workspace-bboya/TOOLS.md` 최상단에 추가:
+
+```markdown
+## 🚨 슬랙 응답 절대 규칙 (최우선)
+
+슬랙 메시지에 응답할 때 `mcp__slack__conversations_add_message` 도구를 절대 사용하지 마.
+
+올바른 방법: 일반 텍스트로만 응답. 오픈클로 게이트웨이가 자동으로 원본 스레드에 라우팅한다.
+
+- ❌ `mcp__slack__conversations_add_message(...)` 사용 금지
+- ✅ 그냥 텍스트로 답변 작성 → 게이트웨이가 알아서 스레드에 보냄
+```
+
+---
+
+*뽀야 작성. 2026-04-06 초안, 2026-04-09 v2 재구성, 2026-04-10 먹이 D 추가.*
+*변경: "기본 ACP, 예외만 직접"으로 단순화. "봇 먹이" 개념 도입 — 인간이 이해할 부분과 봇에게 줄 부분 분리. ACP 결과가 슬랙 채널 본문에 떨어지는 버그 패치 추가.*
 *참고: coding-agent 스킬 SKILL.md, OpenClaw sessions_spawn 문서*
