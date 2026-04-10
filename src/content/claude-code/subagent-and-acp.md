@@ -494,10 +494,15 @@ openclaw config set acp.allowedAgents '["claude", "codex"]'
 # 게이트웨이 재시작
 openclaw gateway restart
 
-# ACP 백엔드 건강 상태 확인
-# Slack에서:
-/acp doctor
+# 게이트웨이 상태 확인 (Runtime: running, RPC probe: ok 떠야 정상)
+openclaw gateway status
+
+# 활성 ACP 세션 목록 확인
+openclaw sessions
 ```
+
+> 검증: 슬랙에서 봇 멘션 → 답변이 정상적으로 오면 ACP 정상 작동.
+> `openclaw sessions` 출력에 `agent:bboya:slack:...` 같은 세션 키가 보이고 토큰 카운트가 올라가면 ACP 세션이 제대로 떠있는 것.
 
 > 핵심: **Claude Code Max 구독이 있는 사람만 ACP를 쓸 수 있다.** 구독 없으면 ACP 자체가 안 됨 — API 키로 서브에이전트를 써야 해.
 
