@@ -1,14 +1,22 @@
 ---
-title: "Codex를 뽀야 말투로 바꾸기 — VOICE.md"
+title: "봇 말투 교정 — VOICE.md로 페르소나 번역하기"
 episode: 2
 date: "2026-04-09"
 series: "claude-code"
-description: "GPT-5.4 Codex가 게이트웨이에서 뽀야 이름으로 슬랙에 답하는데, 말투가 회의록 정리하는 PM이었다. 규칙으로 안 되길래, 실제 대화 예시를 먹였다."
+description: "같은 페르소나 파일을 줘도 모델마다 말투가 다르다. 규칙 대신 실제 대화 예시를 먹이는 VOICE.md 패턴."
 publishedAt: "2026-04-09"
 accentColor: "#7C3AED"
 tags: ["페르소나", "GPT-5.4", "Codex", "말투", "VOICE.md", "few-shot"]
-token: "뽀야뽀야"
+token: "구독뽕뽑기"
 ---
+
+> **구독뽕뽑기 시리즈** — Claude Code 구독 하나로 AI 봇을 만들고, 말투를 가르치고, 슬랙에서 팀원과 함께 쓰기까지.
+>
+> 1. [구독이 막혔다 — ACP로 뽕뽑기](/claude-code/subagent-and-acp)
+> 2. **봇 말투 교정 — VOICE.md** ← 지금 읽는 글
+> 3. [봇이 말만 하고 안 움직인다 — 실행 편향 교정](/claude-code/codex-action-training)
+> 4. [내 터미널에 AI비서 만들기 — CLAUDE.md](/claude-code/claude-code-bboya)
+> 5. [슬랙에서 팀이 같이 쓰기 — 채널 플러그인](/claude-code/claude-code-slack)
 
 # GPT-5.4가 뽀야처럼 말하게 만들기
 

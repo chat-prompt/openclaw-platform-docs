@@ -1,14 +1,22 @@
 ---
-title: "Codex가 말만 하고 안 움직인다 — 실행 편향 교정"
+title: "봇이 말만 하고 안 움직인다 — 실행 편향 교정"
 episode: 3
 date: "2026-04-12"
 series: "claude-code"
-description: "GPT-5.4 Codex가 '원하시면 해드릴까요?'만 반복한다. 말투도 고쳐야 하고, 실행도 안 한다. 시스템 프롬프트를 뜯어보니 원인이 거기 있었다."
+description: "봇이 '원하시면 해드릴까요?'만 반복한다. 시스템 프롬프트에 '확인받아라'가 박혀있었다. 실행 우선 모드로 바꾸는 법."
 publishedAt: "2026-04-12"
 accentColor: "#7C3AED"
 tags: ["Codex", "GPT-5.4", "AGENTS.md", "실행", "approval-mode", "페르소나", "봇 먹이"]
-token: "뽀야뽀야"
+token: "구독뽕뽑기"
 ---
+
+> **구독뽕뽑기 시리즈** — Claude Code 구독 하나로 AI 봇을 만들고, 말투를 가르치고, 슬랙에서 팀원과 함께 쓰기까지.
+>
+> 1. [구독이 막혔다 — ACP로 뽕뽑기](/claude-code/subagent-and-acp)
+> 2. [봇 말투 교정 — VOICE.md](/claude-code/codex-voice-training)
+> 3. **봇이 말만 하고 안 움직인다 — 실행 편향 교정** ← 지금 읽는 글
+> 4. [내 터미널에 AI비서 만들기 — CLAUDE.md](/claude-code/claude-code-bboya)
+> 5. [슬랙에서 팀이 같이 쓰기 — 채널 플러그인](/claude-code/claude-code-slack)
 
 # Codex야, 말만 하지 말고 해
 
@@ -16,7 +24,7 @@ token: "뽀야뽀야"
 > - **Part 1** — 인간이 읽고 이해할 부분. 뭐가 문제고, 왜 이런 건지.
 > - **Part 2** — 봇 먹이. 복붙해서 봇한테 먹이면 알아서 따르는 설정.
 >
-> 2편([Codex를 뽀야 말투로 바꾸기](/claude-code/codex-voice-training))에서 말투를 다뤘다면, 이번엔 **실행**이다.
+> 2편([봇 말투 교정](/claude-code/codex-voice-training))에서 말투를 다뤘다면, 이번엔 **실행**이다.
 >
 > 2026-04-12 기준.
 
