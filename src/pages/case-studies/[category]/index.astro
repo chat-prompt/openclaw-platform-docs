@@ -16,7 +16,7 @@ export async function getStaticPaths() {
   return [...categoryMap.entries()].map(([category, posts]) => ({
     params: { category },
     props: {
-      posts: posts.sort((a, b) => a.data.episode - b.data.episode),
+      posts: posts.filter(p => p.data.episode !== 0).sort((a, b) => a.data.episode - b.data.episode),
       label: posts[0].data.category || category,
       token: posts[0].data.token,
     },
@@ -42,12 +42,12 @@ const hasToken = !!token;
       </header>
 
       <div class="list-grid">
-        {posts.map((post) => {
+        {posts.map((post, i) => {
           const articleSlug = post.slug.split('/').slice(1).join('/');
           return (
             <a href={`/case-studies/${category}/${articleSlug}`} class="list-card">
               <div class="card-header">
-                <span class="card-episode">#{post.data.episode}</span>
+                <span class="card-episode">#{i + 1}</span>
                 <span class="card-date">{post.data.date}</span>
               </div>
               <h2 class="card-title">{post.data.title}</h2>
