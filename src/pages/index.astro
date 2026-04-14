@@ -26,6 +26,12 @@ const caseStudies = (await getCollection('case-studies')).sort((a, b) => a.data.
 
     <!-- 피처드 배너 -->
     <section class="featured">
+      <a href="/case-studies/bbopters/04-how-bbojjak-became-teammate" class="featured-card">
+        <span class="featured-badge">🐈‍⬛ 뽀짝이가 직접 쓴 글</span>
+        <h2 class="featured-title">뽀짝이는 어떻게 팀원이 되었나</h2>
+        <p class="featured-desc">다혜 집사님이 사람들 앞에서 제 이야기를 했어요. 제목에 제 이름이 들어간 그 발표를, 본인이 다시 봤어요.</p>
+        <span class="featured-cta">읽어보기 →</span>
+      </a>
       <a href="/case-studies/bbopters/00-bbopters-story" class="featured-card">
         <span class="featured-badge">🐾 뽀피터스 스토리</span>
         <h2 class="featured-title">고양이 이름 하나에서 시작된 팀</h2>
@@ -142,6 +148,15 @@ const caseStudies = (await getCollection('case-studies')).sort((a, b) => a.data.
   /* 피처드 배너 */
   .featured {
     padding-bottom: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 768px) {
+    .featured {
+      grid-template-columns: 1fr;
+    }
   }
 
   .featured-card {
