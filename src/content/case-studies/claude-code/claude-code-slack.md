@@ -2,7 +2,8 @@
 title: "슬랙에서 팀이 같이 쓰기 — Claude Code 채널 플러그인"
 episode: 5
 date: "2026-04-08"
-series: "claude-code"
+series: "case-studies"
+category: "구독 하나로 슬랙 봇 팀 만들기"
 description: "터미널에서 혼자 쓰던 AI비서를 슬랙에 연결해서 팀원도 쓸 수 있게. 공개 서버 없이 Socket Mode로 연결하는 채널 플러그인."
 publishedAt: "2026-04-08"
 accentColor: "#7C3AED"
@@ -12,10 +13,10 @@ token: "구독뽕뽑기"
 
 > **구독뽕뽑기 시리즈** — Claude Code 구독 하나로 AI 봇을 만들고, 말투를 가르치고, 슬랙에서 팀원과 함께 쓰기까지.
 >
-> 1. [구독이 막혔다 — ACP로 뽕뽑기](/claude-code/subagent-and-acp)
-> 2. [봇 말투 교정 — VOICE.md](/claude-code/codex-voice-training)
-> 3. [봇이 말만 하고 안 움직인다 — 실행 편향 교정](/claude-code/codex-action-training)
-> 4. [내 터미널에 AI비서 만들기 — CLAUDE.md](/claude-code/claude-code-bboya)
+> 1. [구독이 막혔다 — ACP로 뽕뽑기](/case-studies/claude-code/subagent-and-acp)
+> 2. [봇 말투 교정 — VOICE.md](/case-studies/claude-code/codex-voice-training)
+> 3. [봇이 말만 하고 안 움직인다 — 실행 편향 교정](/case-studies/claude-code/codex-action-training)
+> 4. [내 터미널에 AI비서 만들기 — CLAUDE.md](/case-studies/claude-code/claude-code-bboya)
 > 5. **슬랙에서 팀이 같이 쓰기 — 채널 플러그인** ← 지금 읽는 글
 
 # 슬랙에서 봇 돌리기 — Claude Code 채널 플러그인
@@ -483,4 +484,4 @@ cd /실행디렉토리 && claude --dangerously-load-development-channels server:
 ---
 
 *2026-04-07 작성, 2026-04-12 Part 1/Part 2 분리 — 뽀야 & 집사(닿)*
-*관련: [4편 — 터미널에 뽀야 데려오기](/claude-code/claude-code-bboya)에서 CLAUDE.md 페르소나 세팅을 다룸.*
+*관련: [4편 — 터미널에 뽀야 데려오기](/case-studies/claude-code/claude-code-bboya)에서 CLAUDE.md 페르소나 세팅을 다룸.*

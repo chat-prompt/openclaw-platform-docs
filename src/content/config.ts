@@ -53,22 +53,6 @@ const setupGuides = defineCollection({
   }),
 });
 
-const claudeCode = defineCollection({
-  type: 'content',
-  schema: z.object({
-    title: z.string(),
-    episode: z.number(),
-    date: z.string(),
-    series: z.literal('claude-code'),
-    description: z.string().optional(),
-    publishedAt: z.string().optional(),
-    cover: z.string().optional(),
-    accentColor: z.string().optional(),
-    tags: z.array(z.string()).optional(),
-    token: z.string().optional(),
-  }),
-});
-
 const caseStudies = defineCollection({
   type: 'content',
   schema: z.object({
@@ -86,4 +70,4 @@ const caseStudies = defineCollection({
   }),
 });
 
-export const collections = { notes, academy, training, 'setup-guides': setupGuides, 'case-studies': caseStudies, 'claude-code': claudeCode };
+export const collections = { notes, academy, training, 'setup-guides': setupGuides, 'case-studies': caseStudies };

@@ -17,5 +17,11 @@ export default defineConfig({
     '/team-guides/guide-02-armor': '/case-studies/handbook/guide-02-armor',
     '/team-guides/guide-03-soul': '/case-studies/handbook/guide-03-soul',
     '/team-guides/guide-04-teamwork': '/case-studies/handbook/guide-04-teamwork',
+    '/claude-code': '/case-studies/claude-code',
+    '/claude-code/subagent-and-acp': '/case-studies/claude-code/subagent-and-acp',
+    '/claude-code/codex-voice-training': '/case-studies/claude-code/codex-voice-training',
+    '/claude-code/codex-action-training': '/case-studies/claude-code/codex-action-training',
+    '/claude-code/claude-code-bboya': '/case-studies/claude-code/claude-code-bboya',
+    '/claude-code/claude-code-slack': '/case-studies/claude-code/claude-code-slack',
   },
 });
