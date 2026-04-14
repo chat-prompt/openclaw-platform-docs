@@ -13,14 +13,18 @@ export async function getStaticPaths() {
     categoryMap.get(category)!.push(post);
   }
 
-  return [...categoryMap.entries()].map(([category, posts]) => ({
-    params: { category },
-    props: {
-      posts: posts.filter(p => p.data.episode !== 0).sort((a, b) => a.data.episode - b.data.episode),
-      label: posts[0].data.category || category,
-      token: posts[0].data.token,
-    },
-  }));
+  return [...categoryMap.entries()].map(([category, posts]) => {
+    const filtered = posts.filter(p => p.data.episode !== 0).sort((a, b) => a.data.episode - b.data.episode);
+    const token = posts.find(p => p.data.token)?.data.token;
+    return {
+      params: { category },
+      props: {
+        posts: filtered,
+        label: posts[0].data.category || category,
+        token,
+      },
+    };
+  });
 }
 
 const { posts, label, token } = Astro.props;

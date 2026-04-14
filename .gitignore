@@ -27,4 +27,4 @@ pnpm-debug.log*
 .vercel
 
 # drafts
-**/draft/
+drafts/
