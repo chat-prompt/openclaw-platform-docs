@@ -3,7 +3,7 @@ title: "Slack 설정 삽질기 — allowBots부터 운영 규칙까지"
 episode: 7
 date: "2026-04-08"
 series: case-studies
-category: "뽀피터스 운영기"
+category: "슬랙에서 봇 팀 협업 세팅하기"
 description: "채널을 만들었는데 봇끼리 안 보인다. allowBots를 켰더니 무한루프. DM 정책, 스레드 규칙, 멘션 패턴, 통신 규칙 대전환까지 — 삽질로 만든 운영 규칙 6개."
 tags: ["Slack", "allowBots", "멀티에이전트", "뽀피터스", "OpenClaw"]
 token: "뽀피터스"

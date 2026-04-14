@@ -3,7 +3,7 @@ title: "왜 Slack이었나 — 봇의 몸을 만드는 법"
 episode: 6
 date: "2026-04-08"
 series: case-studies
-category: "뽀피터스 운영기"
+category: "슬랙에서 봇 팀 협업 세팅하기"
 description: "텔레그램만 쓰다가, 봇이 늘어나면서 한계가 왔다. Slack을 선택하고, 앱을 만들고, 처음 말이 통하기까지."
 tags: ["Slack", "OpenClaw", "멀티에이전트", "뽀피터스"]
 token: "뽀피터스"
