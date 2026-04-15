@@ -293,7 +293,7 @@ description: "Get current weather and forecasts. Use when user asks about weathe
 (본문 — 작동 원리, 사용법, 예시 등)
 ```
 
-**description이 매칭의 핵심!** 여기에 **"언제 이 스킬을 쓰는지"**를 명확히 써야 에이전트가 정확히 매칭할 수 있다.
+**description이 매칭의 핵심!** 여기에 "**언제 이 스킬을 쓰는지**"를 명확히 써야 에이전트가 정확히 매칭할 수 있다.
 
 ---
 
