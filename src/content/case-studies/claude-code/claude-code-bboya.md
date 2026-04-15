@@ -3,7 +3,7 @@ title: "내 터미널에 AI비서 만들기 — CLAUDE.md로 페르소나 심기
 episode: 4
 date: "2026-04-08"
 series: "case-studies"
-category: "구독 하나로 슬랙 봇 팀 만들기"
+category: "클로드코드 구독 막혔을 때 대응법"
 description: "Claude Code 터미널에 나만의 AI비서를 만든다. CLAUDE.md 하나로 매 세션 같은 성격, 같은 기억, 같은 비서가 깨어난다."
 publishedAt: "2026-04-08"
 accentColor: "#7C3AED"

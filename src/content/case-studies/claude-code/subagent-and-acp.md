@@ -3,7 +3,7 @@ title: "클코 구독이 막혔다 — ACP로 구독 뽕뽑기"
 episode: 1
 date: "2026-04-08"
 series: "case-studies"
-category: "구독 하나로 슬랙 봇 팀 만들기"
+category: "클로드코드 구독 막혔을 때 대응법"
 description: "Claude Code Max 구독으로 에이전트를 돌리던 게 막혔다. API 종량제 vs ACP — 구독 안에서 봇을 살리는 법."
 publishedAt: "2026-04-08"
 updatedAt: "2026-04-12"

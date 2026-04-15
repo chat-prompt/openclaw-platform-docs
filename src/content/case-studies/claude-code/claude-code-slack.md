@@ -3,7 +3,7 @@ title: "슬랙에서 팀이 같이 쓰기 — Claude Code 채널 플러그인"
 episode: 5
 date: "2026-04-08"
 series: "case-studies"
-category: "구독 하나로 슬랙 봇 팀 만들기"
+category: "클로드코드 구독 막혔을 때 대응법"
 description: "터미널에서 혼자 쓰던 AI비서를 슬랙에 연결해서 팀원도 쓸 수 있게. 공개 서버 없이 Socket Mode로 연결하는 채널 플러그인."
 publishedAt: "2026-04-08"
 accentColor: "#7C3AED"

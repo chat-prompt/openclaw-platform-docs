@@ -3,7 +3,7 @@ title: "봇 말투 교정 — VOICE.md로 페르소나 번역하기"
 episode: 2
 date: "2026-04-09"
 series: "case-studies"
-category: "구독 하나로 슬랙 봇 팀 만들기"
+category: "클로드코드 구독 막혔을 때 대응법"
 description: "같은 페르소나 파일을 줘도 모델마다 말투가 다르다. 규칙 대신 실제 대화 예시를 먹이는 VOICE.md 패턴."
 publishedAt: "2026-04-09"
 accentColor: "#7C3AED"

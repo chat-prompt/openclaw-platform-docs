@@ -3,7 +3,7 @@ title: "봇이 말만 하고 안 움직인다 — 실행 편향 교정"
 episode: 3
 date: "2026-04-12"
 series: "case-studies"
-category: "구독 하나로 슬랙 봇 팀 만들기"
+category: "클로드코드 구독 막혔을 때 대응법"
 description: "봇이 '원하시면 해드릴까요?'만 반복한다. 시스템 프롬프트에 '확인받아라'가 박혀있었다. 실행 우선 모드로 바꾸는 법."
 publishedAt: "2026-04-12"
 accentColor: "#7C3AED"
