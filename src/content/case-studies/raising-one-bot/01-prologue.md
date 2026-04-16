@@ -2,7 +2,8 @@
 title: "프롤로그 — 진짜로 키운다구요?"
 episode: 1
 date: "2026-04-16"
-series: raising-one-bot
+series: case-studies
+category: "금쪽같은 봇 한마리"
 description: "도구가 아니라 팀원으로 키우는 이야기. 한 마리 잘 키우는 6편 시리즈의 시작."
 tags: ["프롤로그", "도구vs팀원", "뽀피터스", "한마리키우기"]
 token: "한마리키우기"

@@ -70,17 +70,4 @@ const caseStudies = defineCollection({
   }),
 });
 
-const raisingOneBot = defineCollection({
-  type: 'content',
-  schema: z.object({
-    title: z.string(),
-    episode: z.number(),
-    date: z.string(),
-    series: z.literal('raising-one-bot'),
-    description: z.string().optional(),
-    tags: z.array(z.string()).optional(),
-    token: z.string().optional(),
-  }),
-});
-
-export const collections = { notes, academy, training, 'setup-guides': setupGuides, 'case-studies': caseStudies, 'raising-one-bot': raisingOneBot };
+export const collections = { notes, academy, training, 'setup-guides': setupGuides, 'case-studies': caseStudies };

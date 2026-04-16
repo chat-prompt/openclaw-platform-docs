@@ -2,7 +2,8 @@
 title: "영혼 주기 — 이름과 성격"
 episode: 2
 date: "2026-04-16"
-series: raising-one-bot
+series: case-studies
+category: "금쪽같은 봇 한마리"
 description: "템플릿 봇이 내 봇이 되는 순간. 이름 짓기 의식과 SOUL.md 첫 버전 쓰기, 그리고 '안녕 [이름]아'의 와우 모먼트."
 tags: ["SOUL.md", "이름짓기", "정체성", "와우모먼트"]
 token: "한마리키우기"
