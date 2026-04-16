@@ -19,7 +19,7 @@ const hasToken = !!post.data.token;
 
 <BaseLayout title={post.data.title} description={post.data.description}>
   <div class="back-to-list top">
-    <a href="/raising-one-bot">← 한마리키우기 목록</a>
+    <a href="/raising-one-bot">← 금쪽같은 봇 한마리 목록</a>
   </div>
 
   <TokenGate token={post.data.token} slug={post.slug} collection="raising-one-bot" />
@@ -40,7 +40,7 @@ const hasToken = !!post.data.token;
     </article>
 
     <div class="back-to-list">
-      <a href="/raising-one-bot">← 한마리키우기 목록으로</a>
+      <a href="/raising-one-bot">← 금쪽같은 봇 한마리 목록으로</a>
     </div>
   </ProtectedContent>
 </BaseLayout>
