@@ -1,0 +1,111 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const posts = (await getCollection('raising-one-bot')).sort(
+  (a, b) => a.data.episode - b.data.episode
+);
+---
+
+<BaseLayout title="금쪽같은 내 봇 한마리 키우기">
+  <div class="list-page">
+    <header class="list-header">
+      <h1>🐱 금쪽같은 내 봇 한마리 키우기</h1>
+      <p>도구가 아니라 팀원으로 — 한 마리 잘 키우는 6편 시리즈.</p>
+    </header>
+
+    <div class="list-grid">
+      {posts.map((post) => (
+        <a href={`/raising-one-bot/${post.slug}`} class="list-card">
+          <div class="card-header">
+            <span class="card-episode">Ep {String(post.data.episode).padStart(2, '0')}</span>
+            <span class="card-date">{post.data.date}</span>
+          </div>
+          <h2 class="card-title">{post.data.token && '🔒 '}{post.data.title}</h2>
+          {post.data.description && (
+            <p class="card-desc">{post.data.description}</p>
+          )}
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .list-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  .list-header {
+    text-align: center;
+    padding: 60px 0 40px;
+  }
+
+  .list-header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .list-header p {
+    font-size: 16px;
+    color: var(--text-secondary);
+  }
+
+  .list-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .list-card {
+    display: block;
+    padding: 20px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .list-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 24px rgba(91, 141, 190, 0.12);
+    transform: translateY(-1px);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .card-episode {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .card-date {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+
+  .card-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+</style>

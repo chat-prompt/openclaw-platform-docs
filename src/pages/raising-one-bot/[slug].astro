@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TokenGate from '../../components/TokenGate.astro';
+import ProtectedContent from '../../components/ProtectedContent.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('raising-one-bot');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+const hasToken = !!post.data.token;
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <div class="back-to-list top">
+    <a href="/raising-one-bot">← 한마리키우기 목록</a>
+  </div>
+
+  <TokenGate token={post.data.token} slug={post.slug} collection="raising-one-bot" />
+
+  <ProtectedContent hasToken={hasToken}>
+    <article>
+      <header class="article-header">
+        <span class="series-badge">🐱 한마리키우기 Ep {String(post.data.episode).padStart(2, '0')}</span>
+        <h1>{post.data.title}</h1>
+        <div class="meta">
+          <span>{post.data.date}</span>
+        </div>
+      </header>
+
+      <div class="article-body">
+        <Content />
+      </div>
+    </article>
+
+    <div class="back-to-list">
+      <a href="/raising-one-bot">← 한마리키우기 목록으로</a>
+    </div>
+  </ProtectedContent>
+</BaseLayout>
