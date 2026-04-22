@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1200px;
+    height: 630px;
+    background: linear-gradient(150deg, #F8FAFB 0%, #F0F5FA 30%, #E8F0F8 70%, #E1EBF5 100%);
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, sans-serif;
+    display: flex;
+    align-items: center;
+    padding: 56px 60px;
+    gap: 44px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    right: -80px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(91,141,190,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: absolute;
+    bottom: -140px;
+    left: -80px;
+    width: 360px;
+    height: 360px;
+    background: radial-gradient(circle, rgba(107,155,123,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .left {
+    flex: 0 0 520px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .badge {
+    display: inline-flex;
+    background: rgba(107,155,123,0.12);
+    color: #6B9B7B;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 18px;
+    margin-bottom: 18px;
+    width: fit-content;
+  }
+
+  .title {
+    font-size: 44px;
+    font-weight: 800;
+    color: #1A2332;
+    line-height: 1.22;
+    letter-spacing: -0.8px;
+    margin-bottom: 16px;
+  }
+
+  .title .accent-wallet { color: #C99B66; }
+  .title .accent-os { color: #5B8DBE; }
+
+  .subtitle {
+    font-size: 17px;
+    color: #4A5568;
+    line-height: 1.6;
+    font-weight: 500;
+  }
+
+  .subtitle .quote {
+    font-weight: 700;
+    color: #2D3748;
+  }
+
+  .right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .panel {
+    background: rgba(255,255,255,0.88);
+    border: 1px solid #D4DCE2;
+    border-radius: 14px;
+    padding: 20px 22px;
+    display: flex;
+    gap: 18px;
+    align-items: center;
+  }
+
+  .panel-icon {
+    font-size: 44px;
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+  }
+
+  .panel-icon.wallet {
+    background: rgba(201,155,102,0.14);
+  }
+
+  .panel-icon.os {
+    background: rgba(91,141,190,0.14);
+  }
+
+  .panel-body {
+    flex: 1;
+  }
+
+  .panel-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .panel-label.wallet { color: #C99B66; }
+  .panel-label.os { color: #5B8DBE; }
+
+  .panel-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1A2332;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+
+  .panel-desc {
+    font-size: 13px;
+    color: #6B7A8F;
+    line-height: 1.5;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: #A0AEC0;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin: -4px 0;
+  }
+
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #D4DCE2, transparent);
+  }
+
+  .divider span {
+    padding: 0 14px;
+  }
+</style>
+</head>
+<body>
+<div class="left">
+  <div class="badge">📝 봇키우기 교실 #13</div>
+  <div class="title"><span class="accent-wallet">CLI bridge</span>는 지갑,<br><span class="accent-os">ACP</span>는 OS</div>
+  <div class="subtitle">같은 <span class="quote">"세션"</span>이라는 단어가<br>다른 두 층에서 다른 일을 한다.</div>
+</div>
+<div class="right">
+  <div class="panel">
+    <div class="panel-icon wallet">💳</div>
+    <div class="panel-body">
+      <div class="panel-label wallet">CLI BRIDGE</div>
+      <div class="panel-title">지갑 교체</div>
+      <div class="panel-desc">모델 호출 한 칸만 바뀜<br>API 요금 → Pro/Max 구독 요금</div>
+    </div>
+  </div>
+  <div class="divider"><span>≠</span></div>
+  <div class="panel">
+    <div class="panel-icon os">🖥️</div>
+    <div class="panel-body">
+      <div class="panel-label os">ACP</div>
+      <div class="panel-title">운영체제</div>
+      <div class="panel-desc">스레드↔에이전트 매핑, 멀티에이전트<br>오케스트레이션, 채널 라우팅</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

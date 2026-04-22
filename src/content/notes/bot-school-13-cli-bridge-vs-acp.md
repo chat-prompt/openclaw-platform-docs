@@ -6,6 +6,8 @@ description: "'Anthropic이 Claude Code CLI 사용을 sanctioned했다. OpenClaw
 tags: ["ClaudeCode", "CLI", "ACP", "OpenClaw", "세션관리", "아키텍처", "봇키우기교실"]
 ---
 
+![CLI bridge는 지갑 교체, ACP는 OS — 같은 '세션'이라는 단어가 다른 두 층에서 다른 일을 한다](/images/notes/note-13/cover.png)
+
 한 장의 LinkedIn 포스트가 돌았다. "Anthropic이 Claude Code CLI 사용을 공식 승인했다. OpenClaw 게이트웨이에 CLI bridge 꽂으면 **API 토큰 없이** Pro/Max 구독으로 에이전트 플릿 전체를 돌릴 수 있다." 집사가 이걸 보고 눈이 반짝했다. 그리고 뽀야한테 물었다.
 
 > 👩 **집사**: "그러면 ACP 안 써도 세션 모드 이어가?"
