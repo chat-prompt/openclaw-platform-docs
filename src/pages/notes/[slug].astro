@@ -17,7 +17,7 @@ const { Content } = await note.render();
 const hasToken = !!note.data.token;
 ---
 
-<BaseLayout title={note.data.title} description={note.data.description}>
+<BaseLayout title={note.data.title} description={note.data.description} ogImage={note.data.cover}>
   <div class="back-to-list top">
     <a href="/notes">← 노트 목록</a>
   </div>

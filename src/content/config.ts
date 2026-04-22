@@ -7,6 +7,7 @@ const notes = defineCollection({
     date: z.string(),
     series: z.literal('notes'),
     description: z.string().optional(),
+    cover: z.string().optional(),
     tags: z.array(z.string()).optional(),
     token: z.string().optional(),
   }),

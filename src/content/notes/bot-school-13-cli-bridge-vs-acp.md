@@ -3,6 +3,7 @@ title: "CLI bridge는 지갑 교체, ACP는 OS — 같은 '세션'이 다른 층
 date: "2026-04-22"
 series: notes
 description: "'Anthropic이 Claude Code CLI 사용을 sanctioned했다. OpenClaw에 bridge 꽂으면 API 토큰 없이 Pro/Max 구독으로 에이전트 전체가 돈다' — 이 글을 읽고 집사가 뽀야한테 던진 질문이 혼동 지점을 드러냈다. CLI 세션과 ACP 세션이 이름만 같고 다른 층이라는 걸 정리한다."
+cover: "/images/notes/note-13/cover.png"
 tags: ["ClaudeCode", "CLI", "ACP", "OpenClaw", "세션관리", "아키텍처", "봇키우기교실"]
 ---
 
