@@ -445,7 +445,7 @@ openclaw pairing approve slack ABCD1234
       "messages_tab_read_only_enabled": false
     },
     "bot_user": {
-      "display_name": "뽀야",
+      "display_name": "bboya",
       "always_online": true
     }
   },
@@ -486,7 +486,6 @@ openclaw pairing approve slack ABCD1234
         "message.channels",
         "message.groups",
         "message.im",
-        "message.mpim",
         "pin_added",
         "pin_removed",
         "reaction_added",
