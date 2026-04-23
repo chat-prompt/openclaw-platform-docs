@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1200px;
+    height: 630px;
+    background: linear-gradient(150deg, #F8FAFB 0%, #F0F5FA 30%, #E8F0F8 70%, #E1EBF5 100%);
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, sans-serif;
+    display: flex;
+    align-items: center;
+    padding: 56px 60px;
+    gap: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    right: -80px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(91,141,190,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: absolute;
+    bottom: -140px;
+    left: -80px;
+    width: 360px;
+    height: 360px;
+    background: radial-gradient(circle, rgba(201,155,102,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .left {
+    flex: 0 0 540px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .badge {
+    display: inline-flex;
+    background: rgba(107,155,123,0.12);
+    color: #6B9B7B;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 18px;
+    margin-bottom: 18px;
+    width: fit-content;
+  }
+
+  .title {
+    font-size: 48px;
+    font-weight: 800;
+    color: #1A2332;
+    line-height: 1.18;
+    letter-spacing: -0.8px;
+    margin-bottom: 18px;
+  }
+
+  .title .accent {
+    color: #5B8DBE;
+  }
+
+  .title .num {
+    color: #C99B66;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .subtitle {
+    font-size: 17px;
+    color: #4A5568;
+    line-height: 1.65;
+    font-weight: 500;
+  }
+
+  .subtitle .quote {
+    font-weight: 700;
+    color: #2D3748;
+  }
+
+  .right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stage {
+    background: rgba(255,255,255,0.92);
+    border: 1px solid #D4DCE2;
+    border-radius: 14px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .stage-num {
+    flex: 0 0 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    color: white;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.5px;
+  }
+
+  .stage.recv .stage-num    { background: #6B9B7B; }
+  .stage.spawn .stage-num   { background: #5B8DBE; }
+  .stage.hook .stage-num    { background: #C99B66; }
+  .stage.respond .stage-num { background: #8B7AB8; }
+
+  .stage-body {
+    flex: 1;
+  }
+
+  .stage-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+  }
+
+  .stage.recv .stage-label    { color: #6B9B7B; }
+  .stage.spawn .stage-label   { color: #5B8DBE; }
+  .stage.hook .stage-label    { color: #C99B66; }
+  .stage.respond .stage-label { color: #8B7AB8; }
+
+  .stage-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1A2332;
+    letter-spacing: -0.2px;
+  }
+
+  .arrow {
+    align-self: center;
+    color: #B8C2D0;
+    font-size: 16px;
+    line-height: 1;
+    margin: -4px 0;
+  }
+</style>
+</head>
+<body>
+<div class="left">
+  <div class="badge">📝 봇키우기 교실 #14</div>
+  <div class="title">
+    한 번의 멘션,<br>
+    <span class="num">11구간</span> <span class="accent">릴레이</span>
+  </div>
+  <div class="subtitle">
+    슬랙 메시지가 답으로 돌아오기까지<br>
+    <span class="quote">11명의 부품</span>이 바통을 넘긴다.
+  </div>
+</div>
+<div class="right">
+  <div class="stage recv">
+    <div class="stage-num">1·2·3</div>
+    <div class="stage-body">
+      <div class="stage-label">RECEIVE</div>
+      <div class="stage-title">슬랙 → 게이트웨이 → 라우팅</div>
+    </div>
+  </div>
+  <div class="arrow">▼</div>
+  <div class="stage spawn">
+    <div class="stage-num">4·5·6</div>
+    <div class="stage-body">
+      <div class="stage-label">SPAWN</div>
+      <div class="stage-title">cli-backend → claude CLI 실행</div>
+    </div>
+  </div>
+  <div class="arrow">▼</div>
+  <div class="stage hook">
+    <div class="stage-num">7·8·9</div>
+    <div class="stage-body">
+      <div class="stage-label">HOOK</div>
+      <div class="stage-title">스레드 fetch → prompt에 주입</div>
+    </div>
+  </div>
+  <div class="arrow">▼</div>
+  <div class="stage respond">
+    <div class="stage-num">10·11</div>
+    <div class="stage-body">
+      <div class="stage-label">RESPOND</div>
+      <div class="stage-title">LLM 응답 → 슬랙 스레드 답글</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

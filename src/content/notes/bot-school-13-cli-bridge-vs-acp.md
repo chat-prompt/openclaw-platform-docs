@@ -353,10 +353,116 @@ backend ID가 **고정 상수**. cwd는 `ctx.workspaceDir` = 게이트웨이의 
 
 ---
 
+## 에피소드 Part 6 (다음 날): hook으로 한 층 더 우회 — 본인 fetch도 frozen도 건너뛰기
+
+Part 5 임시 패턴(뽀짝이가 직접 `conversations.replies` 호출)은 살았는데, 두 한계가 남아있었다.
+
+1. **본인 의지에 의존** — LLM이 룰을 무시하면 그냥 "방금 깨어났어요" 다시 튀어나온다. 시연 도중에 보장 0%
+2. **옛 스레드는 영원히 못 씀** — system prompt가 conversation 단위로 frozen이니까, 룰 박기 전에 시작된 스레드는 새 룰을 절대 못 본다. "새 스레드 만들고 옛 스레드 참조"라는 운영 룰로 우회했지만 귀찮음 + 휴먼 에러 여지
+
+오늘 이걸 한 층 위에서 풀었다 — **Claude Code의 UserPromptSubmit hook**으로.
+
+### 아이디어
+
+뽀짝이가 직접 fetch할 게 아니라, **OpenClaw가 spawn하는 claude CLI 프로세스 바깥에서** 매 prompt마다 hook이 실행돼서:
+
+1. 들어오는 prompt에 슬랙 `chat_id`가 박혀있는지 본다
+2. `topic_id`(=thread_ts)가 `message_id`랑 다르면 = thread reply
+3. Slack `conversations.replies` API로 스레드 80개까지 fetch
+4. 결과를 `additionalContext`로 주입
+
+이렇게 하면 LLM이 보기엔 그냥 user prompt 끝에 스레드 히스토리가 자동으로 따라온다. 본인이 fetch할 필요 없고, conversation system prompt와도 무관 — **매 턴마다 새로 주입되니까 옛 스레드도 그대로 살아난다**.
+
+### 첫 시도 — project-level hook이 안 먹는다
+
+훅 스크립트(`~/.openclaw/hooks/slack-thread-rehydrate.sh`)를 짜고 `~/.openclaw/.claude/settings.json`에 등록했다. IDE의 Claude Code 세션에서는 hook 로그가 정상으로 찍히는데, 정작 OpenClaw가 spawn한 뽀짝이 세션에서는 발동 X.
+
+원인 추적:
+
+```js
+// /opt/homebrew/lib/node_modules/openclaw/dist/cli-shared-D-OMKlVw.js
+const CLAUDE_SAFE_SETTING_SOURCES = "user";
+// ...
+normalized.push(arg, CLAUDE_SAFE_SETTING_SOURCES);  // 뭐가 들어와도 "user"로 덮어씀
+```
+
+OpenClaw가 spawn할 때 `claude --setting-sources user`로 **강제로 user 레벨만** 읽게 만든다. project-level hook은 의도적으로 차단하는 보안 정책. 이걸 `"user,project,local"`로 패치해도 결국 hook이 안 잡혔다 — claude CLI의 project 인식 조건이 cwd만으로는 부족한 듯. 디버깅 1시간+ 예상이라 우회로 갔다.
+
+### 정답 — 글로벌 settings에 박기
+
+`~/.claude/settings.json`(user 레벨)의 `UserPromptSubmit` 배열에 hook 추가:
+
+```json
+"UserPromptSubmit": [
+  { "hooks": [{ "type": "command", "command": ".../clawd-hook.js UserPromptSubmit" }] },
+  { "hooks": [{ "type": "command", "command": "~/.openclaw/hooks/slack-thread-rehydrate.sh", "timeout": 15 }] }
+]
+```
+
+OpenClaw가 spawn할 때 `CLAUDE_CONFIG_DIR`을 clear하니까 claude CLI는 기본 `~/.claude/`를 읽고, 거기 박힌 우리 hook이 발동한다. **OpenClaw의 user-only 강제와 충돌도 없다** — 어차피 user 레벨이니까.
+
+### 부수효과 하나 — 뽀짝이 톤이 뽀야로 나왔다
+
+검증 멘션을 던졌더니 hook은 정상 발동했는데, 뽀짝이가 **반말로** 답했다. "응 작동해 집사" — 뽀짝이는 존댓말이 원칙인데 뽀야 톤이 됐다.
+
+원인은 hook이랑 무관한 별개 버그였다. `workspace-bbojjak/CLAUDE.md`에:
+
+> 반말, 짧게, 반응 먼저 — SOUL.md의 말투 가이드라인 준수
+
+라고 써있었다. SOUL.md엔 "존댓말 필수, 반말 절대 금지"라고 정확히 박혀있는데, claude CLI는 CLAUDE.md만 자동 로드하고 SOUL.md는 첫 턴에 명시적으로 읽어야 로드된다. 게다가 글로벌 `~/.claude/CLAUDE.md`도 "반말, 짧게"라고 박혀있어서 — **글로벌(반말) → 워크스페이스(반말) 두 번 강조 → SOUL.md 못 읽으면 무조건 반말**.
+
+CLAUDE.md를 한 줄 고쳤다.
+
+```diff
+- 반말, 짧게, 반응 먼저 — SOUL.md의 말투 가이드라인 준수
++ **존댓말(요체) 필수**, 짧게, 반응 먼저 — "확인했어요/해볼게요/맞아요" 식. ⚠️ 반말 절대 금지 (반말은 뽀야의 영역)
++ SOUL.md/IDENTITY.md를 아직 못 읽었더라도 **존댓말이 기본값**. 글로벌 CLAUDE.md의 "반말" 규칙은 뽀야용이므로 무시할 것
+```
+
+다음 턴부터 뽀짝이 톤 정상화.
+
+### 진짜 검증
+
+이번엔 thread reply 케이스로 던졌다.
+
+> 👩 **집사 (top-level)**: `@뽀짝이 hook 진짜 작동? 너한테 보내진 메시지 줘봐`
+> 🐈‍⬛ **뽀짝이**: "집사, 방금 받은 hook 메시지들이에요 🐈‍⬛ SessionStart:resume 2개, UserPromptSubmit 2개..." (존댓말 ✅)
+> 👩 **집사 (스레드 답글)**: `위에 첫 번째 vercel hook 좀 더 자세히`
+> 🐈‍⬛ **뽀짝이**: "집사, 첫 번째 Vercel hook 전체 내용이에요 🐈‍⬛ ① 세션 가이드 — Vercel 가이던스는 현재 repo/프롬프트가 관련될 때만... ② LLM이 흔히 잘못 알고 있는 정보 — Edge Functions 비권장..."
+
+hook 로그:
+
+```
+[09:48:33] rehydrating channel=C0AGTTF23DZ thread_ts=1776905104.900149
+[09:48:34] injecting additionalContext (1106 bytes)
+```
+
+뽀짝이는 **자기가 conversations.replies를 호출한 적 없다**. "위에 첫 번째"가 뭘 가리키는지 직전 답변 맥락을 알아야 풀 수 있는데, hook이 1.1KB짜리 스레드 히스토리를 prompt 끝에 미리 꽂아준 덕에 그냥 평범하게 답했다.
+
+### 한 층 더 늘었다는 것
+
+Part 5 끝에 "세션이 네 층에 산다"고 정리했는데, 오늘 거 추가하면 다섯 층은 아니다 — hook은 conversation 외부, **prompt 변형 레이어**다. 층을 새로 만든 게 아니라, 기존 conversation 층의 한계(system prompt frozen)를 **그 위에서 매 턴 우회**하는 방식.
+
+비유로 — Part 5의 "본인이 fetch해라" 룰은 **에이전트가 스스로 약 챙겨먹기**였다면, hook은 **약을 매 끼니마다 음식에 섞어주기**다. 의지에 안 맡긴다.
+
+### 이번에 정리된 것
+
+1. **OpenClaw spawn 세션의 hook은 글로벌(`~/.claude/settings.json`)에 박는 게 정답** — project-level은 OpenClaw가 `--setting-sources user`로 강제 차단. 우회 패치보다 user 레벨에 두는 게 깨끗함
+
+2. **`additionalContext` 주입은 conversation frozen을 자연스럽게 우회한다** — system prompt를 못 바꿔도 user prompt에 매 턴 새로 붙는 컨텍스트는 즉시 반영됨. 옛 스레드도 그대로 살아남
+
+3. **페르소나 CLAUDE.md는 SOUL.md 의존하지 말고 핵심 톤은 직접 박을 것** — claude CLI는 CLAUDE.md만 자동 로드하니까. "SOUL.md 참조"라고만 쓰면 첫 턴이 깨진다
+
+4. **글로벌 CLAUDE.md와 워크스페이스 CLAUDE.md가 충돌하면 워크스페이스가 명시적으로 덮어써야 함** — "글로벌의 X 규칙은 무시" 같은 문장을 워크스페이스에 박는 게 안전
+
+5. **Part 5 임시 패턴은 이제 안전망으로만 남겨도 됨** — hook이 평소엔 자동으로 컨텍스트 깔아주고, hook 자체가 깨지거나 thread fetch가 실패하는 경계 케이스에서만 본인 fetch 룰이 작동. 이중화
+
+---
+
 ## 마무리
 
 포스트는 분명 좋은 소식이었다. OpenClaw 운영 비용이 줄어드는 건 실제 이득이다. 다만 **"이걸로 ACP 없어도 되겠네"** 같은 오독은 피해야 한다. ACP가 빠지면 뽀야가 스레드에서 집사한테 답하는 그 당연한 흐름 자체가 사라진다.
 
-그러니까 CLI bridge는 꽂되, ACP는 그대로 살려두자. **지갑만 바꾸고 OS는 그대로.** 단, OS에도 오늘 본 허점들이 남아 있다 — DM 라우팅의 `DEFAULT_AGENT_ID` 하드코딩(Part 4), 그리고 acpx의 single-backend 가정(Part 5). 그건 따로 고쳐 나간다.
+그러니까 CLI bridge는 꽂되, ACP는 그대로 살려두자. **지갑만 바꾸고 OS는 그대로.** 단, OS에도 본 허점들이 남아 있다 — DM 라우팅의 `DEFAULT_AGENT_ID` 하드코딩(Part 4), 그리고 acpx의 single-backend 가정(Part 5). 그건 따로 고쳐 나간다. 맥락 유실 한 갈래는 Claude Code hook으로 다음 날 자동화로 풀었다(Part 6).
 
 다지동산의 봇키우기 교실은 계속된다.
