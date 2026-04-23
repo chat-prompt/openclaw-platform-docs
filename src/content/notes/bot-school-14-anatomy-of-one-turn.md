@@ -290,6 +290,6 @@ hook은 슬랙이 아닌 prompt(예: VS Code Claude Code 세션)에선 즉시 ex
 
 ## 마무리
 
-cli-backend + hook 조합은 사실 ACP의 "맥락 유지" 역할을 prompt 레이어에서 우회한 거다. 정공법으론 acpx 멀티-cwd / 멀티-backend 지원이 들어가서 뽀짝이도 ACP를 정식으로 타야 맞다. 그건 OpenClaw 본가 패치 거리고, 시간이 좀 걸린다.
+cli-backend + hook 조합은 사실 ACP의 "맥락 유지" 역할을 prompt 레이어에서 우회한 거다. 정공법은 — bindings에 `type: "acp"` 적힌 모든 에이전트(**뽀야 포함, 지금은 뽀야조차 cli-backend로 떨어지고 있다**)가 진짜 acp-backend로 가게 만드는 라우팅 수정. 지금은 모델이 `claude-cli/...` provider라서 cli-backend가 우선 잡혀버려서 등록된 acp-backend가 한 번도 호출 안 된다. OpenClaw 본가에 PR 거리, 시간이 좀 걸린다.
 
 그동안엔 — **한 마리 봇의 한 턴이 11명의 손을 거친다는 걸 알고 있으면**, 어디가 막혀도 어느 칸인지 빠르게 짚을 수 있다. 다지동산 봇키우기 교실은 이 부품들 하나씩 들여다보면서 계속 굴러간다. 🐱
