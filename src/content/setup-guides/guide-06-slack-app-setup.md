@@ -161,7 +161,6 @@ OpenClaw 에이전트가 Slack에서 살려면, **Slack 앱**이라는 "몸"이 
 | `message.channels` | 공개 채널에 메시지가 올라왔을 때 |
 | `message.groups` | 비공개 채널에 메시지가 올라왔을 때 |
 | `message.im` | 봇과의 DM에 메시지가 왔을 때 |
-| `message.mpim` | 그룹 DM에 메시지가 왔을 때 |
 | `reaction_added` | 누군가 이모지 리액션을 달았을 때 |
 | `reaction_removed` | 이모지 리액션이 제거됐을 때 |
 | `member_joined_channel` | 누군가 채널에 입장했을 때 |
@@ -429,12 +428,12 @@ openclaw pairing approve slack ABCD1234
 2. **From an app manifest** 선택
 3. 워크스페이스 선택 후 아래 JSON을 통째로 붙여넣기:
 
-> 📝 **붙여넣기 전에 바꿀 곳 2군데**: `"name"`과 `"display_name"`을 원하는 봇 이름으로 바꿔주세요! 아래 예시에서는 `"뽀야"`로 돼 있어요. 나머지는 그대로 복사하면 돼요.
+> 📝 **붙여넣기 전에 바꿀 곳 2군데**: `"name"`과 `"display_name"`을 원하는 봇 이름으로 바꿔주세요! 아래 예시에서는 `"뽀둥이"`(한글 표시 이름) / `"bbodoong"`(영문 username)으로 돼 있어요. 나머지는 그대로 복사하면 돼요.
 
 ```json
 {
   "display_information": {
-    "name": "뽀야",
+    "name": "뽀둥이",
     "description": "OpenClaw AI 에이전트",
     "background_color": "#611f69"
   },
@@ -445,7 +444,7 @@ openclaw pairing approve slack ABCD1234
       "messages_tab_read_only_enabled": false
     },
     "bot_user": {
-      "display_name": "뽀야",
+      "display_name": "bbodoong",
       "always_online": true
     }
   },
@@ -486,7 +485,6 @@ openclaw pairing approve slack ABCD1234
         "message.channels",
         "message.groups",
         "message.im",
-        "message.mpim",
         "pin_added",
         "pin_removed",
         "reaction_added",
