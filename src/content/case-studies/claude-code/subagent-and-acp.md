@@ -69,7 +69,7 @@ Anthropic(Claude 만든 회사)이 **서드파티 도구가 구독을 갖다 쓰
 
 ## ACP가 뭔데?
 
-ACP = **Agent Coding Protocol**. 이름이 거창하지만 하는 일은 단순해.
+ACP = **Agent Client Protocol** (Zed가 만든 오픈 프로토콜). 이름이 거창하지만 하는 일은 단순해.
 
 > **다른 프로그램이 Claude Code를 대신 실행해주는 것.**
 
