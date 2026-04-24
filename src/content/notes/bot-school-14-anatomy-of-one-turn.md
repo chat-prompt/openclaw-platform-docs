@@ -126,7 +126,7 @@ claude -p \
 | `--resume <uuid>` | 같은 슬랙 스레드면 기존 conversation 이어감 |
 | `--append-system-prompt` | 페르소나 + 운영 컨텍스트 주입 |
 
-그리고 환경변수 한 무더기를 **clear**한다. 가장 중요한 건 `CLAUDE_CONFIG_DIR` clear — 그래서 claude CLI는 무조건 기본값 `~/.claude/`를 읽는다. (이게 우리 hook 위치 결정의 단서가 된다 — 글로벌 settings에 박아야 하는 이유.)
+여기서 핵심은 `--setting-sources user` 한 줄. 이게 **project/local의 `.claude/settings.json`을 아예 무시하게 만든다**. 그래서 spawn된 claude CLI는 무조건 `~/.claude/`만 본다. (이게 우리가 hook을 글로벌 settings에 박은 진짜 이유다 — project/local에 박으면 플래그가 그대로 무시해버린다.)
 
 stdin으로는 사용자가 보낸 prompt가 흘러들어간다. OpenClaw가 약간 가공해서 보내는데, 슬랙 메시지면 이런 모양이다.
 
