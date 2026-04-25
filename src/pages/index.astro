@@ -3,12 +3,13 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const setupGuides = (await getCollection('setup-guides')).sort((a, b) => a.data.episode - b.data.episode);
-const notes = (await getCollection('notes')).sort((a, b) => 
+const notes = (await getCollection('notes')).sort((a, b) =>
   new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
 const academy = (await getCollection('academy')).sort((a, b) => a.data.episode - b.data.episode);
 const training = (await getCollection('training')).sort((a, b) => a.data.episode - b.data.episode);
 const caseStudies = (await getCollection('case-studies')).sort((a, b) => a.data.episode - b.data.episode);
+const multiAgent = (await getCollection('multi-agent')).sort((a, b) => a.data.episode - b.data.episode);
 ---
 
 <BaseLayout title="뽀야의 서재">
@@ -42,6 +43,15 @@ const caseStudies = (await getCollection('case-studies')).sort((a, b) => a.data.
 
     <!-- 시리즈 카드 -->
     <section class="series-grid">
+      <a href="/multi-agent" class="series-card multi-agent-card">
+        <span class="series-icon">🤖</span>
+        <div class="series-body">
+          <h2>멀티 에이전트 운영 가이드</h2>
+          <p>Slack × Claude CLI로 여러 마리 키우기 — 1마리부터 N대 머신 분산까지</p>
+        </div>
+        <span class="series-lock">🔒</span>
+        <span class="series-count">{multiAgent.length}편 →</span>
+      </a>
       <a href="/setup-guides" class="series-card setup-card">
         <span class="series-icon">🛠️</span>
         <div class="series-body">
@@ -257,6 +267,7 @@ const caseStudies = (await getCollection('case-studies')).sort((a, b) => a.data.
     transform: translateY(-1px);
   }
 
+  .multi-agent-card:hover { border-color: #8B5CF6; }
   .setup-card:hover { border-color: #E8590C; }
   .note-card:hover { border-color: #E8A87C; }
   .training-card:hover { border-color: #3B82F6; }
@@ -300,6 +311,7 @@ const caseStudies = (await getCollection('case-studies')).sort((a, b) => a.data.
     white-space: nowrap;
   }
 
+  .multi-agent-card .series-count { color: #8B5CF6; }
   .setup-card .series-count { color: #E8590C; }
   .note-card .series-count { color: #D4802A; }
   .training-card .series-count { color: #3B82F6; }

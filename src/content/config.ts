@@ -71,4 +71,19 @@ const caseStudies = defineCollection({
   }),
 });
 
-export const collections = { notes, academy, training, 'setup-guides': setupGuides, 'case-studies': caseStudies };
+const multiAgent = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    episode: z.number(),
+    series: z.literal('multi-agent'),
+    description: z.string().optional(),
+    publishedAt: z.string().optional(),
+    cover: z.string().optional(),
+    accentColor: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    token: z.string().optional(),
+  }),
+});
+
+export const collections = { notes, academy, training, 'setup-guides': setupGuides, 'case-studies': caseStudies, 'multi-agent': multiAgent };

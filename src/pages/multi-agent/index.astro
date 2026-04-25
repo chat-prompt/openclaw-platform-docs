@@ -1,0 +1,134 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SeriesGate from '../../components/SeriesGate.astro';
+
+const guides = (await getCollection('multi-agent')).sort((a, b) => a.data.episode - b.data.episode);
+const seriesToken = guides.find(g => g.data.token)?.data.token || '';
+---
+
+<BaseLayout title="멀티 에이전트 운영 가이드">
+  <div class="list-page">
+    <header class="list-header">
+      <h1>🤖 멀티 에이전트 운영 가이드</h1>
+      <p>Slack × Claude CLI로 여러 마리 AI 에이전트 키우기 — 1마리부터 N대 머신 분산까지</p>
+    </header>
+
+    {seriesToken ? (
+      <SeriesGate token={seriesToken} seriesKey="multi-agent-series-token">
+        <div class="list-grid">
+          {guides.map((guide) => (
+            <a href={`/multi-agent/${guide.slug}`} class="list-card" style={guide.data.accentColor ? `--card-accent: ${guide.data.accentColor}` : ''}>
+              <div class="card-header">
+                <span class="card-episode" style={guide.data.accentColor ? `color: ${guide.data.accentColor}` : ''}>EP. {guide.data.episode}</span>
+                {guide.data.publishedAt && (
+                  <span class="card-date">{guide.data.publishedAt.replace(/^\d{4}-/, '')}</span>
+                )}
+              </div>
+              <h2 class="card-title">{guide.data.title}</h2>
+              {guide.data.description && (
+                <p class="card-desc">{guide.data.description}</p>
+              )}
+            </a>
+          ))}
+        </div>
+      </SeriesGate>
+    ) : (
+      <div class="list-grid">
+        {guides.map((guide) => (
+          <a href={`/multi-agent/${guide.slug}`} class="list-card" style={guide.data.accentColor ? `--card-accent: ${guide.data.accentColor}` : ''}>
+            <div class="card-header">
+              <span class="card-episode" style={guide.data.accentColor ? `color: ${guide.data.accentColor}` : ''}>EP. {guide.data.episode}</span>
+              {guide.data.publishedAt && (
+                <span class="card-date">{guide.data.publishedAt.replace(/^\d{4}-/, '')}</span>
+              )}
+            </div>
+            <h2 class="card-title">{guide.data.title}</h2>
+            {guide.data.description && (
+              <p class="card-desc">{guide.data.description}</p>
+            )}
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .list-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  .list-header {
+    text-align: center;
+    padding: 60px 0 40px;
+  }
+
+  .list-header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .list-header p {
+    font-size: 16px;
+    color: var(--text-secondary);
+  }
+
+  .list-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .list-card {
+    display: block;
+    padding: 20px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .list-card:hover {
+    border-color: var(--card-accent, var(--accent));
+    box-shadow: 0 4px 24px rgba(139, 92, 246, 0.12);
+    transform: translateY(-1px);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .card-episode {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+  }
+
+  .card-date {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+
+  .card-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+</style>
