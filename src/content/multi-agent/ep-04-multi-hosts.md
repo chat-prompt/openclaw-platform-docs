@@ -35,6 +35,8 @@ token: "밋업"
 
 ## 전체 그림
 
+![3 사무실 · 4 마리 · 1 자료실 — 맥미니 A+B+C 분산 + 공용 git 레포](/images/multi-agent/ep-04/architecture.png)
+
 ```
         ┌──────────────────────────────┐
         │  공용 git 레포                │

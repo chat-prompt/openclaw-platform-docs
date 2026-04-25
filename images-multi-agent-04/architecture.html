@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1280px;
+    height: 900px;
+    background: linear-gradient(150deg, #F8FAFB 0%, #F0F5FA 30%, #E8F0F8 70%, #E1EBF5 100%);
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, sans-serif;
+    padding: 36px 48px;
+    position: relative;
+    overflow: hidden;
+    color: #1A2332;
+  }
+
+  /* 헤더 */
+  .header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .badge {
+    display: inline-flex;
+    background: rgba(139,92,246,0.12);
+    color: #7C3AED;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 18px;
+    margin-bottom: 10px;
+    letter-spacing: 0.3px;
+  }
+
+  .title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #1A2332;
+    letter-spacing: -0.5px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: #6B7A8F;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+
+  /* 공용 git 레포 (상단) */
+  .repo {
+    background: linear-gradient(135deg, rgba(16,185,129,0.10), rgba(16,185,129,0.04));
+    border: 1.5px solid rgba(16,185,129,0.35);
+    border-radius: 14px;
+    padding: 14px 22px;
+    margin: 0 auto 20px;
+    width: 720px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .repo-icon { font-size: 30px; }
+  .repo-text { flex: 1; }
+  .repo-name {
+    font-size: 16px;
+    font-weight: 800;
+    color: #047857;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+  .repo-tags {
+    font-size: 12.5px;
+    color: #1A2332;
+    margin-top: 3px;
+    font-weight: 600;
+  }
+  .repo-note {
+    font-size: 11.5px;
+    color: #047857;
+    font-weight: 700;
+    text-align: right;
+  }
+
+  /* 슬랙 (중앙) */
+  .slack {
+    background: linear-gradient(135deg, rgba(74,21,75,0.04), rgba(74,21,75,0.10));
+    border: 1.5px solid rgba(74,21,75,0.25);
+    border-radius: 14px;
+    padding: 14px 22px;
+    margin: 0 auto 22px;
+    width: 920px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .slack-icon { font-size: 28px; }
+  .slack-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: #4A154B;
+    margin-bottom: 8px;
+  }
+  .slack-bots {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .bot-chip {
+    background: rgba(255,255,255,0.85);
+    border: 1px solid #D4DCE2;
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #1A2332;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .bot-chip .label {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 11px;
+    color: #7C3AED;
+    background: rgba(139,92,246,0.10);
+    padding: 1px 5px;
+    border-radius: 4px;
+    margin-left: 3px;
+  }
+
+  /* 화살표 */
+  .arrows-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 0 auto 8px;
+    width: 1100px;
+    text-align: center;
+    color: #94A3B8;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  /* 머신 3개 (가로 배치) */
+  .machines {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18px;
+    width: 1100px;
+    margin: 0 auto;
+  }
+
+  .machine {
+    background: rgba(255,255,255,0.92);
+    border: 1.5px solid #D4DCE2;
+    border-radius: 14px;
+    padding: 18px 18px 16px;
+    box-shadow: 0 4px 12px rgba(26,35,50,0.04);
+    display: flex;
+    flex-direction: column;
+  }
+  .machine.A { border-color: rgba(59,130,246,0.30); }
+  .machine.B { border-color: rgba(245,158,11,0.30); }
+  .machine.C { border-color: rgba(236,72,153,0.30); }
+
+  .machine-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed #E2E8F0;
+  }
+  .machine-icon { font-size: 22px; }
+  .machine-name {
+    font-size: 16px;
+    font-weight: 800;
+    color: #1A2332;
+  }
+  .machine-tag {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+  .A .machine-tag { background: rgba(59,130,246,0.12); color: #2563EB; }
+  .B .machine-tag { background: rgba(245,158,11,0.12); color: #B45309; }
+  .C .machine-tag { background: rgba(236,72,153,0.12); color: #BE185D; }
+
+  .agent-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 12px;
+  }
+  .agent {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(248,250,252,0.7);
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .agent-emoji { font-size: 16px; }
+  .agent-name { color: #1A2332; }
+  .default-pill {
+    margin-left: auto;
+    font-size: 9.5px;
+    font-weight: 800;
+    color: #fff;
+    background: #7C3AED;
+    padding: 1.5px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+  }
+  .agent .role {
+    color: #6B7A8F;
+    font-size: 11.5px;
+    font-weight: 600;
+    margin-left: 4px;
+  }
+
+  .machine-files {
+    margin-top: auto;
+    background: rgba(248,250,252,0.5);
+    border-radius: 8px;
+    padding: 8px 10px;
+  }
+  .file-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 11.5px;
+    color: #4B5A70;
+    line-height: 1.45;
+  }
+  .file-row + .file-row { margin-top: 3px; }
+  .file-key {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 10.5px;
+    color: #1A2332;
+    font-weight: 700;
+  }
+  .file-val { color: #6B7A8F; font-weight: 500; }
+
+  /* 하단 캡션 */
+  .caption {
+    position: absolute;
+    bottom: 22px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 12px;
+    color: #6B7A8F;
+    font-weight: 600;
+  }
+  .caption b { color: #7C3AED; }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div class="badge">멀티 에이전트 · ep.04</div>
+    <div class="title">3 사무실 · 4 마리 · 1 자료실</div>
+    <div class="subtitle">맥미니 A + B + C 분산 + 공용 git 레포로 묶기</div>
+  </div>
+
+  <!-- 공용 git 레포 -->
+  <div class="repo">
+    <div class="repo-icon">📚</div>
+    <div class="repo-text">
+      <div class="repo-name">github.com/chat-prompt/bbopters-shared</div>
+      <div class="repo-tags">skills · hooks · projects · templates</div>
+    </div>
+    <div class="repo-note">모든 머신<br>clone / pull</div>
+  </div>
+
+  <!-- 슬랙 -->
+  <div class="slack">
+    <div class="slack-icon">💬</div>
+    <div style="flex:1;">
+      <div class="slack-title">Slack Workspace (뽀피터스) — 하나로 공유</div>
+      <div class="slack-bots">
+        <div class="bot-chip">🐱 @뽀야 <span class="label">A-1</span></div>
+        <div class="bot-chip">🐈‍⬛ @뽀짝이 <span class="label">A-2</span></div>
+        <div class="bot-chip">🐱 @뽀둥이 <span class="label">B-1</span></div>
+        <div class="bot-chip">🐱 @뽀식이 <span class="label">C-1</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrows-row">
+    <div>↓ A 토큰</div>
+    <div>↓ B 토큰</div>
+    <div>↓ C 토큰</div>
+  </div>
+
+  <!-- 3 머신 -->
+  <div class="machines">
+    <!-- A -->
+    <div class="machine A">
+      <div class="machine-head">
+        <div class="machine-icon">🏢</div>
+        <div class="machine-name">맥미니 A</div>
+        <div class="machine-tag">대민 업무</div>
+      </div>
+      <div class="agent-list">
+        <div class="agent">
+          <span class="agent-emoji">🐱</span>
+          <span class="agent-name">뽀야</span>
+          <span class="role">팀장</span>
+          <span class="default-pill">DEFAULT</span>
+        </div>
+        <div class="agent">
+          <span class="agent-emoji">🐈‍⬛</span>
+          <span class="agent-name">뽀짝이</span>
+          <span class="role">부팀장</span>
+        </div>
+      </div>
+      <div class="machine-files">
+        <div class="file-row"><span class="file-key">openclaw.json</span><span class="file-val">머신별 독립</span></div>
+        <div class="file-row"><span class="file-key">bbopters-shared/</span><span class="file-val">git clone (동일)</span></div>
+      </div>
+    </div>
+
+    <!-- B -->
+    <div class="machine B">
+      <div class="machine-head">
+        <div class="machine-icon">🏢</div>
+        <div class="machine-name">맥미니 B</div>
+        <div class="machine-tag">데이터</div>
+      </div>
+      <div class="agent-list">
+        <div class="agent">
+          <span class="agent-emoji">🐱</span>
+          <span class="agent-name">뽀둥이</span>
+          <span class="role">데이터 전담</span>
+          <span class="default-pill">DEFAULT</span>
+        </div>
+      </div>
+      <div class="machine-files">
+        <div class="file-row"><span class="file-key">openclaw.json</span><span class="file-val">머신별 독립</span></div>
+        <div class="file-row"><span class="file-key">bbopters-shared/</span><span class="file-val">git clone (동일)</span></div>
+      </div>
+    </div>
+
+    <!-- C -->
+    <div class="machine C">
+      <div class="machine-head">
+        <div class="machine-icon">🏢</div>
+        <div class="machine-name">맥미니 C</div>
+        <div class="machine-tag">고객 응대</div>
+      </div>
+      <div class="agent-list">
+        <div class="agent">
+          <span class="agent-emoji">🐱</span>
+          <span class="agent-name">뽀식이</span>
+          <span class="role">CS 전담</span>
+          <span class="default-pill">DEFAULT</span>
+        </div>
+      </div>
+      <div class="machine-files">
+        <div class="file-row"><span class="file-key">openclaw.json</span><span class="file-val">머신별 독립</span></div>
+        <div class="file-row"><span class="file-key">bbopters-shared/</span><span class="file-val">git clone (동일)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="caption">
+    <b>공유</b>(bbopters-shared) = 스킬 · hook · 팀 문서 · 템플릿 &nbsp;·&nbsp;
+    <b>분리</b>(머신/에이전트별) = 봇 토큰 · openclaw.json · 워크스페이스 · MEMORY · OAuth
+  </div>
+</body>
+</html>
