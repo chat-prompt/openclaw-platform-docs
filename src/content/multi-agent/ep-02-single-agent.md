@@ -571,6 +571,70 @@ done
 
 ---
 
+## Advanced · 메모리 위계 — OpenClaw memory vs Claude CLI auto memory
+
+> 🧠 Claude CLI엔 자체 auto memory가 있고, OpenClaw엔 워크스페이스 메모리가 있어. **둘 다 봇 평생 자산이고 용도만 다름**. 차이를 모르면 페르소나 오염 사고가 나니까 정확히 짚고 가자.
+
+### 핵심 — cwd가 봇별 고정이라 둘 다 평생 누적
+
+OpenClaw는 봇별로 **고정된 워크스페이스 디렉토리**(`~/.openclaw/workspace-<id>`)를 cwd로 잡고 Claude CLI를 spawn한다. cwd가 봇 평생 같으니까 Claude auto memory도 봇별로 한 곳에 누적됨:
+
+```
+~/.openclaw/workspace-bboya/      ← 뽀야 cwd (봇 평생 고정)
+~/.openclaw/workspace-bbojjak/    ← 뽀짝이 cwd (봇 평생 고정)
+
+→ Claude CLI는 cwd를 인코딩해서 auto memory 폴더 만듦:
+
+~/.claude/projects/
+├── -Users-dahtmad--openclaw-workspace-bboya/memory/MEMORY.md   ← 뽀야 평생 메모리
+└── -Users-dahtmad--openclaw-workspace-bbojjak/memory/MEMORY.md ← 뽀짝이 평생 메모리
+```
+
+→ **봇끼리 절대 안 섞이고, 봇 평생 누적**. (참고: ep.1에서 짚은 ACP 우회 시기엔 OpenClaw 이전 버전(goclaw)이 세션별 임시 cwd로 spawn했어서 auto memory가 흩어졌는데, **지금 CLI bridge 방식은 워크스페이스 직결**이라 봇 평생 한 곳에 쌓임)
+
+### 한눈에 비교 — 둘 다 평생, 용도만 다름
+
+| | 🐱 OpenClaw memory | 🤖 Claude auto memory |
+|---|---|---|
+| **위치** | `workspace-<id>/MEMORY.md` + `memory/YYYY-MM-DD.md` | `~/.claude/projects/-Users-...-workspace-<id>/memory/MEMORY.md` |
+| **단위** | **봇 단위 평생** | **봇 단위 평생** (cwd 고정 덕분) |
+| **누가 쓰나** | 사람이 직접 / 봇이 일별 로그(`memory/YYYY-MM-DD.md`)로 기록 | Claude가 작업 중 자동 누적 (학습한 규칙·실수 방지) |
+| **주입 섹션** | `Workspace Files (injected)` / `Project Context` | `# auto memory` |
+| **들어가는 내용** | 정체성·관계·진행 프로젝트·일지·하드룰 | "이 작업할 때 이거 먼저 확인", "FAQ 오독 주의" 같은 운영 노하우 |
+| **재주입 보장** | ⭐ AGENTS.md `## Red Lines`는 post-compaction 재주입 | ❌ 일반 시스템 프롬프트에만 |
+
+### 실제 사례 — 뽀짝이의 auto memory
+
+뽀짝이가 운영하면서 자동 누적한 학습 메모(`~/.claude/projects/-Users-dahtmad--openclaw-workspace-bbojjak/memory/`):
+
+- `feedback_account_merge_phone.md` — FAQ "phone은 merge 대상 아님" 오독 주의
+- `feedback_ai_talk_speaker_email_approval.md` — 설문 리포트 자동발송 금지, Slack 초안 공유 후 닿 컨펌 받고 보낼 것
+- `feedback_honorific_silence.md` — 타타가 존댓말 스레드엔 끼어들지 말기
+- `feedback_survey_report_autosend_check.md` — "보냈니?" 질문엔 파일/git/memory 부재만 보고 판단 금지, gog gmail search로 먼저 확인
+- `reference_youtube_channel.md` — 지피터스 YouTube는 support@gpters.org 소유
+
+→ 이게 운영하면서 자동으로 쌓인 **봇 평생 노하우**. 사람이 일일이 안 박아도 Claude가 알아서 학습·누적함.
+
+### 충돌 시 우선순위 — OpenClaw가 진실
+
+둘 다 system prompt에 들어가서 **이론상 충돌 가능**. 예: OpenClaw `MEMORY.md`엔 "집사로 부른다"인데 auto memory엔 어쩌다 "사용자" 호칭이 박힘.
+
+**원칙**:
+
+1. **봇 페르소나·정체성·하드룰**은 무조건 **OpenClaw쪽**(`MEMORY.md` / `AGENTS.md ## Red Lines`)에. post-compaction 재주입 보장
+2. **auto memory는 운영 노하우 영역** — 페르소나 정의 박지 말기. Claude가 자동 학습한 거라 페르소나가 박히면 오염원이 됨
+3. **충돌 시 OpenClaw가 진실** — 매 호출마다 새로 주입하니 더 일관됨. auto memory에 잘못 박힌 페르소나는 사람이 직접 해당 .md 삭제·수정
+
+### 증상별 점검 위치
+
+| 증상 | 점검 |
+|---|---|
+| 봇이 자기 정체성·집사 호칭 까먹음 | OpenClaw `MEMORY.md` / `AGENTS.md ## Red Lines` |
+| 운영 노하우(어떤 API는 이렇게, FAQ 오독 등) 까먹음 | Claude auto memory — Claude가 자동 챙기게 두면 됨 |
+| 페르소나 오염 (어색한 말투 등) | auto memory `~/.claude/projects/-Users-...-workspace-<id>/memory/`에 잘못 박힌 항목 정리 |
+
+---
+
 ## 트러블슈팅
 
 | 증상 | 원인 | 해결 |
