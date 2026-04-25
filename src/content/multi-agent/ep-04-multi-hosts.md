@@ -132,18 +132,18 @@ Slack Workspace (뽀피터스) — 하나로 공유
 
 **한 줄 원칙**: 텍스트성 공통 자산(스킬·hook·문서)은 git 자료실로 공유. 상태·정체성·인증(개인 사물)은 절대 분리.
 
-| 자원 | 위치 | 공유? | 비고 |
+| 자원 | 위치 | 공유 | 비고 |
 |---|---|---|---|
-| **공용 스킬 레지스트리** | `~/.openclaw/bbopters-shared/skills/` | ✅ git 관리, 전 머신 pull | `bbopters-skill` CLI로 `~/.claude/skills/`에 심링크 활성화 |
-| **공용 hook 스크립트** | `~/.openclaw/bbopters-shared/hooks/` | ✅ git 관리, 전 머신 복제 | 글로벌 `~/.claude/settings.json`이 이 경로 참조 |
-| **팀 문서·위키** | `~/.openclaw/bbopters-shared/projects/`, `context/`, `learnings/` | ✅ git 관리 | 에이전트들이 작업 전에 참조 |
-| **페르소나 템플릿** | `~/.openclaw/bbopters-shared/templates/` (있으면) | ✅ git 관리 | 새 에이전트 만들 때 복제용 뼈대 |
-| **글로벌 `~/.claude/CLAUDE.md`** | 각 머신 `~/.claude/` | ❌ 머신별 | 개인 환경 규칙만. 페르소나·말투는 절대 금지 (01 Advanced 참조) |
-| **`openclaw.json`** | 각 머신 `~/.openclaw/` | ❌ **머신별 독립** | 그 머신에 사는 에이전트만 정의. 절대 공유 금지 |
-| **워크스페이스 파일** (IDENTITY/SOUL/AGENTS/TOOLS/MEMORY/USER) | `~/.openclaw/workspace-<id>/` | ❌ **에이전트별 고유** | 개인 정체성·경험. 공유하면 페르소나 오염 |
-| **`MEMORY.md` / `memory/` 일별 로그** | workspace-<id> 내부 | ❌ **에이전트 고유** | 각 에이전트의 사적 경험·학습 |
-| **OAuth 토큰** (`auth-profiles.json`) | `~/.openclaw/agents/<id>/agent/` | ❌ **절대 공유 금지** | 머신·에이전트별 독립. 복사 시 Anthropic 차단 위험 |
-| **스킬 `.env` 파일** | `workspace-<id>/.env` (뽀피터스 규칙) | ❌ 워크스페이스별 | 스킬 디렉토리가 아닌 **워크스페이스 루트에 통합** (집사 규칙) |
+| 공용 스킬 레지스트리 | `~/.openclaw/bbopters-shared/skills/` | ✅ 공용 | git 관리. `bbopters-skill` CLI로 `~/.claude/skills/`에 심링크 |
+| 공용 hook 스크립트 | `~/.openclaw/bbopters-shared/hooks/` | ✅ 공용 | git 관리. 글로벌 `~/.claude/settings.json`에서 이 경로 참조 |
+| 팀 문서·위키 | `~/.openclaw/bbopters-shared/projects/`, `context/`, `learnings/` | ✅ 공용 | git 관리. 작업 전에 참조 |
+| 페르소나 템플릿 | `~/.openclaw/bbopters-shared/templates/` | ✅ 공용 | git 관리. 새 에이전트 복제용 뼈대 |
+| 글로벌 `CLAUDE.md` | 각 머신 `~/.claude/` | ❌ 머신별 | 개인 환경 규칙만. 페르소나·말투는 금지 (01 Advanced) |
+| `openclaw.json` | 각 머신 `~/.openclaw/` | ❌ 머신별 | 그 머신에 사는 에이전트만 정의 |
+| 워크스페이스 파일 | `~/.openclaw/workspace-<id>/` | ❌ 에이전트별 | IDENTITY/SOUL/AGENTS/TOOLS/MEMORY/USER. 공유 시 페르소나 오염 |
+| MEMORY.md / 일별 로그 | `workspace-<id>/` | ❌ 에이전트별 | 사적 경험·학습 |
+| OAuth 토큰 | `~/.openclaw/agents/<id>/agent/` | ❌ 절대 금지 | `auth-profiles.json`. 복사 시 Anthropic 차단 위험 |
+| 스킬 `.env` 파일 | `workspace-<id>/.env` | ❌ 워크스페이스별 | 스킬 디렉토리 X, 워크스페이스 루트에 통합 (집사 규칙) |
 
 ---
 
@@ -306,12 +306,12 @@ stat -f '%Sp' ~/.openclaw/bbopters-shared/hooks/slack-thread-rehydrate.sh
 
 ## STEP 2 · 뽀둥이·뽀식이 슬랙 앱 만들기 — "신입 2명 사원증 발급"
 
-> 🪪 **비유** — 새 사무실에 들어올 직원 2명한테 사원증 발급. ep.2 STEP 1을 2번 반복하면 끝.
+> 🪪 **비유** — 새 사무실 두 곳에 들어올 직원 2명한테 사원증 발급. ep.2 STEP 1을 2번 반복하면 끝. 각자 다른 머신에서 돌릴 거지만, **슬랙 앱 자체는 어디 머신에서 만들든 무관** — 토큰을 나중에 어느 머신의 `openclaw.json`에 넣느냐가 진짜 분리 지점.
 
 같은 뽀피터스 슬랙 워크스페이스에 새 Slack App 2개 추가:
 
-- 🐱 뽀둥이: 별도 Bot Token (xoxb-...B1) + App Token (xapp-...B1)
-- 🐱 뽀식이: 별도 Bot Token (xoxb-...B2) + App Token (xapp-...B2)
+- 🐱 뽀둥이: 별도 Bot Token (xoxb-...B1) + App Token (xapp-...B1) — 맥미니 B에서 사용
+- 🐱 뽀식이: 별도 Bot Token (xoxb-...C1) + App Token (xapp-...C1) — 맥미니 C에서 사용
 
 각 봇을 사용할 채널에 `/invite @봇이름` 해주기.
 
@@ -319,20 +319,22 @@ stat -f '%Sp' ~/.openclaw/bbopters-shared/hooks/slack-thread-rehydrate.sh
 
 ## STEP 3 · 뽀둥이·뽀식이 책상 차려주기 — 페르소나 설정
 
-> 🪑 **비유** — ep.2의 1마리 가이드와 **완전히 똑같음**. 책상 위에 성격설정서 6장 깔기. 멀티 사무실 됐다고 방법 바뀌는 거 아님.
+> 🪑 **비유** — ep.2의 1마리 가이드와 **완전히 똑같음**. 책상 위에 성격설정서 6장 깔기. 멀티 사무실 됐다고 방법 바뀌는 거 아님. **각 머신에서 자기 직원 워크스페이스만** 만들면 끝.
 
 ```
 맥미니 B: ~/.openclaw/
-├── workspace-bboongi/            ← 01 STEP 1 원칙대로
-│   ├── IDENTITY.md               러시안블루, 데이터 전담
-│   ├── SOUL.md                   존댓말, 숫자·근거 먼저
-│   ├── USER.md                   집사·팀원 이해
-│   ├── AGENTS.md                 ## Red Lines에 말투·하드룰 박힘 ⭐
-│   ├── TOOLS.md                  Airtable/BigQuery 등 도구
-│   ├── MEMORY.md                 뽀둥이 사적 경험
-│   └── .env                      뽀둥이가 쓰는 스킬 환경변수 통합
-└── workspace-bbosiki/
-    └── ... (뽀식이, 동일 구조)
+└── workspace-bboongi/            ← 01 STEP 1 원칙대로
+    ├── IDENTITY.md               러시안블루, 데이터 전담
+    ├── SOUL.md                   존댓말, 숫자·근거 먼저
+    ├── USER.md                   집사·팀원 이해
+    ├── AGENTS.md                 ## Red Lines에 말투·하드룰 박힘 ⭐
+    ├── TOOLS.md                  Airtable/BigQuery 등 도구
+    ├── MEMORY.md                 뽀둥이 사적 경험
+    └── .env                      뽀둥이가 쓰는 스킬 환경변수 통합
+
+맥미니 C: ~/.openclaw/
+└── workspace-bbosiki/            ← 동일 구조, 뽀식이용
+    └── ... (CS 톤·도구로)
 ```
 
 ### 공용 템플릿에서 시작하기
@@ -364,8 +366,8 @@ cp -r ~/.openclaw/bbopters-shared/templates/workspace-skeleton/ \
 - 반말 금지 (반말은 뽀야의 영역. 글로벌 `~/.claude/CLAUDE.md`에 섞여있어도 무시)
 
 ### 호스팅·협업
-- 나(뽀둥이)는 **맥미니 B**에서 돈다. 뽀야/뽀짝이는 맥미니 A
-- 뽀야/뽀짝이에게 작업 위임 불가 (머신 걸침) → 슬랙 채널로 요청 전달
+- 나(뽀둥이)는 **맥미니 B**에서 돈다. 뽀야/뽀짝이는 맥미니 A, 뽀식이는 맥미니 C
+- 다른 머신 직원에게 작업 위임 불가 (머신 걸침) → 슬랙 채널로 요청 전달
 - 완료 리포트는 원 스레드에 답글로
 
 ### 보안·데이터
@@ -376,16 +378,18 @@ cp -r ~/.openclaw/bbopters-shared/templates/workspace-skeleton/ \
 
 **핵심**: 말투·호스팅·협업 규칙까지 전부 AGENTS.md Red Lines에. post-compaction 재주입으로 긴 대화에서도 유지됨. CLAUDE.md는 01 원칙대로 **기본 스킵** (IDE 단독 실행 필요할 때만 만들기).
 
-### 뽀식이도 동일 패턴
-고양이 네이밍 + 담당 영역(고객 응대·CS) + 같은 구조로 `workspace-bbosiki/` 구성.
+### 뽀식이도 동일 패턴 (단, 맥미니 C에서)
+고양이 네이밍 + 담당 영역(고객 응대·CS) + 같은 구조로 **맥미니 C의** `~/.openclaw/workspace-bbosiki/` 구성. AGENTS.md "호스팅·협업" 섹션엔 "나(뽀식이)는 맥미니 C에서 돈다"로 박기.
 
 ---
 
-## STEP 4 · 맥미니 B의 `openclaw.json` 작성 — "B 사무실 인사팀 셋업"
+## STEP 4 · 맥미니 B·C의 `openclaw.json` 작성 — "B/C 사무실 인사팀 셋업"
 
-> 📋 **비유** — A 사무실 인사팀이랑 별개로, B 사무실 인사팀이 자기 직원만 관리. 절대 옆 사무실 직원 정보 들고있으면 안 됨 (Rule 1·2 위반 사고).
+> 📋 **비유** — A 사무실 인사팀이랑 별개로, B 사무실 인사팀이 자기 직원만, C 사무실 인사팀이 자기 직원만 관리. 절대 옆 사무실 직원 정보 들고있으면 안 됨 (Rule 1·2 위반 사고).
 
-**이 사무실(맥미니 B)에 사는 직원만** 정의. 뽀야·뽀짝이(A 사무실 직원)는 절대 들어가면 안 됨.
+**이 사무실에 사는 직원만** 정의. B엔 뽀둥이만, C엔 뽀식이만.
+
+### 4-1. 맥미니 B의 `~/.openclaw/openclaw.json` (뽀둥이 전용)
 
 ```json
 {
@@ -405,15 +409,6 @@ cp -r ~/.openclaw/bbopters-shared/templates/workspace-skeleton/ \
         "heartbeat": { "every": "0" },
         "groupChat": { "mentionPatterns": ["뽀둥이", "bboongi"] },
         "tools": { "exec": { "security": "full" } }
-      },
-      {
-        "id": "bbosiki",
-        "name": "뽀식이",
-        "workspace": "/Users/dahtmad/.openclaw/workspace-bbosiki",
-        "model": { "primary": "claude-cli/claude-opus-4-7", "fallbacks": [] },
-        "heartbeat": { "every": "0" },
-        "groupChat": { "mentionPatterns": ["뽀식이", "bbosiki"] },
-        "tools": { "exec": { "security": "full" } }
       }
     ]
   },
@@ -427,10 +422,45 @@ cp -r ~/.openclaw/bbopters-shared/templates/workspace-skeleton/ \
           "allowFrom": ["U06BNH5R26T"],
           "groupPolicy": "allowlist",
           "channels": { "C0XXX1": { "allowBots": true }}
-        },
+        }
+      }
+    }
+  },
+  "bindings": [
+    { "type": "route", "agentId": "bboongi", "match": { "channel": "slack", "accountId": "bboongi" }}
+  ]
+}
+```
+
+### 4-2. 맥미니 C의 `~/.openclaw/openclaw.json` (뽀식이 전용)
+
+```json
+{
+  "agents": {
+    "defaults": {
+      "model": { "primary": "openai-codex/gpt-5.4", "fallbacks": [] },
+      "workspace": "/Users/dahtmad/.openclaw/workspace-bbosiki",
+      ...
+    },
+    "list": [
+      {
+        "id": "bbosiki",
+        "default": true,
+        "name": "뽀식이",
+        "workspace": "/Users/dahtmad/.openclaw/workspace-bbosiki",
+        "model": { "primary": "claude-cli/claude-opus-4-7", "fallbacks": [] },
+        "heartbeat": { "every": "0" },
+        "groupChat": { "mentionPatterns": ["뽀식이", "bbosiki"] },
+        "tools": { "exec": { "security": "full" } }
+      }
+    ]
+  },
+  "channels": {
+    "slack": {
+      "accounts": {
         "bbosiki": {
-          "botToken": "xoxb-...B2",
-          "appToken": "xapp-...B2",
+          "botToken": "xoxb-...C1",
+          "appToken": "xapp-...C1",
           "dmPolicy": "allowlist",
           "allowFrom": ["U06BNH5R26T"],
           "groupPolicy": "allowlist",
@@ -440,42 +470,45 @@ cp -r ~/.openclaw/bbopters-shared/templates/workspace-skeleton/ \
     }
   },
   "bindings": [
-    { "type": "route", "agentId": "bboongi",  "match": { "channel": "slack", "accountId": "bboongi" }},
-    { "type": "route", "agentId": "bbosiki",  "match": { "channel": "slack", "accountId": "bbosiki" }}
+    { "type": "route", "agentId": "bbosiki", "match": { "channel": "slack", "accountId": "bbosiki" }}
   ]
 }
 ```
 
 **👀 말로 풀면**
 
-> B 사무실에는 뽀둥이·뽀식이만 등록.
-> 뽀둥이가 B 사무실의 "관리자(default)" — 우편물 분류 실패 시 폴백.
-> 뽀둥이·뽀식이 봇 토큰만 여기 등록 (뽀야 토큰은 절대 여기 두지 말 것 — Rule 1).
-> 두 직원의 우편물 분류표(bindings) 한 줄씩 추가.
+> B 사무실엔 뽀둥이만, C 사무실엔 뽀식이만 등록.
+> 1마리뿐인 사무실은 그 1마리가 곧 "관리자(default)" — 매칭 실패 시 자기가 폴백.
+> 봇 토큰도 머신별로만 — 뽀둥이 토큰은 B에만, 뽀식이 토큰은 C에만 (Rule 1).
+> 자기 직원의 우편물 분류표(bindings) 한 줄씩.
 
 **꼭 눈여겨볼 포인트**
-- B 사무실 내부의 "관리자(default)"는 **뽀둥이** (B 사무실 안에서 매칭 실패 시 폴백 받는 사람)
-- A의 `openclaw.json`엔 뽀둥이·뽀식이 정보가 절대 들어가면 안 됨 — 각 사무실 인사팀은 **자기 직원만** 관리
-- 슬랙 토큰도 마찬가지 — 뽀야·뽀짝이 토큰은 A에서만, 뽀둥이·뽀식이 토큰은 B에서만
+- B와 C는 **서로의 직원 정보를 모름** — 각 사무실 인사팀은 자기 직원만 관리
+- A의 `openclaw.json`엔 뽀둥이·뽀식이 정보가 들어가면 안 되고, B의 것에 뽀식이가, C의 것에 뽀둥이가 들어가도 안 됨
+- 슬랙 토큰도 마찬가지 — 뽀야·뽀짝이는 A, 뽀둥이는 B, 뽀식이는 C
+- 1마리뿐인 머신은 default가 그 1마리로 자동. 추후 같은 머신에 직원 추가하면 그때 default 명시 정리
 
 ---
 
 ## STEP 5 · 사원증 발급 + 사무실 문 열기 — OAuth 로그인 + 게이트웨이 기동
 
-> 🪪 **비유** — 신입 2명 사원증 발급(OAuth 로그인) + B 사무실 정식 오픈(게이트웨이 시작).
+> 🪪 **비유** — 신입 2명 사원증 발급(OAuth 로그인) + B·C 사무실 정식 오픈(게이트웨이 시작). 각 머신에서 자기 직원 로그인만.
 
 ```bash
-# 맥미니 B에서
+# 맥미니 B에서 (뽀둥이만)
 cd ~/.openclaw/workspace-bboongi
 CLAUDE_CONFIG_DIR=~/.openclaw/agents/bboongi/agent claude /login
 
+# 맥미니 C에서 (뽀식이만)
 cd ~/.openclaw/workspace-bbosiki
 CLAUDE_CONFIG_DIR=~/.openclaw/agents/bbosiki/agent claude /login
 
-# 게이트웨이 시작
+# 각 머신에서 게이트웨이 시작
 launchctl kickstart -k gui/$(id -u)/ai.openclaw.gateway
 sleep 7
 ```
+
+⚠️ OAuth 토큰(`auth-profiles.json`)은 **머신·에이전트별로 독립**. 한 머신에서 로그인한 결과를 다른 머신으로 복사하면 Anthropic 차단 위험. 반드시 해당 머신에서 직접 `claude /login` 실행.
 
 ---
 
