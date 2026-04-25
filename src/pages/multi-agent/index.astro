@@ -10,6 +10,7 @@ const seriesToken = guides.find(g => g.data.token)?.data.token || '';
 <BaseLayout title="멀티 에이전트 운영 가이드">
   <div class="list-page">
     <header class="list-header">
+      <span class="meetup-badge">🎤 밋업 발표 자료</span>
       <h1>🤖 멀티 에이전트 운영 가이드</h1>
       <p>Slack × Claude CLI로 여러 마리 AI 에이전트 키우기 — 1마리부터 N대 머신 분산까지</p>
     </header>
@@ -64,6 +65,18 @@ const seriesToken = guides.find(g => g.data.token)?.data.token || '';
   .list-header {
     text-align: center;
     padding: 60px 0 40px;
+  }
+
+  .meetup-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #8B5CF6;
+    background: color-mix(in srgb, #8B5CF6 12%, transparent);
+    padding: 4px 12px;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+    margin-bottom: 16px;
   }
 
   .list-header h1 {

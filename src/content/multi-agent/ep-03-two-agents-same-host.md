@@ -6,7 +6,7 @@ publishedAt: "2026-04-25"
 accentColor: "#8B5CF6"
 description: "한 대의 맥미니에 두 에이전트를 페르소나 격리해서 돌리는 법. cwd 기반 spawn + bindings route + slack-thread-rehydrate hook 자동 적용."
 tags: ["멀티에이전트", "OpenClaw", "Claude CLI", "페르소나 격리"]
-token: "뽀야뽀야"
+token: "밋업"
 ---
 
 # 02 · 같은 맥미니에 2마리 (뽀야 + 뽀짝이)

@@ -6,7 +6,7 @@ publishedAt: "2026-04-25"
 accentColor: "#8B5CF6"
 description: "기존 Anthropic API 방식과 Claude CLI 방식의 차이. 모델 호출 한 칸만 바뀌지만, 그 한 칸이 비용·세션·도구·인증을 흔든다."
 tags: ["멀티에이전트", "OpenClaw", "Claude CLI", "Claude API"]
-token: "뽀야뽀야"
+token: "밋업"
 ---
 
 # 00 · OpenClaw + Claude API vs OpenClaw + Claude CLI 비교

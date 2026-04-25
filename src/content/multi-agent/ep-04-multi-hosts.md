@@ -6,7 +6,7 @@ publishedAt: "2026-04-25"
 accentColor: "#8B5CF6"
 description: "맥미니 N대 + 에이전트 M마리. 봇 토큰·OAuth·MEMORY는 분리, 스킬·hook·팀 문서는 공용 git 레포로 통일. 머신 걸친 협업은 슬랙 스레드를 메시지 큐처럼."
 tags: ["멀티에이전트", "OpenClaw", "Claude CLI", "멀티 호스트", "공용 레포"]
-token: "뽀야뽀야"
+token: "밋업"
 ---
 
 # 03 · 여러 물리 머신에 여러 마리 (뽀야·뽀짝이 + 뽀둥이·뽀식이)

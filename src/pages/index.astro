@@ -46,7 +46,7 @@ const multiAgent = (await getCollection('multi-agent')).sort((a, b) => a.data.ep
       <a href="/multi-agent" class="series-card multi-agent-card">
         <span class="series-icon">🤖</span>
         <div class="series-body">
-          <h2>멀티 에이전트 운영 가이드</h2>
+          <h2>멀티 에이전트 운영 가이드 <span class="meetup-tag">🎤 밋업 발표</span></h2>
           <p>Slack × Claude CLI로 여러 마리 키우기 — 1마리부터 N대 머신 분산까지</p>
         </div>
         <span class="series-lock">🔒</span>
@@ -268,6 +268,18 @@ const multiAgent = (await getCollection('multi-agent')).sort((a, b) => a.data.ep
   }
 
   .multi-agent-card:hover { border-color: #8B5CF6; }
+  .meetup-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #8B5CF6;
+    background: color-mix(in srgb, #8B5CF6 12%, transparent);
+    padding: 2px 8px;
+    border-radius: 999px;
+    margin-left: 6px;
+    vertical-align: 1px;
+    letter-spacing: 0.02em;
+  }
   .setup-card:hover { border-color: #E8590C; }
   .note-card:hover { border-color: #E8A87C; }
   .training-card:hover { border-color: #3B82F6; }
