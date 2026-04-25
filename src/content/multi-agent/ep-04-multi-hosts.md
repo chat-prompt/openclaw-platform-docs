@@ -134,18 +134,25 @@ Slack Workspace (뽀피터스) — 하나로 공유
 
 **한 줄 원칙**: 텍스트성 공통 자산(스킬·hook·문서)은 git 자료실로 공유. 상태·정체성·인증(개인 사물)은 절대 분리.
 
-| 자원 | 위치 | 공유 | 비고 |
+### ✅ 공유 — 모든 머신이 같은 git 레포를 봄
+
+| 자원 | 위치 | 비고 |
+|---|---|---|
+| 공용 스킬 레지스트리 | `~/.openclaw/bbopters-shared/skills/` | `bbopters-skill` CLI로 `~/.claude/skills/`에 심링크 |
+| 공용 hook 스크립트 | `~/.openclaw/bbopters-shared/hooks/` | 글로벌 `~/.claude/settings.json`에서 이 경로 참조 |
+| 팀 문서·위키 | `~/.openclaw/bbopters-shared/projects/`, `context/`, `learnings/` | 작업 전 `git pull`로 최신화 |
+| 페르소나 템플릿 | `~/.openclaw/bbopters-shared/templates/` | 새 에이전트 복제용 뼈대 |
+
+### ❌ 분리 — 머신·에이전트마다 독립 (절대 공유 금지)
+
+| 자원 | 단위 | 위치 | 비고 |
 |---|---|---|---|
-| 공용 스킬 레지스트리 | `~/.openclaw/bbopters-shared/skills/` | ✅ 공용 | git 관리. `bbopters-skill` CLI로 `~/.claude/skills/`에 심링크 |
-| 공용 hook 스크립트 | `~/.openclaw/bbopters-shared/hooks/` | ✅ 공용 | git 관리. 글로벌 `~/.claude/settings.json`에서 이 경로 참조 |
-| 팀 문서·위키 | `~/.openclaw/bbopters-shared/projects/`, `context/`, `learnings/` | ✅ 공용 | git 관리. 작업 전에 참조 |
-| 페르소나 템플릿 | `~/.openclaw/bbopters-shared/templates/` | ✅ 공용 | git 관리. 새 에이전트 복제용 뼈대 |
-| 글로벌 `CLAUDE.md` | 각 머신 `~/.claude/` | ❌ 머신별 | 개인 환경 규칙만. 페르소나·말투는 금지 (01 Advanced) |
-| `openclaw.json` | 각 머신 `~/.openclaw/` | ❌ 머신별 | 그 머신에 사는 에이전트만 정의 |
-| 워크스페이스 파일 | `~/.openclaw/workspace-<id>/` | ❌ 에이전트별 | IDENTITY/SOUL/AGENTS/TOOLS/MEMORY/USER. 공유 시 페르소나 오염 |
-| MEMORY.md / 일별 로그 | `workspace-<id>/` | ❌ 에이전트별 | 사적 경험·학습 |
-| OAuth 토큰 | `~/.openclaw/agents/<id>/agent/` | ❌ 절대 금지 | `auth-profiles.json`. 복사 시 Anthropic 차단 위험 |
-| 스킬 `.env` 파일 | `workspace-<id>/.env` | ❌ 워크스페이스별 | 스킬 디렉토리 X, 워크스페이스 루트에 통합 (집사 규칙) |
+| 글로벌 `CLAUDE.md` | 머신별 | `~/.claude/` | 개인 환경 규칙만. 페르소나 금지 |
+| `openclaw.json` | 머신별 | `~/.openclaw/` | 그 머신에 사는 에이전트만 정의 |
+| OAuth 토큰 | 머신·에이전트별 | `~/.openclaw/agents/<id>/agent/` | 복사 시 Anthropic 차단 위험 |
+| 워크스페이스 파일 | 에이전트별 | `~/.openclaw/workspace-<id>/` | IDENTITY·SOUL·AGENTS·TOOLS·MEMORY·USER |
+| MEMORY.md / 일별 로그 | 에이전트별 | `workspace-<id>/` | 사적 경험·학습 |
+| 스킬 `.env` | 에이전트별 | `workspace-<id>/.env` | 스킬 디렉토리 ❌, 워크스페이스 루트 통합 |
 
 ---
 
