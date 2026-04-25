@@ -175,20 +175,22 @@ Slack Workspace (뽀피터스) — 하나로 공유
 
 ### CLAUDE.md vs AGENTS.md `## Red Lines` — 언제 뭘 쓰나
 
-> 둘 다 "자동 주입"되는 건 맞아. 다만 **주입 메커니즘이 달라서 용도가 갈린다**. 발표 때 자주 나오는 질문이라 정리.
+> 둘 다 자동 주입 + `/compact` 후에도 보존되는 건 맞아. 다만 **주입 경로와 메커니즘이 다르다**. 발표 때 자주 나오는 질문이라 사실 기반으로 정리.
 
 | 항목 | 워크스페이스 `CLAUDE.md` | `AGENTS.md` `## Red Lines` |
 |---|---|---|
-| 주입 시점 | **세션 시작 시 1회** — Claude Code가 cwd에서 시스템 프롬프트에 포함 | **매 턴 / post-compaction 재주입** — OpenClaw 게이트웨이가 시스템 메시지로 다시 박음 |
-| 컨텍스트 압축 시 | 시스템 프롬프트라 보존되지만, 매우 긴 대화에선 우선순위 밀릴 위험 | **자동 재주입 보장** — 잘려도 다시 들어옴 |
-| 의도 | 페르소나·세션 시작 가이드 (한 번 알려주면 됨) | 끝까지 잊으면 안 되는 하드 룰 |
-| 대표 예시 | "이 워크스페이스는 뽀야 페르소나로 동작" | 말투·보안·`.env` 위치·호스팅·협업 |
+| 주입 경로 | 세션 시작 시 cwd에서 로드 → **사용자 메시지(user message)로 주입**. 프롬프트 캐싱으로 매 API 호출엔 캐시 히트 | OpenClaw 게이트웨이가 **별도 시스템 메시지로 재주입** (워크스페이스 `AGENTS.md` 본문에 명시된 메커니즘) |
+| `/compact` 후 | **디스크에서 재로드 (re-injected from disk)** — Claude Code 공식 문서 보장 [^cc-context] | 매 턴 재주입되므로 자연스럽게 살아남음 |
+| 의도 | 페르소나·세션 시작 가이드 (한 번 알려주면 되는 정적 정보) | 에이전트별 운영 하드 룰 (말투·보안·인프라 등 절대 잊으면 안 되는 것) |
+| 대표 예시 | "이 워크스페이스는 뽀야 페르소나로 동작" | 말투·보안·`.env` 위치·호스팅·협업·도구 사용 |
 
 **한 줄 정리**:
-- **CLAUDE.md = 세션 시작 인사말** · 한 번 알려줘도 되는 가이드
-- **AGENTS.md `## Red Lines` = 매 턴 떠올리는 절대 룰** · 사고 직결되는 하드 룰
+- **CLAUDE.md = 세션 시작 인사말 + 페르소나 로드 가이드**
+- **AGENTS.md `## Red Lines` = 에이전트별 운영 하드 룰 모음**
 
-`.env` 위치, 어느 머신에서 도는지, 머신 걸친 위임 금지 같은 룰은 **헷갈리면 사고 직결** (Rule 1 위반 = 메시지 유실/중복 응답)이라 반드시 Red Lines 자리. CLAUDE.md엔 "운영 하드 룰은 AGENTS.md `## Red Lines` 참조" 한 줄 포인터만 둬도 충분.
+뽀피터스 표준 패턴: CLAUDE.md엔 페르소나 로드 가이드만 짧게 두고, **운영 하드 룰은 모두 `AGENTS.md` `## Red Lines` 한 곳에 모은다**. 둘 다 보존은 강하지만, 운영 룰을 한 자리에 모아두면 변경·검토·신규 에이전트 복제할 때 관리가 깔끔. CLAUDE.md엔 "운영 하드 룰은 AGENTS.md `## Red Lines` 참조" 포인터 한 줄로 충분.
+
+[^cc-context]: Claude Code 공식 문서 [Memory](https://code.claude.com/docs/en/memory.md)·[Context Window](https://code.claude.com/docs/en/context-window.md) "What survives compaction" 표 참조. AGENTS.md Red Lines의 매 턴 재주입은 OpenClaw 게이트웨이 메커니즘이며, Claude Code 공식 기능은 아님.
 
 ---
 
