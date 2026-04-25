@@ -628,27 +628,27 @@ ssh mac-mini-C "tail -f ~/.openclaw/logs/gateway.log | grep matchedBy"
 
 ## 뽀둥이 / 뽀식이 첫 세팅 체크리스트
 
-### 공용 자산 세팅 (STEP 0 — 맥미니 B 최초 1회)
+### 공용 자산 세팅 (STEP 0 — 맥미니 B/C 최초 1회씩)
 - [ ] `~/.openclaw/bbopters-shared/` git clone (A와 동일 경로)
 - [ ] `bbopters-skill` CLI 사용 가능 확인 (`bbopters-skill list`)
 - [ ] `bbopters-skill install --all` 또는 필요 스킬만 활성화
 - [ ] pull/push 워크플로우 숙지 (Rule 4: 읽기 전 `git pull`)
 
-### 맥미니 B 인프라 (STEP 1)
+### 맥미니 B·C 인프라 (STEP 1 — 각 머신에서 한 번씩)
 - [ ] OpenClaw 2026.4.22+ 설치
 - [ ] Claude CLI 설치
 - [ ] launchd plist 등록 + 게이트웨이 기동 확인
 - [ ] 글로벌 `~/.claude/settings.json` hook에 **공용 레포 경로** 등록 (`bbopters-shared/hooks/slack-thread-rehydrate.sh`)
 
-### 에이전트별 (뽀둥이 × 1, 뽀식이 × 1)
+### 에이전트별 (뽀둥이 → 맥미니 B, 뽀식이 → 맥미니 C)
 - [ ] Slack App 생성 (뽀피터스 워크스페이스)
 - [ ] Bot/App Token 발급 + 채널 초대
-- [ ] `workspace-<id>/` 디렉토리 + 페르소나 파일 6종 (`bbopters-shared/templates/`에서 복제)
+- [ ] 해당 머신의 `workspace-<id>/` 디렉토리 + 페르소나 파일 6종 (`bbopters-shared/templates/`에서 복제)
 - [ ] **말투·호스팅·협업 규칙은 AGENTS.md `## Red Lines`에** (01/02 원칙 그대로, CLAUDE.md 기본 스킵)
 - [ ] `workspace-<id>/.env` — 스킬 환경변수 통합 (집사 규칙)
-- [ ] `openclaw.json` (맥미니 B) agents.list·channels·bindings 추가
+- [ ] 해당 머신의 `openclaw.json`에 자기 직원만 등록 (B엔 뽀둥이만, C엔 뽀식이만)
 - [ ] `~/.openclaw/agents/<id>/agent/`에 OAuth 로그인 (**머신별 독립**, 복사 금지)
-- [ ] 슬랙 멘션 검증 (B 로그에만 찍히는지 확인)
+- [ ] 슬랙 멘션 검증 (자기 머신 로그에만 찍히는지 확인)
 - [ ] hook 로그 검증 (`/tmp/slack-thread-rehydrate.log`에 `using account=<id>`)
 
 ---
@@ -656,13 +656,13 @@ ssh mac-mini-C "tail -f ~/.openclaw/logs/gateway.log | grep matchedBy"
 ## 운영 팁
 
 ### 팁 1 · 머신별 역할 문서화
-맥미니 A는 "대민 업무(뽀야·뽀짝이)", 맥미니 B는 "백오피스(뽀둥이·뽀식이)" 식으로 역할을 문서에 박고, 팀 내부에 누가 어느 머신 담당인지 정리. 장애 시 트리아지 빠름.
+맥미니 A는 "대민 업무(뽀야·뽀짝이)", B는 "데이터 분석(뽀둥이)", C는 "고객응대(뽀식이)" 식으로 역할을 문서에 박고, 팀 내부에 누가 어느 머신 담당인지 정리. 장애 시 트리아지 빠름.
 
 ### 팁 2 · 크론/정기 작업은 머신별 분산
-맥미니 A가 다운돼도 B의 정기 작업(뽀둥이 월별 리포트 등)은 계속 돌아야 함. 중요한 크론은 머신별로 나눠 돌리기.
+맥미니 A가 다운돼도 B의 데이터 리포트, C의 CS 자동 응대는 계속 돌아야 함. 중요한 크론은 머신별로 나눠 돌리기.
 
 ### 팁 3 · 설정 변경 시 한 번에 1대씩
-`openclaw.json` 수정은 머신별 독립이지만, 슬랙 앱 설정(스코프 추가 등)은 양쪽 기동 중일 때 먼저 한 쪽 게이트웨이 껐다 켜고 검증 후 반대쪽. 동시 중단은 피하기.
+`openclaw.json` 수정은 머신별 독립이지만, 슬랙 앱 설정(스코프 추가 등)은 여러 머신 기동 중일 때 한 쪽씩 게이트웨이 껐다 켜고 검증. 동시 중단은 피하기.
 
 ### 팁 4 · 머신 이름 / 호스트 추적
 에이전트가 자기 어느 머신에서 도는지 **AGENTS.md `## Red Lines`의 "호스팅·협업" 섹션**에 박아두면 디버깅 유리 (STEP 3 예시 참조). post-compaction에서도 재주입되므로 긴 대화에서도 자기 호스트를 잊지 않음:
@@ -682,14 +682,14 @@ Slack App Admin 계정은 공용(팀 이메일)으로 만들어서 여러 명이
 
 | 증상 | 의심 | 해결 |
 |---|---|---|
-| 슬랙 멘션에 간헐적으로 답 안 옴 | 같은 봇 토큰이 A/B 양쪽 게이트웨이에 동시 등록돼있음 | `openclaw.json` 양쪽 확인, 중복 제거 |
-| 뽀둥이한테 질문했는데 뽀야가 답 | accountId 매칭 실패 → default fallback. 맥미니 B의 `bindings` 누락 | B의 `openclaw.json` bindings route 추가 |
-| B가 먹통인데 프로세스는 떠있음 | hook 스크립트가 없거나 실행 권한 없음 | A의 hook 스크립트를 B에 복제 + `chmod +x` |
-| OAuth 만료 한쪽에서만 터짐 | 머신별 `auth-profiles.json` 독립 | 해당 머신에서 `claude /login` 재실행 |
-| 크론 작업 중복 실행 | 같은 크론이 A/B 양쪽에 등록됨 | `cron/jobs.json`은 **머신 단위로 유일** 관리 |
+| 슬랙 멘션에 간헐적으로 답 안 옴 | 같은 봇 토큰이 여러 머신 게이트웨이에 동시 등록돼있음 | 각 머신 `openclaw.json` 확인, 중복 제거 |
+| 뽀둥이한테 질문했는데 뽀야가 답 | accountId 매칭 실패 → default fallback. B의 `bindings` 누락 | B의 `openclaw.json` bindings route 추가 |
+| 특정 머신만 먹통인데 프로세스는 떠있음 | hook 스크립트가 없거나 실행 권한 없음 | 공용 레포 hook 경로 확인 + `chmod +x` |
+| OAuth 만료 특정 머신만 터짐 | 머신별 `auth-profiles.json` 독립 | 해당 머신에서 `claude /login` 재실행 |
+| 크론 작업 중복 실행 | 같은 크론이 여러 머신에 등록됨 | `cron/jobs.json`은 **머신 단위로 유일** 관리 |
 | 에이전트 간 위임 실패 | `subagents.allowAgents`는 머신 걸쳐 작동 안 함 | 슬랙 채널로 요청 전달 패턴 사용 (협업 패턴 1) |
-| A 머신에서 고친 스킬이 B에선 구버전으로 실행 | `bbopters-shared` pull 안 함 | B 머신에서 `cd ~/.openclaw/bbopters-shared && git pull` (또는 `bbopters-skill sync`) |
-| B 머신의 hook 로그에 스킬이 안 찍힘 | `bbopters-skill install` 안 함 (심링크 없음) | `bbopters-skill install --all` 또는 필요 스킬 개별 install |
+| 한 머신에서 고친 스킬이 다른 머신에선 구버전 | `bbopters-shared` pull 안 함 | 해당 머신에서 `cd ~/.openclaw/bbopters-shared && git pull` (또는 `bbopters-skill sync`) |
+| 새 머신의 hook 로그에 스킬이 안 찍힘 | `bbopters-skill install` 안 함 (심링크 없음) | `bbopters-skill install --all` 또는 필요 스킬 개별 install |
 | 팀 위키 내용대로 작업했는데 스키마가 다름 | 위키 pull 안 해서 구버전 참조 | Rule 4: 읽기 전 반드시 `git pull`. 특히 스키마/정책 문서 |
 | OAuth 한 머신에서 다른 머신으로 복사 시 계정 차단 | `auth-profiles.json`은 머신·에이전트별 독립이어야 함 | 해당 머신에서 직접 `CLAUDE_CONFIG_DIR=... claude /login` (복사 절대 금지) |
 | `bbopters-skill` 명령 안 먹힘 | CLI 설치 안 돼있음 | `~/.openclaw/CLAUDE.md`의 스킬 매니저 섹션 참조해 CLI 설치 |
@@ -708,29 +708,34 @@ Slack Workspace (뽀피터스)
    ├ @뽀둥이   ──┤
    └ @뽀식이   ──┘
         │
-   ┌────┴─────────────────────────┐
-   ▼                               ▼
-┌──────────────┐              ┌──────────────┐
-│ 맥미니 A      │              │ 맥미니 B      │
-│              │              │              │
-│ openclaw.json│              │ openclaw.json│
-│  agents:     │              │  agents:     │
-│   bboya (d)  │              │   bboongi(d) │
-│   bbojjak    │              │   bbosiki    │
-│  bindings:   │              │  bindings:   │
-│   default→   │              │   bboongi→   │
-│   dajidongsan│              │   bbosiki→   │
-│   hbscom→    │              │              │
-│   bbojjak→   │              │              │
-│              │              │              │
-│ cli-backend  │              │ cli-backend  │
-│  warm stdio  │              │  warm stdio  │
-│  × 2         │              │  × 2         │
-└──────────────┘              └──────────────┘
-   │                               │
-   ▼                               ▼
- claude ─ workspace-bboya     claude ─ workspace-bboongi
- claude ─ workspace-bbojjak   claude ─ workspace-bbosiki
+   ┌────┼──────────────────┐
+   ▼    ▼                  ▼
+┌────────────┐ ┌────────────┐ ┌────────────┐
+│ 맥미니 A    │ │ 맥미니 B    │ │ 맥미니 C    │
+│            │ │            │ │            │
+│openclaw    │ │openclaw    │ │openclaw    │
+│ .json      │ │ .json      │ │ .json      │
+│ agents:    │ │ agents:    │ │ agents:    │
+│  bboya (d) │ │  bboongi(d)│ │  bbosiki(d)│
+│  bbojjak   │ │            │ │            │
+│ bindings:  │ │ bindings:  │ │ bindings:  │
+│  default→  │ │  bboongi→  │ │  bbosiki→  │
+│  dajidongsan│ │           │ │            │
+│  hbscom→   │ │            │ │            │
+│  bbojjak→  │ │            │ │            │
+│            │ │            │ │            │
+│cli-backend │ │cli-backend │ │cli-backend │
+│ warm stdio │ │ warm stdio │ │ warm stdio │
+│ × 2        │ │ × 1        │ │ × 1        │
+└────────────┘ └────────────┘ └────────────┘
+   │                │              │
+   ▼                ▼              ▼
+ claude ─           claude ─       claude ─
+  workspace-         workspace-     workspace-
+  bboya              bboongi        bbosiki
+ claude ─
+  workspace-
+  bbojjak
 ```
 
 **한 줄 요약**: 슬랙 한 워크스페이스 + 머신 N대 + 에이전트 M마리 + 공용 git 레포 1개. **공유(bbopters-shared)**: 스킬·hook·팀 문서·템플릿. **분리(머신·에이전트별)**: 봇 토큰·`openclaw.json`·워크스페이스·MEMORY·OAuth. default는 머신당 1명, 머신 걸친 협업은 슬랙 스레드로.
