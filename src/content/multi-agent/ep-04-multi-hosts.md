@@ -512,9 +512,9 @@ sleep 7
 
 ---
 
-## STEP 6 · 양쪽 사무실 동시에 출근 첫날 — 전체 검증
+## STEP 6 · 세 사무실 동시에 출근 첫날 — 전체 검증
 
-> 🌅 **비유** — A·B 사무실 양쪽 동시에 출근. 4마리 다 자기 자리에서 자기 페르소나로 답하면 셋업 끝.
+> 🌅 **비유** — A·B·C 사무실 세 곳 동시에 출근. 4마리 다 자기 자리에서 자기 페르소나로 답하면 셋업 끝.
 
 ### A 맥미니
 ```bash
@@ -526,13 +526,18 @@ ssh mac-mini-A "tail -f ~/.openclaw/logs/gateway.log | grep matchedBy"
 ssh mac-mini-B "tail -f ~/.openclaw/logs/gateway.log | grep matchedBy"
 ```
 
+### C 맥미니
+```bash
+ssh mac-mini-C "tail -f ~/.openclaw/logs/gateway.log | grep matchedBy"
+```
+
 슬랙에서 4마리 각각 멘션:
 - `@뽀야 ping`    → A에만 `matchedBy=binding.account agentId=bboya`
 - `@뽀짝이 ping`  → A에만 `matchedBy=binding.account agentId=bbojjak`
 - `@뽀둥이 ping`  → B에만 `matchedBy=binding.account agentId=bboongi`
-- `@뽀식이 ping`  → B에만 `matchedBy=binding.account agentId=bbosiki`
+- `@뽀식이 ping`  → C에만 `matchedBy=binding.account agentId=bbosiki`
 
-**절대 A와 B 양쪽 로그에 같은 에이전트가 찍히면 안 됨.** 찍히면 Rule 1 위반 (같은 토큰 중복 기동).
+**절대 두 머신 이상의 로그에 같은 에이전트가 찍히면 안 됨.** 찍히면 Rule 1 위반 (같은 토큰 중복 기동).
 
 ---
 
@@ -566,22 +571,24 @@ ssh mac-mini-B "tail -f ~/.openclaw/logs/gateway.log | grep matchedBy"
 
 ### 패턴 2 · 공용 스킬로 일관성 유지
 
-두 에이전트가 같은 작업을 각자 할 때는 `bbopters-shared/skills/`의 **같은 스킬**을 실행:
+여러 에이전트가 같은 작업을 각자 할 때는 `bbopters-shared/skills/`의 **같은 스킬**을 실행:
 
 ```
-뽀야(A) ──┐                    뽀둥이(B) ──┐
-          ▼                              ▼
-~/.claude/skills/              ~/.claude/skills/
- airtable-query (symlink)       airtable-query (symlink)
-   │                              │
-   ▼                              ▼
-~/.openclaw/bbopters-shared/skills/airtable-query/
-   └── (단일 source of truth)
+뽀야(A) ──┐         뽀둥이(B) ──┐         뽀식이(C) ──┐
+          ▼                    ▼                    ▼
+~/.claude/skills/   ~/.claude/skills/   ~/.claude/skills/
+ airtable-query      airtable-query      airtable-query
+ (symlink)           (symlink)           (symlink)
+   │                    │                    │
+   └────────────────────┴────────────────────┘
+                       ▼
+   ~/.openclaw/bbopters-shared/skills/airtable-query/
+      └── (단일 source of truth, 모든 머신이 같은 git 레포)
 ```
 
-장점: 스킬 버전 불일치 불가. 한쪽에서 스킬 수정 → push → 다른쪽 `bbopters-skill sync` → 양쪽 동일 버전.
+장점: 스킬 버전 불일치 불가. 한쪽에서 스킬 수정 → push → 다른 머신 `bbopters-skill sync` → 모두 동일 버전.
 
-주의: 스킬 실행 시 `.env`는 **각 에이전트의 워크스페이스 루트**(`workspace-bboongi/.env`)에서 읽음. 스킬은 공유지만 토큰은 각자 관리.
+주의: 스킬 실행 시 `.env`는 **각 에이전트의 워크스페이스 루트**(`workspace-bboongi/.env`, `workspace-bbosiki/.env`)에서 읽음. 스킬은 공유지만 토큰은 각자 관리.
 
 ### 패턴 3 · 팀 위키 참조 (공용 문서)
 

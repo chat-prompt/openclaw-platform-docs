@@ -144,8 +144,25 @@ cli-backend가 각자 Claude CLI 병렬 spawn
 
 ### 4. **cwd / 워크스페이스** = 봇의 자기 책상
 
-`cwd` = "current working directory" = 지금 작업 중인 폴더. **봇마다 자기 폴더가 따로 있어**:
+**`cwd` = current working directory = `claude` 명령이 실행되는 그 순간의 현재 디렉토리.**
 
+터미널에서 사람이 직접 쓸 때:
+```bash
+cd ~/myproject && claude
+#  ↑ 이 폴더가 cwd. claude는 여기서 깨어나서 이 폴더의 파일들을 자동으로 봄
+```
+
+OpenClaw가 봇 호출받을 때도 똑같이 `cwd` 지정해서 spawn함:
+```bash
+# 뽀야한테 메시지 오면
+cd /Users/dahtmad/.openclaw/workspace-bboya && claude
+
+# 뽀짝이한테 메시지 오면
+cd /Users/dahtmad/.openclaw/workspace-bbojjak && claude
+#                                ↑ cwd만 다르게 줌
+```
+
+봇마다 자기 폴더가 따로 있어:
 ```
 ~/.openclaw/
 ├── workspace-bboya/      ← 뽀야 책상
@@ -153,7 +170,9 @@ cli-backend가 각자 Claude CLI 병렬 spawn
 └── workspace-arongi/     ← 아롱이 책상
 ```
 
-봇한테 일 들어오면 OpenClaw가 **그 봇 책상(cwd)에서 `claude`를 실행**해. 그러면 그 책상에 깔린 성격설정서를 Claude가 자동으로 읽어서 그 봇 페르소나로 답함. **이게 멀티에이전트의 핵심 트릭** — 같은 `claude` 바이너리인데 어느 책상에서 실행되냐에 따라 다른 봇이 됨.
+`claude`는 시작할 때 **자기 cwd 폴더의 파일들을 자동으로 둘러봄** (CLAUDE.md 등). OpenClaw는 거기에 추가로 SOUL/IDENTITY/AGENTS 같은 페르소나 파일도 주입해줌.
+
+> 🪑 **그래서 "책상" 비유**: cwd = "claude가 깨어났을 때 자기가 앉은 자리". 책상 위에 깔린 파일(성격설정서)이 자기 페르소나가 됨. **같은 `claude` 바이너리인데 어느 책상에서 실행되냐에 따라 완전히 다른 봇이 되는 게 멀티에이전트의 핵심 트릭.**
 
 ### 5. **페르소나 파일 6장** = 책상에 깔리는 성격설정서
 
