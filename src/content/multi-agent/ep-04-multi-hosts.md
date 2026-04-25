@@ -149,6 +149,27 @@ Slack Workspace (뽀피터스) — 하나로 공유
 
 ---
 
+## 📌 이 가이드의 규칙이 박혀있는 곳
+
+> 위 표의 자원들이 "어디에 있나"를 정했다면, 이번 표는 그 **운영 규칙 자체가 어느 파일에 박혀서 작동하는지**를 정리. 룰은 두 레이어 — 모든 에이전트가 공유하는 **공통 룰**과 에이전트별 **운영 룰**.
+
+| 규칙 | 정의된 위치 |
+|---|---|
+| `bbopters-shared` 절대 경로 = `~/.openclaw/bbopters-shared/` (모든 머신 동일) | 글로벌 `~/.claude/CLAUDE.md` + 프로젝트 `~/.openclaw/CLAUDE.md` |
+| 읽기 전 `git pull` (Rule 4) | 글로벌 `~/.claude/CLAUDE.md` |
+| `bbopters-skill` CLI로 `~/.claude/skills/`에 심링크 활성화 | 프로젝트 `~/.openclaw/CLAUDE.md` |
+| `.env`는 **워크스페이스 루트**(`workspace-<id>/.env`)에 통합 — 스킬 디렉토리에 두지 않음 | 각 워크스페이스 `AGENTS.md` `## Red Lines` |
+| 호스팅·협업 (어느 머신에서 도는지, 머신 걸친 위임 불가) | 각 워크스페이스 `AGENTS.md` `## Red Lines` |
+| 말투·호칭·보안 등 에이전트별 하드 룰 | 각 워크스페이스 `AGENTS.md` `## Red Lines` |
+| 머신별 `openclaw.json`엔 자기 직원만 정의 (Rule 1·2) | 각 머신 `~/.openclaw/openclaw.json` 자체 — 구조적 제약 |
+| OAuth 토큰 머신 간 복사 금지 | 각 머신 `~/.openclaw/agents/<id>/agent/` 자체 — 머신별 독립 |
+
+**🌐 공통 룰 → CLAUDE.md** / **🐱 에이전트별 운영 룰 → AGENTS.md `## Red Lines`** 두 갈래로 분리되는 게 핵심.
+
+`AGENTS.md`의 `## Red Lines` 섹션은 **post-compaction 재주입 보장** — 대화가 길어져 컨텍스트 압축돼도 이 섹션은 자동으로 다시 들어옴. 그래서 머신·.env·말투 같은 절대 잊으면 안 되는 운영 룰을 여기 박는다.
+
+---
+
 ## STEP 0 · 공용 자료실(`bbopters-shared`) 세팅 — "팀 자료실 갖다놓기"
 
 > 📚 **비유** — 새 사무실(맥미니 B, C) 차리기 전에 가장 먼저 할 일. 사무실에서 일하려면 팀 자료실(스킬·hook·문서)이 책상 옆에 있어야 함. 자료실은 **모든 사무실에서 똑같은 경로**로 두는 게 핵심.
@@ -222,7 +243,7 @@ git push
 
 💡 여러 머신에서 동시 수정 가능하니 merge conflict 주의. 대규모 편집은 작업 시작 전 "지금 건드릴게" 슬랙에 알리는 관행 권장.
 
-### 0-5. `.env` 위치 규칙 (집사 메모리)
+### 0-5. `.env` 위치 규칙 (각 워크스페이스 `AGENTS.md` `## Red Lines`에 박힘)
 
 스킬마다 `.env` 파일을 따로 두지 **않는다**. 모든 환경변수는 **워크스페이스 루트**(`workspace-<id>/.env`)에 통합.
 
@@ -231,10 +252,11 @@ workspace-bboongi/
 ├── .env                ← 뽀둥이가 쓰는 모든 스킬의 환경변수
 ├── IDENTITY.md
 ├── SOUL.md
+├── AGENTS.md           ← 이 룰이 ## Red Lines에 박혀있어야 함
 └── ...
 ```
 
-이유: 한 에이전트가 여러 스킬 실행 → 토큰 관리 분산되면 지옥. 워크스페이스 루트가 single source of truth.
+이유: 한 에이전트가 여러 스킬 실행 → 토큰 관리 분산되면 지옥. 워크스페이스 루트가 single source of truth. **이 룰은 각 에이전트의 `AGENTS.md` `## Red Lines`에 명시해 post-compaction에서도 잊지 않게** 한다.
 
 ---
 
