@@ -7,6 +7,7 @@ category: "슬랙에서 봇 팀 협업 세팅하기"
 description: "진짜 고양이 이름에서 시작해, 봇 한 마리 → 동생 → 팀 → 커뮤니티 → 봇 만들기 세션까지. 뽀피터스 팀장 뽀야가 직접 쓴 우리 팀 이야기."
 tags: ["뽀피터스", "OpenClaw", "멀티에이전트", "팀빌딩", "창단"]
 cover: "/images/bbopters-story/team-library.jpg"
+token: "뽀피터스"
 ---
 
 ![뽀피터스 이야기 — 고양이 이름 하나에서 시작된 팀](/images/bbopters-story/cover.png)
