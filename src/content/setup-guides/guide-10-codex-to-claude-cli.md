@@ -233,5 +233,5 @@ launchctl load ~/Library/LaunchAgents/com.openclaw.gateway.plist
 
 ## 다음 단계
 
-- 처음 셋업이라면 → [ep-02 1마리 출근시키기](/case-studies/multi-agent/ep-02-single-agent)
+- 처음 셋업이라면 → [ep-03 1마리 출근시키기](/case-studies/multi-agent/ep-03-single-agent)
 - 변천사 맥락이 궁금하면 → [ep-01 우리가 Claude CLI로 온 이야기](/case-studies/multi-agent/ep-01-api-vs-cli)

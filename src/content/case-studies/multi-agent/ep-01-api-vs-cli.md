@@ -1,21 +1,21 @@
 ---
-title: "ACP 우회 시기를 지나 — 우리가 Claude CLI 방식으로 넘어온 이야기"
+title: "Claude in Slack vs Claude CLI 기반 OpenClaw — 같은 슬랙 봇, 무엇이 다른가"
 episode: 1
 date: "2026-04-25"
 series: case-studies
 category: "Slack × Claude CLI 멀티에이전트"
 publishedAt: "2026-04-25"
 accentColor: "#8B5CF6"
-description: "구독 차단 → ACP 우회 → 정식 CLI 지원. 뽀피터스가 거쳐온 OpenClaw 백엔드 변천사와 지금 CLI 방식이 권장되는 이유."
-tags: ["멀티에이전트", "OpenClaw", "Claude CLI", "ACP", "구독 차단"]
+description: "같은 슬랙 봇이지만 철학이 정반대. 5명 팀이면 구독 5개 vs 1개, 가시성 협업 vs 위임 협업. 뽀피터스가 Claude CLI 기반 OpenClaw를 쓰는 이유."
+tags: ["멀티에이전트", "OpenClaw", "Claude CLI", "Claude in Slack", "협업"]
 token: "밋업"
 ---
 
-# 00 · 어쩌다 우리는 Claude CLI로 왔나 — OpenClaw 백엔드 변천사
+# 00 · Claude in Slack vs Claude CLI 기반 OpenClaw — 우리가 OpenClaw를 쓰는 이유
 
-> 🛣️ **이 편의 핵심** — 그냥 "API vs CLI 비교"가 아니야. 우리가 **2026년 4월 구독 차단 사건**부터 **ACP 우회 시기**를 거쳐 **최근 CLI 정식 지원**으로 넘어온 흐름을 짚는 편.
-> 이 맥락을 알아야 ep.2~ep.4의 셋업 이유가 이해돼.
-> 비개발자 닿도 따라올 수 있게 시간순으로 풀게.
+> 🛣️ **이 편의 핵심** — 같은 "슬랙 봇"이지만 **Claude in Slack과 OpenClaw는 철학이 정반대**. 협업의 정의도, 구독 카운트도, 봇이 팀원이냐 도구냐도 다름. 우리(뽀피터스)가 어느 쪽을 표준으로 잡았고 왜 그런지 푸는 편.
+> 셋업 들어가기 전 이 큰 그림을 잡고 가야 [ep.2 등장인물](./ep-02-anatomy)부터 [ep.5 N대 머신](./ep-05-multi-hosts)까지 흐름이 풀려.
+> 비개발자도 따라올 수 있게 비유 위주로 풀었어.
 
 ---
 
@@ -170,100 +170,13 @@ token: "밋업"
 
 ---
 
-## 🧱 먼저 알아야 할 등장인물 8명
+## 🧱 등장인물 8명은 별도 편으로 — 셋업 들어가기 전에
 
-> 본론 들어가기 전에 이 네 가지 단어만 잡고 가면 뒤가 다 풀려. 비유로 한 줄씩.
-
-### 1. **OpenClaw 게이트웨이** = 사무실 안내데스크
-
-슬랙·텔레그램·웹훅에서 메시지가 오면 가장 먼저 받는 프로그램. "어느 봇한테 갈 메시지인지" 분류해서 적절한 봇한테 넘겨줌. 맥미니 같은 컴퓨터에서 24시간 돌아가는 백그라운드 서비스.
-
-```
-슬랙 메시지 도착 → 🏢 OpenClaw 게이트웨이 → 적절한 봇한테 분배
-```
-
-### 2. **Claude Code CLI** = 봇의 뇌
-
-원래는 사람이 터미널 열고 `claude` 치면 실행되는 AI 코딩 도구. 우리 시리즈에선 **OpenClaw가 사람 대신 이걸 실행**해서 봇의 뇌로 씀.
-
-```
-봇한테 일이 들어오면 → OpenClaw가 백그라운드에서 `claude` 실행 →
-"이 메시지에 어떻게 답할까?" 묻고 → 답 받아서 슬랙으로 전송
-```
-
-> 💡 즉 봇이 멘션받을 때마다 OpenClaw가 **컴퓨터 뒤에서 `claude` 명령을 자동으로 실행**한다고 생각하면 돼. 사람이 직접 타이핑하는 거랑 똑같은 일을 자동으로.
-
-### 3. **바인딩(bindings)** = 우편물 분류표
-
-"슬랙 'A 계정'으로 온 메시지는 → 뽀야한테" / "슬랙 'B 계정'으로 온 메시지는 → 뽀짝이한테" 같은 매핑 규칙. `openclaw.json` 파일에 적어둠. 게이트웨이는 이 표를 보고 분배해.
-
-```json
-{ "type": "route", "agentId": "bboya", "match": { "channel": "slack", "accountId": "default" }}
-//   ↑ 분류 규칙 한 줄                ↑ 누구한테?              ↑ 어떤 메시지를?
-```
-
-### 4. **cwd / 워크스페이스** = 봇의 자기 책상
-
-**`cwd` = current working directory = `claude` 명령이 실행되는 그 순간의 현재 디렉토리.**
-
-터미널에서 사람이 직접 쓸 때:
-```bash
-cd ~/myproject && claude
-#  ↑ 이 폴더가 cwd. claude는 여기서 깨어나서 이 폴더의 파일들을 자동으로 봄
-```
-
-OpenClaw가 봇 호출받을 때도 똑같이 `cwd` 지정해서 spawn함:
-```bash
-# 뽀야한테 메시지 오면
-cd /Users/dahtmad/.openclaw/workspace-bboya && claude
-
-# 뽀짝이한테 메시지 오면
-cd /Users/dahtmad/.openclaw/workspace-bbojjak && claude
-#                                ↑ cwd만 다르게 줌
-```
-
-봇마다 자기 폴더가 따로 있어:
-```
-~/.openclaw/
-├── workspace-bboya/      ← 뽀야 책상
-├── workspace-bbojjak/    ← 뽀짝이 책상
-└── workspace-arongi/     ← 아롱이 책상
-```
-
-`claude`는 시작할 때 **자기 cwd 폴더의 파일들을 자동으로 둘러봄** (CLAUDE.md 등). OpenClaw는 거기에 추가로 SOUL/IDENTITY/AGENTS 같은 페르소나 파일도 주입해줌.
-
-> 🪑 **그래서 "책상" 비유**: cwd = "claude가 깨어났을 때 자기가 앉은 자리". 책상 위에 깔린 파일(성격설정서)이 자기 페르소나가 됨. **같은 `claude` 바이너리인데 어느 책상에서 실행되냐에 따라 완전히 다른 봇이 되는 게 멀티에이전트의 핵심 트릭.**
-
-### 5. **페르소나 파일 6장** = 책상에 깔리는 성격설정서
-
-각 워크스페이스 책상 위에 깔리는 6장의 마크다운 파일. OpenClaw가 매 호출마다 자동으로 읽어서 Claude한테 끼워줌:
-
-| 파일 | 역할 |
-|---|---|
-| `IDENTITY.md` | 정체성 (이름, 종, 외형) |
-| `SOUL.md` | 성격·말투·가치관 |
-| `USER.md` | 사용자(집사) 이해 |
-| `AGENTS.md` | 운영 매뉴얼 (⭐ Red Lines 섹션은 긴 대화에도 재주입) |
-| `TOOLS.md` | 도구·API 사용법 |
-| `MEMORY.md` | 장기 기억 |
-
-> 🪶 멀티에이전트에서 **봇 성격이 안 섞이는 비밀**이 여기 있어 — 각자 자기 책상 파일만 읽으니까.
-
-### 6. **OAuth 토큰** = 봇별 Claude 사원증
-
-봇마다 자기 Claude Pro/Max 구독 사원증을 따로 발급받음. `~/.openclaw/agents/<봇이름>/agent/auth-profiles.json`에 저장. **봇·머신별 완전 격리** — 절대 공유 금지 (Anthropic 차단 위험).
-
-```bash
-CLAUDE_CONFIG_DIR=~/.openclaw/agents/bboya/agent claude /login
-```
-
-### 7. **default 에이전트** = 대장 봇
-
-`"default": true`가 붙은 봇 1마리. 바인딩 매칭 실패 시 폴백으로 받음. **시스템에 단 1명만**. 보통 팀장 역할(뽀야)을 대장으로.
-
-### 8. **bbopters-shared** = 팀 공용 git 자료실 (멀티 머신일 때만)
-
-여러 맥미니에서 같이 봐야 하는 **스킬·hook 스크립트·팀 문서·페르소나 템플릿**을 모아둔 git 레포. 각 머신에서 clone → `git pull/push`로 동기화. 1·2마리만 한 머신에서 돌리면 굳이 안 써도 됨.
+> 📖 **OpenClaw 등장인물 8명** (게이트웨이·CLI·바인딩·cwd·페르소나 파일·OAuth·default·공용 레포)은 분량이 커서 별도 편으로 분리했어:
+>
+> → **[ep.2 OpenClaw 해부 — 등장인물 8명](./ep-02-anatomy)**
+>
+> 처음이라면 ep.2부터 보고 셋업으로 가자. 이미 알고 있다면 아래로 계속.
 
 ---
 
@@ -271,7 +184,7 @@ CLAUDE_CONFIG_DIR=~/.openclaw/agents/bboya/agent claude /login
 
 각 시나리오에서 어떤 게 그대로고, 어떤 게 바뀌는지 한 표로:
 
-| 항목 | 🐱 1마리<br/>(ep.2) | 🐱🐈‍⬛ 2마리·같은 머신<br/>(ep.3) | 🏢🏢 N대 머신·N마리<br/>(ep.4) |
+| 항목 | 🐱 1마리<br/>(ep.3) | 🐱🐈‍⬛ 2마리·같은 머신<br/>(ep.4) | 🏢🏢 N대 머신·N마리<br/>(ep.5) |
 |---|---|---|---|
 | 🪪 슬랙 앱 / 봇 토큰 | 1개 / 1쌍 | 2개 / 2쌍 | N개 / N쌍 |
 | 🪑 워크스페이스 디렉토리 | 1개 | 2개 (`workspace-A`, `workspace-B`) | N개 (머신·봇별로 흩어짐) |
@@ -446,7 +359,7 @@ ACP로 Claude Code borrow           Claude (Opus 4.7)
 
 **현재 뽀피터스 라우팅**: 슬랙 메시지 도착 → 게이트웨이가 `bindings` 보고 `accountId → agentId` 매핑 → cli-backend가 그 워크스페이스 cwd로 Claude CLI spawn → OpenClaw가 페르소나 파일 자동 주입 → 응답.
 
-스레드 매핑·멀티에이전트 라우팅은 ACP 없이도 **route 바인딩 + slack-thread-rehydrate hook + 워크스페이스별 cwd 분리**로 다 처리됨. (자세한 셋업은 ep.2~ep.4)
+스레드 매핑·멀티에이전트 라우팅은 ACP 없이도 **route 바인딩 + slack-thread-rehydrate hook + 워크스페이스별 cwd 분리**로 다 처리됨. (자세한 셋업은 ep.3~ep.5)
 
 > 🪝 **참고** — 노트 Part 7 결론: "ACP 바인딩만 박고 '왜 내 에이전트가 뽀야로 답하지?' 하는 순간이 온다. 라우터는 `type: 'route'`만 본다. 새 에이전트 심을 땐 route 바인딩부터." 즉 멀티에이전트 운영의 표준 답안은 ACP가 아니라 **route 바인딩**.
 
@@ -467,7 +380,7 @@ ACP로 Claude Code borrow           Claude (Opus 4.7)
 
 ## 🤔 그래서 지금 뭘 골라야 해?
 
-### ✅ Claude CLI 방식 (지금 권장 — 이 가이드 시리즈 ep.2~ep.4 전제)
+### ✅ Claude CLI 방식 (지금 권장 — 이 가이드 시리즈 ep.3~ep.5 전제)
 
 - 개인·팀 단위로 봇 여러 마리 키우는 환경
 - Claude Pro/Max 구독 이미 있음
@@ -537,4 +450,4 @@ ACP 시기에 셋업한 환경을 CLI 방식으로 옮길 때:
 
 ## 다음 단계
 
-자, 이제 본격 셋업 들어가자 → [ep.2 1마리 출근시키기](./ep-02-single-agent)
+자, 이제 셋업 들어가자 → [ep.2 OpenClaw 해부 (등장인물 8명)](./ep-02-anatomy)부터 보고 [ep.3 1마리 출근시키기](./ep-03-single-agent)로

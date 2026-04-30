@@ -2,6 +2,10 @@
   "trailingSlash": false,
   "redirects": [
     { "source": "/multi-agent", "destination": "/case-studies/multi-agent", "permanent": true },
-    { "source": "/multi-agent/:slug", "destination": "/case-studies/multi-agent/:slug", "permanent": true }
+    { "source": "/multi-agent/:slug", "destination": "/case-studies/multi-agent/:slug", "permanent": true },
+    { "source": "/case-studies/multi-agent/ep-02-single-agent", "destination": "/case-studies/multi-agent/ep-03-single-agent", "permanent": true },
+    { "source": "/case-studies/multi-agent/ep-03-two-agents-same-host", "destination": "/case-studies/multi-agent/ep-04-two-agents-same-host", "permanent": true },
+    { "source": "/case-studies/multi-agent/ep-04-multi-hosts", "destination": "/case-studies/multi-agent/ep-05-multi-hosts", "permanent": true },
+    { "source": "/case-studies/multi-agent/ep-05-invocation-modes", "destination": "/case-studies/multi-agent/ep-04-two-agents-same-host", "permanent": true }
   ]
 }
