@@ -445,7 +445,7 @@ cp -r ~/.openclaw/bbopters-shared/templates/workspace-skeleton/ \
 {
   "agents": {
     "defaults": {
-      "model": { "primary": "openai-codex/gpt-5.4", "fallbacks": [] },
+      "model": { "primary": "claude-cli/claude-opus-4-7", "fallbacks": [] },
       "workspace": "/Users/dahtmad/.openclaw/workspace-bboongi",
       ...
     },
@@ -488,7 +488,7 @@ cp -r ~/.openclaw/bbopters-shared/templates/workspace-skeleton/ \
 {
   "agents": {
     "defaults": {
-      "model": { "primary": "openai-codex/gpt-5.4", "fallbacks": [] },
+      "model": { "primary": "claude-cli/claude-opus-4-7", "fallbacks": [] },
       "workspace": "/Users/dahtmad/.openclaw/workspace-bbosiki",
       ...
     },
