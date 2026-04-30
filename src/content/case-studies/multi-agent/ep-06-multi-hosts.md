@@ -1,6 +1,6 @@
 ---
 title: "여러 물리 머신에 여러 마리 — 공용 레포 + 협업 패턴"
-episode: 6
+episode: 5
 date: "2026-04-25"
 series: case-studies
 category: "Slack × Claude CLI 멀티에이전트"
@@ -31,7 +31,7 @@ token: "밋업"
 
 ## 전제
 
-- [ ] 1마리 / 2마리 가이드 ([ep.4](./ep-04-single-agent), [ep.5](./ep-05-two-agents-same-host)) 끝낸 상태
+- [ ] 1마리 / 2마리 가이드 ([ep.3](./ep-04-single-agent), [ep.4](./ep-05-two-agents-same-host)) 끝낸 상태
 - [ ] 새 머신(맥미니 B, C) 두 대 추가 가능
 - [ ] GitHub에 공용 레포 만들 수 있는 권한 (또는 기존 `bbopters-shared` 접근 권한)
 
@@ -356,7 +356,7 @@ stat -f '%Sp' ~/.openclaw/bbopters-shared/hooks/slack-thread-rehydrate.sh
 
 ## STEP 2 · 뽀둥이·뽀식이 슬랙 앱 만들기 — "신입 2명 사원증 발급"
 
-> 🪪 **비유** — 새 사무실 두 곳에 들어올 직원 2명한테 사원증 발급. ep.4 STEP 1을 2번 반복하면 끝. 각자 다른 머신에서 돌릴 거지만, **슬랙 앱 자체는 어디 머신에서 만들든 무관** — 토큰을 나중에 어느 머신의 `openclaw.json`에 넣느냐가 진짜 분리 지점.
+> 🪪 **비유** — 새 사무실 두 곳에 들어올 직원 2명한테 사원증 발급. ep.3 STEP 1을 2번 반복하면 끝. 각자 다른 머신에서 돌릴 거지만, **슬랙 앱 자체는 어디 머신에서 만들든 무관** — 토큰을 나중에 어느 머신의 `openclaw.json`에 넣느냐가 진짜 분리 지점.
 
 같은 뽀피터스 슬랙 워크스페이스에 새 Slack App 2개 추가:
 
@@ -369,7 +369,7 @@ stat -f '%Sp' ~/.openclaw/bbopters-shared/hooks/slack-thread-rehydrate.sh
 
 ## STEP 3 · 뽀둥이·뽀식이 책상 차려주기 — 페르소나 설정
 
-> 🪑 **비유** — ep.4의 1마리 가이드와 **완전히 똑같음**. 책상 위에 성격설정서 6장 깔기. 멀티 사무실 됐다고 방법 바뀌는 거 아님. **각 머신에서 자기 직원 워크스페이스만** 만들면 끝.
+> 🪑 **비유** — ep.3의 1마리 가이드와 **완전히 똑같음**. 책상 위에 성격설정서 6장 깔기. 멀티 사무실 됐다고 방법 바뀌는 거 아님. **각 머신에서 자기 직원 워크스페이스만** 만들면 끝.
 
 ```
 맥미니 B: ~/.openclaw/
@@ -597,7 +597,7 @@ ssh mac-mini-C "tail -f ~/.openclaw/logs/gateway.log | grep matchedBy"
 
 `subagents.allowAgents`는 같은 사무실 안에서만 작동. A의 뽀야가 B의 뽀둥이한테 직접 일 위임 불가. 대신 아래 4가지 패턴으로 협업.
 
-> 📌 **같은 머신 안 협업이 궁금하면** → [ep.5 STEP 6 작동법](./ep-05-two-agents-same-host) 참조. 멘션·sessions_send·위임 spawn 3가지 방식이 거기.
+> 📌 **같은 머신 안 협업이 궁금하면** → [ep.4 STEP 6 작동법](./ep-05-two-agents-same-host) 참조. 멘션·sessions_send·위임 spawn 3가지 방식이 거기.
 
 ### 패턴 1 · 슬랙 스레드 = 메시지 큐
 
@@ -800,10 +800,10 @@ Slack Workspace (뽀피터스)
 
 | 편 | 핵심 |
 |---|---|
-| [ep.2 비교](./ep-02-api-vs-cli) | Claude in Slack vs Claude CLI 기반 OpenClaw — 왜 OpenClaw인가 |
-| [ep.3 작동 흐름](./ep-03-anatomy) | 메시지 한 줄이 페르소나 입은 답이 되는 8단계 (cwd·페르소나 임베드·--resume) |
-| [ep.4 1마리](./ep-04-single-agent) | 1마리 셋업 + 작동법(멘션) |
-| [ep.5 2마리](./ep-05-two-agents-same-host) | 2마리 셋업 + 작동법(멘션·sessions_send·위임) |
-| **ep.6 N마리** (이 편) | N대 머신 셋업 + 공용 레포 규칙 + 머신 걸친 협업 4가지 |
+| [ep.1 비교](./ep-02-api-vs-cli) | Claude in Slack vs Claude CLI 기반 OpenClaw — 왜 OpenClaw인가 |
+| [ep.2 작동 흐름](./ep-03-anatomy) | 메시지 한 줄이 페르소나 입은 답이 되는 8단계 (cwd·페르소나 임베드·--resume) |
+| [ep.3 1마리](./ep-04-single-agent) | 1마리 셋업 + 작동법(멘션) |
+| [ep.4 2마리](./ep-05-two-agents-same-host) | 2마리 셋업 + 작동법(멘션·sessions_send·위임) |
+| **ep.5 N마리** (이 편) | N대 머신 셋업 + 공용 레포 규칙 + 머신 걸친 협업 4가지 |
 
 운영 노하우(OAuth 격리, 사고 회고 등)는 다른 시리즈에서 계속 쌓을 예정.

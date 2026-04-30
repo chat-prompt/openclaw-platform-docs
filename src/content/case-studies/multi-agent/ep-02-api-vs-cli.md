@@ -1,6 +1,6 @@
 ---
 title: "Claude in Slack vs Claude CLI 기반 OpenClaw — 같은 슬랙 봇, 무엇이 다른가"
-episode: 2
+episode: 1
 date: "2026-04-25"
 series: case-studies
 category: "Slack × Claude CLI 멀티에이전트"
@@ -14,10 +14,10 @@ token: "밋업"
 # 01 · Claude in Slack vs Claude CLI 기반 OpenClaw — 우리가 OpenClaw를 쓰는 이유
 
 > 🛣️ **이 편의 핵심** — 같은 "슬랙 봇"이지만 **Claude in Slack과 OpenClaw는 철학이 정반대**. 협업의 정의도, 구독 카운트도, 봇이 팀원이냐 도구냐도 다름. 우리(뽀피터스)가 어느 쪽을 표준으로 잡았고 왜 그런지 푸는 편.
-> 셋업 들어가기 전 이 큰 그림을 잡고 가야 [ep.3 작동 흐름](./ep-03-anatomy)부터 [ep.6 N대 머신](./ep-06-multi-hosts)까지 흐름이 풀려.
+> 셋업 들어가기 전 이 큰 그림을 잡고 가야 [ep.2 작동 흐름](./ep-03-anatomy)부터 [ep.5 N대 머신](./ep-06-multi-hosts)까지 흐름이 풀려.
 > 비개발자도 따라올 수 있게 비유 위주로 풀었어.
 >
-> 📜 **"어쩌다 지금 셋업이 됐는지" 변천사가 궁금하면** → [ep.1 OpenClaw 변천사](./ep-01-journey) (토큰 빌려쓰기 → ACP 우회 → Claude CLI 정식). 본 편은 **지금 표준**을 다루고, 거쳐온 길은 [ep.1 변천사](./ep-01-journey)로 분리했어.
+> 📜 **"어쩌다 지금 셋업이 됐는지" 변천사가 궁금하면** → [Claude CLI 도입기 ep.1 OpenClaw 변천사](../claude-cli/ep-01-journey) (토큰 빌려쓰기 → ACP 우회 → Claude CLI 정식). 본 편은 **지금 표준**을 다루고, 거쳐온 길은 [Claude CLI 도입기 ep.1 변천사](../claude-cli/ep-01-journey)로 분리했어.
 
 ---
 
@@ -170,7 +170,7 @@ token: "밋업"
 
 > 💡 다른 두 시나리오(터미널 단독·Claude in Slack)도 도구로서 가치는 있지만, **"팀이 봇을 직원처럼 쓰는" 모델은 OpenClaw에서만 가능**. 이게 우리가 그쪽을 표준으로 잡은 이유.
 
-> 🔍 **OpenClaw 골랐어도 끝이 아니다** — 그 안에서 *PI 모드(빌트인) vs Claude CLI 모드* 두 갈래가 또 있어. 우린 CLI를 골랐고, 그 결정으로 *잃는 것·얻는 것*이 분명히 갈려. 공식문서 근거로 정리한 심화 편을 따로 뒀어 → **[ep.2.5 PI vs Claude CLI — OpenClaw 안의 두 갈래](./ep-02a-pi-vs-cli)**
+> 🔍 **OpenClaw 골랐어도 끝이 아니다** — 그 안에서 *PI 모드(빌트인) vs Claude CLI 모드* 두 갈래가 또 있어. 우린 CLI를 골랐고, 그 결정으로 *잃는 것·얻는 것*이 분명히 갈려. 공식문서 근거로 정리한 심화 편을 따로 뒀어 → **[Claude CLI 도입기 ep.2 PI vs Claude CLI — OpenClaw 안의 두 갈래](../claude-cli/ep-02a-pi-vs-cli)**
 >
 > 셋업이 급하면 건너뛰어도 OK. *왜 우리 봇 시스템이 Claude Code 훅·skill 생태계 위에 얹혀 있는지* 진짜로 이해하고 싶으면 거기로.
 
@@ -180,9 +180,9 @@ token: "밋업"
 
 > 📖 **OpenClaw 작동 흐름** — 메시지 한 줄이 어떻게 페르소나 입은 답이 되는지 8단계로 푸는 편을 별도로 분리했어. **cwd 잡기 + 페르소나 자료 자동 임베드 + `--resume` 기억 잇기** 3종 세트가 핵심.
 >
-> → **[ep.3 OpenClaw 작동 흐름 — 메시지 한 줄이 페르소나 입은 답이 될 때까지](./ep-03-anatomy)**
+> → **[ep.2 OpenClaw 작동 흐름 — 메시지 한 줄이 페르소나 입은 답이 될 때까지](./ep-03-anatomy)**
 >
-> 처음이라면 ep.3부터 보고 셋업으로 가자. 이미 작동 원리 알고 있다면 아래로 계속.
+> 처음이라면 ep.2부터 보고 셋업으로 가자. 이미 작동 원리 알고 있다면 아래로 계속.
 
 ---
 
@@ -190,7 +190,7 @@ token: "밋업"
 
 각 시나리오에서 어떤 게 그대로고, 어떤 게 바뀌는지 한 표로:
 
-| 항목 | 🐱 1마리<br/>(ep.4) | 🐱🐈‍⬛ 2마리·같은 머신<br/>(ep.5) | 🏢🏢 N대 머신·N마리<br/>(ep.6) |
+| 항목 | 🐱 1마리<br/>(ep.3) | 🐱🐈‍⬛ 2마리·같은 머신<br/>(ep.4) | 🏢🏢 N대 머신·N마리<br/>(ep.5) |
 |---|---|---|---|
 | 🪪 슬랙 앱 / 봇 토큰 | 1개 / 1쌍 | 2개 / 2쌍 | N개 / N쌍 |
 | 🪑 워크스페이스 디렉토리 | 1개 | 2개 (`workspace-A`, `workspace-B`) | N개 (머신·봇별로 흩어짐) |
@@ -214,8 +214,8 @@ token: "밋업"
 
 > **OpenClaw는 봇이 진짜 직원이 되는 모델** — 페르소나·기억·스킬을 가진 동료가 슬랙에 출근. 구독 1개로 팀 전체가 같이 부림. Claude in Slack과 가장 큰 차이는 **위임 협업이 진짜로 된다는 것**.
 
-> 📜 변천사가 궁금하면 → [ep.1 OpenClaw 변천사 (토큰 빌려쓰기 → ACP → Claude CLI 정식)](./ep-01-journey)
+> 📜 변천사가 궁금하면 → [Claude CLI 도입기 ep.1 OpenClaw 변천사 (토큰 빌려쓰기 → ACP → Claude CLI 정식)](../claude-cli/ep-01-journey)
 
 ## 다음 단계
 
-자, 이제 셋업 들어가자 → [ep.3 OpenClaw 작동 흐름](./ep-03-anatomy)부터 보고 [ep.4 1마리 출근시키기](./ep-04-single-agent)로
+자, 이제 셋업 들어가자 → [ep.2 OpenClaw 작동 흐름](./ep-03-anatomy)부터 보고 [ep.3 1마리 출근시키기](./ep-04-single-agent)로

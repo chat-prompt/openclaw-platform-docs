@@ -1,6 +1,6 @@
 ---
 title: "Slack에서 움직이는 AI 에이전트 1마리 출근시키기"
-episode: 4
+episode: 3
 date: "2026-04-25"
 series: case-studies
 category: "Slack × Claude CLI 멀티에이전트"
@@ -259,7 +259,7 @@ OpenClaw 주입이 없으니 세션 시작 시 아래 순서로 읽기:
 
 > 🎫 **비유** — Slack이라는 사무실에서 이 애가 어느 자리에서 누구한테 반응할지 세팅하는 단계. Bot/App Token이 사원증이고, `groupPolicy`는 "어느 층까지 출입 가능한지"에 해당.
 
-1마리 가이드에선 **account key를 `default`**로 쓴다. `bindings`의 `accountId: "default"`와 짝을 이루고, 매칭 실패 시에도 이리로 fallback된다. (2마리 이상일 때 에이전트별로 account key를 쪼개는 패턴으로 진화 → [ep.5 같은 머신 2마리](./ep-05-two-agents-same-host) 참조)
+1마리 가이드에선 **account key를 `default`**로 쓴다. `bindings`의 `accountId: "default"`와 짝을 이루고, 매칭 실패 시에도 이리로 fallback된다. (2마리 이상일 때 에이전트별로 account key를 쪼개는 패턴으로 진화 → [ep.4 같은 머신 2마리](./ep-05-two-agents-same-host) 참조)
 
 ```json
 "default": {
@@ -475,7 +475,7 @@ candidate = m.group(1)
 
 💡 **1마리 가이드 시나리오**: `workspace-bboya` cwd에서 hook이 `bboya` account를 찾다 없으면 `default`로 폴백. 위 STEP 2-2에서 account key를 `default`로 설정했으니 hook이 자연스럽게 `default`로 매칭됨.
 
-⚠️ **2마리 이상부터 중요**: 에이전트별 account key를 따로 쪼개면(예: `accounts.bbojjak`) 워크스페이스 폴더명과 key가 일치해야 hook 자동 추론이 먹힌다. (예: `workspace-bbojjak`이면 `accounts.bbojjak`) → 자세한 건 [ep.5 같은 머신 2마리](./ep-05-two-agents-same-host) 참조.
+⚠️ **2마리 이상부터 중요**: 에이전트별 account key를 따로 쪼개면(예: `accounts.bbojjak`) 워크스페이스 폴더명과 key가 일치해야 hook 자동 추론이 먹힌다. (예: `workspace-bbojjak`이면 `accounts.bbojjak`) → 자세한 건 [ep.4 같은 머신 2마리](./ep-05-two-agents-same-host) 참조.
 
 ### 동작 확인
 
@@ -525,7 +525,7 @@ tail -f /Users/dahtmad/.openclaw/logs/gateway.log | \
 
 ✅ 아이콘 = 뽀야, 답변도 뽀야 페르소나면 성공.
 
-> 💡 **1마리 작동법 = 멘션이 유일** — 슬랙 채널/DM에서 `@뽀야`로 부르면 답해. 동료한테 일 넘기는(`sessions_send`)·위임 spawn 같은 작동법은 2마리 이상부터 의미 있어 → 자세한 건 [ep.5 STEP 6 작동법](./ep-05-two-agents-same-host).
+> 💡 **1마리 작동법 = 멘션이 유일** — 슬랙 채널/DM에서 `@뽀야`로 부르면 답해. 동료한테 일 넘기는(`sessions_send`)·위임 spawn 같은 작동법은 2마리 이상부터 의미 있어 → 자세한 건 [ep.4 STEP 6 작동법](./ep-05-two-agents-same-host).
 
 ---
 
@@ -594,7 +594,7 @@ OpenClaw는 봇별로 **고정된 워크스페이스 디렉토리**(`~/.openclaw
 └── -Users-dahtmad--openclaw-workspace-bbojjak/memory/MEMORY.md ← 뽀짝이 평생 메모리
 ```
 
-→ **봇끼리 절대 안 섞이고, 봇 평생 누적**. (참고: ep.2에서 짚은 ACP 우회 시기엔 OpenClaw 이전 버전(goclaw)이 세션별 임시 cwd로 spawn했어서 auto memory가 흩어졌는데, **지금 CLI bridge 방식은 워크스페이스 직결**이라 봇 평생 한 곳에 쌓임)
+→ **봇끼리 절대 안 섞이고, 봇 평생 누적**. (참고: Claude CLI 도입기 ep.1에서 짚은 ACP 우회 시기엔 OpenClaw 이전 버전(goclaw)이 세션별 임시 cwd로 spawn했어서 auto memory가 흩어졌는데, **지금 CLI bridge 방식은 워크스페이스 직결**이라 봇 평생 한 곳에 쌓임)
 
 ### 한눈에 비교 — 둘 다 평생, 용도만 다름
 
@@ -675,4 +675,4 @@ OpenClaw는 봇별로 **고정된 워크스페이스 디렉토리**(`~/.openclaw
 
 ## 다음 단계
 
-같은 맥미니에 2번째 에이전트를 추가하려면 → [ep.5 같은 머신 2마리](./ep-05-two-agents-same-host)
+같은 맥미니에 2번째 에이전트를 추가하려면 → [ep.4 같은 머신 2마리](./ep-05-two-agents-same-host)
