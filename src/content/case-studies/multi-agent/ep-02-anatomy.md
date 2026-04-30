@@ -189,6 +189,8 @@ OpenClaw가 클로드 CLI를 띄울 때 어떤 모델 쓸지 알려주는 설정
 > → 우리가 `fallbacks: []`로 비워둔 건 이 *"매칭 실패 시 그냥 실패"* 동작을 의도한 거야. 그래야 뽀야 답이 갑자기 GPT 톤으로 안 새어나감.
 >
 > ※ **PI** = OpenClaw 빌트인 기본 런타임. Claude CLI 같은 외부 백엔드를 안 쓸 때 OpenClaw가 자체적으로 굴리는 모델 루프야. PI로 모델 부르려면 별도 API 키(Anthropic/OpenAI 등)가 필요한데, 우린 Pro/Max OAuth 한 개만 박아놔서 PI로 폴백돼도 어차피 자격 없어 실패함.
+>
+> → PI vs Claude CLI 두 갈래의 *잃는 것·얻는 것* 트레이드오프 전체는 → [ep.1.5 PI vs Claude CLI 심화](./ep-01a-pi-vs-cli)
 
 ### 7. 응답을 슬랙으로 흘려보냄
 
