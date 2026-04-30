@@ -253,7 +253,8 @@ OpenClaw 측에 issue/PR 제기하면 다음 버전에서 빌트인으로 들어
 ## 관련 가이드
 
 - [#6 — Codex에서 Claude CLI로 갈아끼우기](/setup-guides/guide-10-codex-to-claude-cli) — 이 가이드의 전제 단계
-- [ep-01 — 왜 CLI로 왔나 (multi-agent 시리즈)](/case-studies/multi-agent/ep-01-api-vs-cli) — 처음부터 셋업하는 분께
+- [ep-00 — OpenClaw 변천사 (토큰 빌려쓰기 → ACP → CLI 정식)](/case-studies/multi-agent/ep-00-journey) — 어쩌다 지금 모습이 됐는지
+- [ep-01 — Claude in Slack vs OpenClaw](/case-studies/multi-agent/ep-01-api-vs-cli) — 처음부터 셋업하는 분께
 
 ---
 
