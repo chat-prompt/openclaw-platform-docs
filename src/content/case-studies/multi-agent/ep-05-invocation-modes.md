@@ -1,7 +1,9 @@
 ---
 title: "같은 사무실 동료한테 일 시키는 3가지 방법 — 멘션·톡·회의실"
 episode: 5
-series: multi-agent
+date: "2026-04-29"
+series: case-studies
+category: "Slack × Claude CLI 멀티에이전트"
 publishedAt: "2026-04-29"
 accentColor: "#8B5CF6"
 description: "한 호스트에 여러 에이전트가 있을 때 일을 주고받는 방식 3가지(A/B/C). 능력치는 다 같고 차이는 컨텍스트와 동시성 풀뿐. 같은 자원 공유하니까 충돌 위험 — 결정 매트릭스 + 실전 회고로 정리."

@@ -9,7 +9,6 @@ const notes = (await getCollection('notes')).sort((a, b) =>
 const academy = (await getCollection('academy')).sort((a, b) => a.data.episode - b.data.episode);
 const training = (await getCollection('training')).sort((a, b) => a.data.episode - b.data.episode);
 const caseStudies = (await getCollection('case-studies')).sort((a, b) => a.data.episode - b.data.episode);
-const multiAgent = (await getCollection('multi-agent')).sort((a, b) => a.data.episode - b.data.episode);
 ---
 
 <BaseLayout title="뽀야의 서재">
@@ -43,15 +42,6 @@ const multiAgent = (await getCollection('multi-agent')).sort((a, b) => a.data.ep
 
     <!-- 시리즈 카드 -->
     <section class="series-grid">
-      <a href="/multi-agent" class="series-card multi-agent-card">
-        <span class="series-icon">🤖</span>
-        <div class="series-body">
-          <h2>멀티 에이전트 코어 시리즈 <span class="meetup-tag">🎤 4/25 밋업</span></h2>
-          <p>ep.1부터 한 호흡으로 — 1마리부터 N대 머신 분산까지 OpenClaw 셋업의 큰 그림</p>
-        </div>
-        <span class="series-lock">🔒</span>
-        <span class="series-count">{multiAgent.length}편 →</span>
-      </a>
       <a href="/setup-guides" class="series-card setup-card">
         <span class="series-icon">🧰</span>
         <div class="series-body">
@@ -91,8 +81,8 @@ const multiAgent = (await getCollection('multi-agent')).sort((a, b) => a.data.ep
       <a href="/case-studies" class="series-card case-studies-card">
         <span class="series-icon">📖</span>
         <div class="series-body">
-          <h2>후기리워드 자료집</h2>
-          <p>봇을 키우고 팀을 만든 실전 이야기. 사내 적용기, 삽질과 설정, 그리고 교훈.</p>
+          <h2>후기리워드 자료집 <span class="meetup-tag">🎤 4/25 밋업 추가</span></h2>
+          <p>봇을 키우고 팀을 만든 실전 이야기. 웨비나·밋업 후기리워드로 풀어준 핵심 가이드 모음.</p>
         </div>
         <span class="series-lock">🔒</span>
         <span class="series-count">{caseStudies.length}편 →</span>

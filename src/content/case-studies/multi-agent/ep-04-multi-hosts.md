@@ -1,7 +1,9 @@
 ---
 title: "여러 물리 머신에 여러 마리 — 공용 레포 + 협업 패턴"
 episode: 4
-series: multi-agent
+date: "2026-04-25"
+series: case-studies
+category: "Slack × Claude CLI 멀티에이전트"
 publishedAt: "2026-04-25"
 accentColor: "#8B5CF6"
 description: "맥미니 N대 + 에이전트 M마리. 봇 토큰·OAuth·MEMORY는 분리, 스킬·hook·팀 문서는 공용 git 레포로 통일. 머신 걸친 협업은 슬랙 스레드를 메시지 큐처럼."

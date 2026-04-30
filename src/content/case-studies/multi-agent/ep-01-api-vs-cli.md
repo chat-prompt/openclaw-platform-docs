@@ -1,7 +1,9 @@
 ---
 title: "ACP 우회 시기를 지나 — 우리가 Claude CLI 방식으로 넘어온 이야기"
 episode: 1
-series: multi-agent
+date: "2026-04-25"
+series: case-studies
+category: "Slack × Claude CLI 멀티에이전트"
 publishedAt: "2026-04-25"
 accentColor: "#8B5CF6"
 description: "구독 차단 → ACP 우회 → 정식 CLI 지원. 뽀피터스가 거쳐온 OpenClaw 백엔드 변천사와 지금 CLI 방식이 권장되는 이유."

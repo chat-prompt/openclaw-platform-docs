@@ -1,3 +1,7 @@
 {
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/multi-agent", "destination": "/case-studies/multi-agent", "permanent": true },
+    { "source": "/multi-agent/:slug", "destination": "/case-studies/multi-agent/:slug", "permanent": true }
+  ]
 }

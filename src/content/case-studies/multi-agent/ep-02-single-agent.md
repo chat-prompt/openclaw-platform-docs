@@ -1,7 +1,9 @@
 ---
 title: "Slack에서 움직이는 AI 에이전트 1마리 출근시키기"
 episode: 2
-series: multi-agent
+date: "2026-04-25"
+series: case-studies
+category: "Slack × Claude CLI 멀티에이전트"
 publishedAt: "2026-04-25"
 accentColor: "#8B5CF6"
 description: "고양이 비서 한 마리를 새로 들여서 Slack이라는 사무실 자리에 앉히는 과정. OpenClaw + Claude CLI로 1마리 셋업하는 가장 단순한 레시피."
