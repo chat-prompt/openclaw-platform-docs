@@ -801,7 +801,7 @@ Slack Workspace (뽀피터스)
 | 편 | 핵심 |
 |---|---|
 | [ep.1 비교](./ep-01-api-vs-cli) | Claude in Slack vs Claude CLI 기반 OpenClaw — 왜 OpenClaw인가 |
-| [ep.2 해부](./ep-02-anatomy) | OpenClaw 등장인물 8명 (멘탈 모델) |
+| [ep.2 작동 흐름](./ep-02-anatomy) | 메시지 한 줄이 페르소나 입은 답이 되는 8단계 (cwd·페르소나 임베드·--resume) |
 | [ep.3 1마리](./ep-03-single-agent) | 1마리 셋업 + 작동법(멘션) |
 | [ep.4 2마리](./ep-04-two-agents-same-host) | 2마리 셋업 + 작동법(멘션·sessions_send·위임) |
 | **ep.5 N마리** (이 편) | N대 머신 셋업 + 공용 레포 규칙 + 머신 걸친 협업 4가지 |

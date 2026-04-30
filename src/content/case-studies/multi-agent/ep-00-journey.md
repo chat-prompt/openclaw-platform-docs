@@ -262,4 +262,4 @@ ACP 시기에 셋업한 환경을 CLI 방식으로 옮길 때:
 
 ## 다음 단계
 
-변천사는 여기까지. 본격 셋업으로 가자 → [ep.1 Claude in Slack vs OpenClaw — 우리가 OpenClaw를 쓰는 이유](./ep-01-api-vs-cli)부터 보고 [ep.2 등장인물 8명](./ep-02-anatomy)으로
+변천사는 여기까지. 본격 셋업으로 가자 → [ep.1 Claude in Slack vs OpenClaw — 우리가 OpenClaw를 쓰는 이유](./ep-01-api-vs-cli)부터 보고 [ep.2 작동 흐름](./ep-02-anatomy)으로
