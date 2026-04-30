@@ -1,10 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SeriesGate from '../../components/SeriesGate.astro';
 
 const guides = (await getCollection('setup-guides')).sort((a, b) => a.data.episode - b.data.episode);
-const seriesToken = guides.find(g => g.data.token)?.data.token || '';
 ---
 
 <BaseLayout title="OpenClaw 셋업 레시피">
@@ -23,43 +21,27 @@ const seriesToken = guides.find(g => g.data.token)?.data.token || '';
       </span>
     </a>
 
-    {seriesToken ? (
-      <SeriesGate token={seriesToken} seriesKey="setup-guides-series-token">
-        <div class="list-grid">
-          {guides.map((guide) => (
-            <a href={`/setup-guides/${guide.slug}`} class="list-card" style={guide.data.accentColor ? `--card-accent: ${guide.data.accentColor}` : ''}>
-              <div class="card-header">
-                <span class="card-episode" style={guide.data.accentColor ? `color: ${guide.data.accentColor}` : ''}>가이드 #{guide.data.episode}</span>
-                {guide.data.publishedAt && (
-                  <span class="card-date">{guide.data.publishedAt.replace(/^\d{4}-/, '')}</span>
-                )}
-              </div>
-              <h2 class="card-title">{guide.data.title}</h2>
-              {guide.data.description && (
-                <p class="card-desc">{guide.data.description}</p>
+    <div class="list-grid">
+      {guides.map((guide) => (
+        <a href={`/setup-guides/${guide.slug}`} class="list-card" style={guide.data.accentColor ? `--card-accent: ${guide.data.accentColor}` : ''}>
+          <div class="card-header">
+            <span class="card-episode" style={guide.data.accentColor ? `color: ${guide.data.accentColor}` : ''}>가이드 #{guide.data.episode}</span>
+            <div class="card-header-right">
+              {guide.data.token && (
+                <span class="card-lock" title="토큰 필요">🔒</span>
               )}
-            </a>
-          ))}
-        </div>
-      </SeriesGate>
-    ) : (
-      <div class="list-grid">
-        {guides.map((guide) => (
-          <a href={`/setup-guides/${guide.slug}`} class="list-card" style={guide.data.accentColor ? `--card-accent: ${guide.data.accentColor}` : ''}>
-            <div class="card-header">
-              <span class="card-episode" style={guide.data.accentColor ? `color: ${guide.data.accentColor}` : ''}>가이드 #{guide.data.episode}</span>
               {guide.data.publishedAt && (
                 <span class="card-date">{guide.data.publishedAt.replace(/^\d{4}-/, '')}</span>
               )}
             </div>
-            <h2 class="card-title">{guide.data.title}</h2>
-            {guide.data.description && (
-              <p class="card-desc">{guide.data.description}</p>
-            )}
-          </a>
-        ))}
-      </div>
-    )}
+          </div>
+          <h2 class="card-title">{guide.data.title}</h2>
+          {guide.data.description && (
+            <p class="card-desc">{guide.data.description}</p>
+          )}
+        </a>
+      ))}
+    </div>
   </div>
 </BaseLayout>
 
@@ -168,6 +150,12 @@ const seriesToken = guides.find(g => g.data.token)?.data.token || '';
     margin-bottom: 8px;
   }
 
+  .card-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
   .card-episode {
     font-size: 13px;
     font-weight: 600;
@@ -177,6 +165,11 @@ const seriesToken = guides.find(g => g.data.token)?.data.token || '';
   .card-date {
     font-size: 12px;
     color: var(--text-muted);
+  }
+
+  .card-lock {
+    font-size: 13px;
+    opacity: 0.7;
   }
 
   .card-title {
