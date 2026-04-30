@@ -270,7 +270,11 @@ CLAUDE_CONFIG_DIR=~/.openclaw/agents/bboya/agent claude /login
 
 ---
 
-## 🍞 첫 시기 — Claude Code Max 구독으로 OpenClaw 돌리기 (~4월 초)
+## 📖 시기별 상세 — 우리가 거쳐온 길
+
+> 위 한 장 변천사를 시간순으로 풀어쓴 부분. 자세한 사정이 안 궁금하면 바로 [그래서 지금 뭘 골라야 해?](#-그래서-지금-뭘-골라야-해)로 건너뛰어도 OK.
+
+### 🍞 첫 시기 — Claude Code Max 구독으로 OpenClaw 돌리기 (~4월 초)
 
 ### 어떻게 했나
 
@@ -299,7 +303,7 @@ OpenClaw → OAuth 토큰 빌려서 → Anthropic API 직접 호출
 
 ---
 
-## 🔀 두 번째 시기 — ACP 우회 (4월 4일 ~ 4월 21일경)
+### 🔀 두 번째 시기 — ACP 우회 (4월 4일 ~ 4월 21일경)
 
 ### ACP가 뭔데?
 
@@ -344,7 +348,7 @@ ACP는 작동했지만 한계가 있었어:
 
 ---
 
-## 🟢 세 번째 시기 — Claude CLI 정식 sanctioned (4월 22일~)
+### 🟢 세 번째 시기 — Claude CLI 정식 sanctioned (4월 22일~)
 
 ### 무슨 일이 있었나
 
