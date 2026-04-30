@@ -14,7 +14,7 @@ export async function getStaticPaths() {
   }
 
   return [...categoryMap.entries()].map(([category, posts]) => {
-    const filtered = posts.filter(p => p.data.episode !== 0).sort((a, b) => a.data.episode - b.data.episode);
+    const filtered = posts.sort((a, b) => a.data.episode - b.data.episode);
     const token = posts.find(p => p.data.token)?.data.token;
     return {
       params: { category },

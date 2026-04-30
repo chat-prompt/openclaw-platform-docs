@@ -1,6 +1,6 @@
 ---
 title: "OpenClaw 작동 흐름 — 메시지 한 줄이 페르소나 입은 답이 될 때까지"
-episode: 2
+episode: 3
 date: "2026-04-25"
 series: case-studies
 category: "Slack × Claude CLI 멀티에이전트"
@@ -11,7 +11,7 @@ tags: ["멀티에이전트", "OpenClaw", "아키텍처", "작동 원리", "cwd",
 token: "밋업"
 ---
 
-# 01 · OpenClaw 작동 흐름 — 메시지 한 줄이 페르소나 입은 답이 될 때까지
+# 02 · OpenClaw 작동 흐름 — 메시지 한 줄이 페르소나 입은 답이 될 때까지
 
 > 🐱 **이 편의 핵심** — 한 봇이 메시지에 답하는 *백엔드 흐름이 어떻게 굴러가나*를 8단계로 친절히 풀어볼게. 끝까지 읽으면 **cwd 잡기 + 페르소나 자료 임베드 + --resume 기억 잇기**, 이 3종 세트가 OpenClaw + Claude CLI 방식의 핵심임이 잡혀.
 
@@ -190,7 +190,7 @@ OpenClaw가 클로드 CLI를 띄울 때 어떤 모델 쓸지 알려주는 설정
 >
 > ※ **PI** = OpenClaw 빌트인 기본 런타임. Claude CLI 같은 외부 백엔드를 안 쓸 때 OpenClaw가 자체적으로 굴리는 모델 루프야. PI로 모델 부르려면 별도 API 키(Anthropic/OpenAI 등)가 필요한데, 우린 Pro/Max OAuth 한 개만 박아놔서 PI로 폴백돼도 어차피 자격 없어 실패함.
 >
-> → PI vs Claude CLI 두 갈래의 *잃는 것·얻는 것* 트레이드오프 전체는 → [ep.1.5 PI vs Claude CLI 심화](./ep-01a-pi-vs-cli)
+> → PI vs Claude CLI 두 갈래의 *잃는 것·얻는 것* 트레이드오프 전체는 → [ep.2.5 PI vs Claude CLI 심화](./ep-02a-pi-vs-cli)
 
 ### 7. 응답을 슬랙으로 흘려보냄
 
@@ -259,7 +259,7 @@ claude -p "사용자 새 메시지" --resume {sessionId}
 
 ## 다음 단계
 
-이제 작동 원리 잡혔으니 *직접 1마리 출근시키러* 가자 → [ep.3 1마리 셋업](./ep-03-single-agent)
+이제 작동 원리 잡혔으니 *직접 1마리 출근시키러* 가자 → [ep.4 1마리 셋업](./ep-04-single-agent)
 
 ---
 

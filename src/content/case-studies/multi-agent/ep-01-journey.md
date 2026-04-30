@@ -1,6 +1,6 @@
 ---
 title: "OpenClaw 변천사 — 토큰 빌려쓰기, ACP 우회, 그리고 Claude CLI 정식"
-episode: 0
+episode: 1
 date: "2026-04-30"
 series: case-studies
 category: "Slack × Claude CLI 멀티에이전트"
@@ -14,7 +14,7 @@ token: "밋업"
 # Prologue · OpenClaw 변천사 — 어쩌다 우리가 Claude CLI로 왔나
 
 > 🛣️ **이 편의 핵심** — 본격 셋업 들어가기 전, OpenClaw가 **어쩌다 지금 모습이 됐는지** 시간순으로 푸는 프롤로그. 2026년 4월에만 두 번 갈아탔어 — 토큰 빌려쓰기 → ACP 우회 → Claude CLI 정식.
-> "지금 권장하는 셋업이 왜 이거인지" 맥락이 궁금한 분만. 그냥 셋업부터 들어가고 싶다면 [ep.1 (왜 OpenClaw인가)](./ep-01-api-vs-cli)부터 봐도 OK.
+> "지금 권장하는 셋업이 왜 이거인지" 맥락이 궁금한 분만. 그냥 셋업부터 들어가고 싶다면 [ep.2 (왜 OpenClaw인가)](./ep-02-api-vs-cli)부터 봐도 OK.
 
 ---
 
@@ -171,7 +171,7 @@ ACP로 Claude Code borrow           Claude (Opus 4.7)
 
 **현재 뽀피터스 라우팅**: 슬랙 메시지 도착 → 게이트웨이가 `bindings` 보고 `accountId → agentId` 매핑 → cli-backend가 그 워크스페이스 cwd로 Claude CLI spawn → OpenClaw가 페르소나 파일 자동 주입 → 응답.
 
-스레드 매핑·멀티에이전트 라우팅은 ACP 없이도 **route 바인딩 + slack-thread-rehydrate hook + 워크스페이스별 cwd 분리**로 다 처리됨. (자세한 셋업은 [ep.2~ep.5](./ep-02-anatomy))
+스레드 매핑·멀티에이전트 라우팅은 ACP 없이도 **route 바인딩 + slack-thread-rehydrate hook + 워크스페이스별 cwd 분리**로 다 처리됨. (자세한 셋업은 [ep.3~ep.6](./ep-03-anatomy))
 
 > 🪝 **참고** — 노트 Part 7 결론: "ACP 바인딩만 박고 '왜 내 에이전트가 뽀야로 답하지?' 하는 순간이 온다. 라우터는 `type: 'route'`만 본다. 새 에이전트 심을 땐 route 바인딩부터." 즉 멀티에이전트 운영의 표준 답안은 ACP가 아니라 **route 바인딩**.
 
@@ -192,7 +192,7 @@ ACP로 Claude Code borrow           Claude (Opus 4.7)
 
 ## 🤔 그래서 지금 뭘 골라야 해?
 
-### ✅ Claude CLI 방식 (지금 권장 — 이 가이드 시리즈 ep.3~ep.5 전제)
+### ✅ Claude CLI 방식 (지금 권장 — 이 가이드 시리즈 ep.4~ep.6 전제)
 
 - 개인·팀 단위로 봇 여러 마리 키우는 환경
 - Claude Pro/Max 구독 이미 있음
@@ -262,4 +262,4 @@ ACP 시기에 셋업한 환경을 CLI 방식으로 옮길 때:
 
 ## 다음 단계
 
-변천사는 여기까지. 본격 셋업으로 가자 → [ep.1 Claude in Slack vs OpenClaw — 우리가 OpenClaw를 쓰는 이유](./ep-01-api-vs-cli)부터 보고 [ep.2 작동 흐름](./ep-02-anatomy)으로
+변천사는 여기까지. 본격 셋업으로 가자 → [ep.2 Claude in Slack vs OpenClaw — 우리가 OpenClaw를 쓰는 이유](./ep-02-api-vs-cli)부터 보고 [ep.3 작동 흐름](./ep-03-anatomy)으로
