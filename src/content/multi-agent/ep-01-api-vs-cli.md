@@ -434,17 +434,27 @@ ACP로 Claude Code borrow           Claude (Opus 4.7)
 - Bedrock/Vertex 경유 강제 (※ CLI도 일부 지원)
 - Claude 외 모델(GPT, Gemini)을 같은 봇이 번갈아 써야 함
 
-### 🔀 뽀피터스 하이브리드 — Claude CLI 메인 + Codex 폴백 (역할별 차등)
+### 🔀 뽀피터스 표준 — Claude CLI 단일 백엔드 (4/29부터)
+
+처음엔 Claude CLI를 메인으로, Codex를 폴백으로 두는 하이브리드를 시도했어. 근데 운영해보니 — Codex 폴백이 살아있으면 Claude 한도 빠질 때 자동으로 Codex로 떨어져서 **페르소나 톤이 갑자기 뒤틀림**. 외부 응대 봇은 물론이고 실무 봇도 톤이 깨지는 게 더 큰 사고였어.
+
+그래서 **2026년 4월 29일** 본진(닿 머신)에서 **Codex 폴백 완전 제거**:
+
+- `openclaw.json` 13곳 (각 에이전트 + heartbeat + subagents + auth.order)
+- `cron/jobs.json` 25개 잡 model
+
+지금 뽀피터스 표준은 단일 백엔드:
 
 ```json
-// 뽀야 (집사 직속 팀장) — 폴백 끔. 톤 뒤틀림이 위험
-"model": { "primary": "claude-cli/claude-opus-4-7", "fallbacks": [] }
-
-// 뽀짝이 (실무 전담) — 폴백 켬. 멈추면 수강생 피해
-"model": { "primary": "claude-cli/claude-opus-4-7", "fallbacks": ["openai-codex/gpt-5.4"] }
+"model": {
+  "primary": "claude-cli/claude-opus-4-7",
+  "fallbacks": []
+}
 ```
 
-봇 역할에 따라 폴백 켜고 끄는 패턴. 자세한 건 [ep.3 (2마리 셋업)](./ep-03-two-agents-same-host)에서.
+한도 빠지면 차라리 잠깐 멈추는 게 톤 깨지는 것보다 나아. 동시 한도가 모자라면 **Max 200 ×2 계정**으로 분산 운영하는 게 정답.
+
+> 📦 **실전 절차** — codex로 도는 OpenClaw 인스턴스를 옮기는 정식 절차서: [→ guide-10 Codex → Claude CLI 마이그레이션](/setup-guides/guide-10-codex-to-claude-cli)
 
 ---
 
@@ -462,6 +472,8 @@ ACP 시기에 셋업한 환경을 CLI 방식으로 옮길 때:
 - [ ] 슬랙 스레드 rehydrate 필요하면 글로벌 `~/.claude/settings.json`에 hook 설치
 - [ ] 봇별 말투 규칙은 **AGENTS.md `## Red Lines`**에 박기 (post-compaction 재주입 보장)
 - [ ] 게이트웨이 재시작 + 슬랙 멘션 검증 + 로그에 `[agent/cli-backend] live session start` 확인
+
+> 📦 **한방 절차서** — 이 체크리스트의 명령어 풀버전(`sed` 치환·검증 grep·롤백까지)은 별도 가이드로: [→ guide-10 Codex → Claude CLI 마이그레이션](/setup-guides/guide-10-codex-to-claude-cli)
 
 ---
 
