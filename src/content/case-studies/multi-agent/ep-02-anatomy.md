@@ -160,16 +160,9 @@ OpenClaw가 클로드 CLI를 띄울 때 어떤 모델 쓸지 알려주는 설정
 
 → Pro/Max 한도 다 쓰면 그냥 *응답 실패*. 그게 의도된 안전장치야.
 
-### 7. 응답 스트리밍 — 답이 한 글자씩 채워지는 이유
+### 7. 응답을 슬랙으로 흘려보냄
 
-슬랙에서 봇이 답할 때, 답변이 한 번에 통째로 나오는 게 아니라 *한 글자씩 늘어나며 채워지는* 효과를 본 적 있을 거야. 메커니즘은 이래:
-
-1. 클로드 모델은 답을 *한 번에* 안 만들어. 단어 조각(=*토큰*)을 *순서대로 하나씩* 생성함
-2. Anthropic API가 토큰 만들어질 때마다 OpenClaw로 실시간 흘려보냄 (= 스트리밍)
-3. OpenClaw는 토큰 받을 때마다 슬랙 `chat.update` API로 *기존 답변 메시지를 수정*해서 끝에 추가
-4. → 사용자 눈엔 *한 메시지가 점점 길어지는* 효과
-
-→ **새 메시지 여러 개가 아니라 *하나의 메시지가 계속 업데이트되는* 게 핵심.** 그래서 슬랙에 답변 1개만 떠있고 글자가 점점 추가되는 것처럼 보임.
+OpenClaw가 모델 응답을 슬랙 채널/스레드로 전달. 슬랙에서 흔히 보는 *답이 한 글자씩 채워지는 효과*가 어떻게 나오는지 궁금하면 → [📎 부록: Slack 스트리밍 모드 4가지](#-부록-slack-스트리밍-모드-4가지)
 
 ### 8. 세션 저장
 대화 기록은 자동으로:
@@ -252,8 +245,7 @@ claude -p "사용자 새 메시지" --resume {sessionId}
     "accounts": {
       "default": {
         "streaming": {
-          "mode": "partial",       ← 4가지 중 하나
-          "nativeTransport": true
+          "mode": "partial"        ← 4가지 중 하나
         }
       }
     }
@@ -276,22 +268,4 @@ claude -p "사용자 새 메시지" --resume {sessionId}
 
 가장 ChatGPT스러운 UX. 실시간 채워지는 답을 보면 *대화하는 느낌*이 살아남. 봇이 "응답 중"이라는 시각 신호가 의외로 중요해 — 멍 때리는 순간 사용자가 "얘 죽었나?" 의심하기 전에 글자가 채워지기 시작하니까. 슬랙 API 부담은 늘어나지만 그만한 가치가 있어.
 
-### `nativeTransport: true`는 뭐야?
-
-Slack에 *native streaming API*가 있어 (`chat.startStream` / `chat.appendStream` / `chat.stopStream`). 이걸 쓰면:
-
-- 일반 `chat.update` 반복 호출보다 *훨씬 효율적*
-- Slack rate limit 부담 줄어듦
-- 단점: *스레드 답변*에서만 작동. *DM 최상위 메시지*는 fallback으로 일반 `chat.update` 사용
-
-→ `nativeTransport: true`면 슬랙이 알아서 *native vs fallback*을 골라줘. 기본 켜두는 게 권장.
-
-### `chunkMode` 옵션 (block / partial 모드에서)
-
-청크 끊는 기준:
-- `"length"` (기본): 글자 수 일정 단위로 끊음
-- `"newline"`: 줄바꿈마다 끊음
-
-긴 글에서 *줄 단위*로 자연스럽게 끊고 싶으면 `"newline"` 추천.
-
-> 💡 즉 7번 응답 스트리밍에서 본 "한 글자씩 채워지는 효과"는 `streaming.mode = "partial"` + `nativeTransport = true`의 조합. 다른 모드 조합으로 바꾸면 *완전히 다른 UX*가 나와.
+> 💡 7번 응답 스트리밍에서 본 "한 글자씩 채워지는 효과"는 `streaming.mode = "partial"` 한 줄로 결정돼. 다른 값으로 바꾸면 *완전히 다른 UX*가 나와.
