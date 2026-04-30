@@ -235,3 +235,61 @@ claude -p "사용자 새 메시지" --resume {sessionId}
 ## 다음 단계
 
 이제 작동 원리 잡혔으니 *직접 1마리 출근시키러* 가자 → [ep.3 1마리 셋업](./ep-03-single-agent)
+
+---
+
+## 📎 부록: Slack 스트리밍 모드 4가지
+
+7번에서 본 "답이 한 글자씩 채워지는 효과"는 *설정 한 줄*로 결정돼. 이 한 줄을 다른 값으로 바꾸면 슬랙에서 보는 답변 UX가 완전히 달라져.
+
+### 어디에 박혀있냐
+
+`~/.openclaw/openclaw.json`의 슬랙 계정 안:
+
+```json
+"channels": {
+  "slack": {
+    "accounts": {
+      "default": {
+        "streaming": {
+          "mode": "partial",       ← 4가지 중 하나
+          "nativeTransport": true
+        }
+      }
+    }
+  }
+}
+```
+
+### `streaming.mode` 4가지 모드 비교
+
+| 모드 | 동작 | 사용자 체감 | API 부담 |
+|------|------|------------|---------|
+| `"off"` | 응답 *완성된 후* 한 번에 전송 | 답이 갑자기 *툭* 뜸 (긴 답일수록 한참 기다림) | 가장 적음 |
+| `"partial"` ⭐ | 토큰 단위로 *기존 메시지를 수정*해 채움 | 한 글자씩 늘어나는 효과 (ChatGPT 같은 느낌) | 가장 많음 |
+| `"block"` | 토큰 여러 개를 *블록 단위*로 묶어 갱신 | 짧은 끊어짐 있지만 부드럽게 채워짐 | 중간 |
+| `"progress"` | 콘텐츠 대신 *진행률 표시* | "답하는 중..." 같은 인디케이터 | 가장 적음 |
+
+### 우리는 왜 `"partial"`을 쓸까?
+
+가장 ChatGPT스러운 UX. 실시간 채워지는 답을 보면 *대화하는 느낌*이 살아남. 봇이 "응답 중"이라는 시각 신호가 의외로 중요해 — 멍 때리는 순간 사용자가 "얘 죽었나?" 의심하기 전에 글자가 채워지기 시작하니까. 슬랙 API 부담은 늘어나지만 그만한 가치가 있어.
+
+### `nativeTransport: true`는 뭐야?
+
+Slack에 *native streaming API*가 있어 (`chat.startStream` / `chat.appendStream` / `chat.stopStream`). 이걸 쓰면:
+
+- 일반 `chat.update` 반복 호출보다 *훨씬 효율적*
+- Slack rate limit 부담 줄어듦
+- 단점: *스레드 답변*에서만 작동. *DM 최상위 메시지*는 fallback으로 일반 `chat.update` 사용
+
+→ `nativeTransport: true`면 슬랙이 알아서 *native vs fallback*을 골라줘. 기본 켜두는 게 권장.
+
+### `chunkMode` 옵션 (block / partial 모드에서)
+
+청크 끊는 기준:
+- `"length"` (기본): 글자 수 일정 단위로 끊음
+- `"newline"`: 줄바꿈마다 끊음
+
+긴 글에서 *줄 단위*로 자연스럽게 끊고 싶으면 `"newline"` 추천.
+
+> 💡 즉 7번 응답 스트리밍에서 본 "한 글자씩 채워지는 효과"는 `streaming.mode = "partial"` + `nativeTransport = true`의 조합. 다른 모드 조합으로 바꾸면 *완전히 다른 UX*가 나와.
