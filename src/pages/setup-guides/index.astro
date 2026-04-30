@@ -7,12 +7,21 @@ const guides = (await getCollection('setup-guides')).sort((a, b) => a.data.episo
 const seriesToken = guides.find(g => g.data.token)?.data.token || '';
 ---
 
-<BaseLayout title="OpenClaw 실전 가이드">
+<BaseLayout title="OpenClaw 셋업 레시피">
   <div class="list-page">
     <header class="list-header">
-      <h1>🔧 OpenClaw 실전 가이드</h1>
-      <p>설치부터 Slack 연결, 동기화, Google 연동까지 — 실전 셋업 노하우</p>
+      <span class="track-badge">📚 단편 레시피</span>
+      <h1>🧰 OpenClaw 셋업 레시피</h1>
+      <p>필요한 기능만 골라보는 단편 가이드 모음 — Claw 비교, Slack 세부, Syncthing, Google 연동, 마이그레이션</p>
     </header>
+
+    <a href="/multi-agent" class="cross-track-banner">
+      <span class="cross-track-icon">🤖</span>
+      <span class="cross-track-text">
+        <strong>처음 OpenClaw 셋업이라면 → 멀티 에이전트 코어 시리즈</strong>
+        <span class="cross-track-sub">ep.1부터 한 호흡으로 보는 코어 시리즈 (4/25 밋업 자료)</span>
+      </span>
+    </a>
 
     <a href="https://bbojjak-library.gpters.org" class="cross-link-banner" target="_blank" rel="noopener">
       <span class="cross-link-icon">🐈‍⬛</span>
@@ -74,6 +83,18 @@ const seriesToken = guides.find(g => g.data.token)?.data.token || '';
     padding: 60px 0 40px;
   }
 
+  .track-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #E8590C;
+    background: color-mix(in srgb, #E8590C 12%, transparent);
+    padding: 4px 12px;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+    margin-bottom: 16px;
+  }
+
   .list-header h1 {
     font-size: 32px;
     font-weight: 700;
@@ -83,6 +104,46 @@ const seriesToken = guides.find(g => g.data.token)?.data.token || '';
 
   .list-header p {
     font-size: 16px;
+    color: var(--text-secondary);
+  }
+
+  .cross-track-banner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    background: color-mix(in srgb, #8B5CF6 6%, var(--bg-card));
+    border: 1px solid color-mix(in srgb, #8B5CF6 30%, var(--border-card));
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .cross-track-banner:hover {
+    border-color: #8B5CF6;
+    background: color-mix(in srgb, #8B5CF6 10%, var(--bg-card));
+  }
+
+  .cross-track-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+
+  .cross-track-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .cross-track-text strong {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .cross-track-sub {
+    font-size: 13px;
     color: var(--text-secondary);
   }
 

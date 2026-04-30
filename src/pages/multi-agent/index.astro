@@ -7,13 +7,22 @@ const guides = (await getCollection('multi-agent')).sort((a, b) => a.data.episod
 const seriesToken = guides.find(g => g.data.token)?.data.token || '';
 ---
 
-<BaseLayout title="멀티 에이전트 운영 가이드">
+<BaseLayout title="멀티 에이전트 코어 시리즈">
   <div class="list-page">
     <header class="list-header">
-      <span class="meetup-badge">🎤 밋업 발표 자료</span>
-      <h1>🤖 멀티 에이전트 운영 가이드</h1>
+      <span class="meetup-badge">🎤 4/25 밋업 발표 · 코어 시리즈</span>
+      <h1>🤖 멀티 에이전트 코어 시리즈</h1>
       <p>Slack × Claude CLI로 여러 마리 AI 에이전트 키우기 — 1마리부터 N대 머신 분산까지</p>
+      <p class="series-howto">📖 <strong>ep.1부터 한 호흡으로 읽는 시리즈예요.</strong> 처음 OpenClaw 셋업하시는 분께 추천.</p>
     </header>
+
+    <a href="/setup-guides" class="cross-track-banner">
+      <span class="cross-track-icon">🧰</span>
+      <span class="cross-track-text">
+        <strong>특정 기능만 빠르게 → OpenClaw 셋업 레시피</strong>
+        <span class="cross-track-sub">Claw 비교 · Slack 세부 · Syncthing · Google 연동 · 마이그레이션 등 단편 가이드 모음</span>
+      </span>
+    </a>
 
     {seriesToken ? (
       <SeriesGate token={seriesToken} seriesKey="multi-agent-series-token">
@@ -88,6 +97,56 @@ const seriesToken = guides.find(g => g.data.token)?.data.token || '';
 
   .list-header p {
     font-size: 16px;
+    color: var(--text-secondary);
+  }
+
+  .series-howto {
+    margin-top: 12px;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .series-howto strong {
+    color: var(--text-secondary);
+  }
+
+  .cross-track-banner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    background: color-mix(in srgb, #E8590C 6%, var(--bg-card));
+    border: 1px solid color-mix(in srgb, #E8590C 30%, var(--border-card));
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .cross-track-banner:hover {
+    border-color: #E8590C;
+    background: color-mix(in srgb, #E8590C 10%, var(--bg-card));
+  }
+
+  .cross-track-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+
+  .cross-track-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .cross-track-text strong {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .cross-track-sub {
+    font-size: 13px;
     color: var(--text-secondary);
   }
 
