@@ -72,21 +72,55 @@ PI 모드면 컨텍스트가 길어지면 OpenClaw가 *알아서 압축*해줘. 
 
 잃는 게 있으면 얻는 것도 있어. Claude Code 본체 생태계가 통째로 따라옴.
 
-### 1. Claude Code 자체 훅 (settings.json)
+### 1. Claude Code 자체 훅 (`settings.json`)
 
-`~/.claude/settings.json`의 `SessionStart`, `UserPromptSubmit`, `PreToolUse` 같은 훅이 *그대로* 작동. 우리 페르소나 부팅 hook(매 세션 시작 시 SOUL/IDENTITY/MEMORY 자동 로드), 팀 스킬 자동 검색 hook, NO_REPLY 토큰 처리 등 — 다 Claude Code 훅 시스템에 얹혀 있어. **PI 모드면 이 생태계 못 씀.**
+**훅이 뭐냐?** — *"이런 일이 일어나면 자동으로 저거 해"* 라고 미리 정해두는 자동화 트리거야. Claude Code는 `~/.claude/settings.json`에 다음 같은 훅 종류를 지원해:
+
+- `SessionStart` — 새 세션 시작 시 자동 실행 (예: 페르소나 파일 로드)
+- `UserPromptSubmit` — 사용자가 메시지 보낼 때 자동 실행 (예: 팀 스킬 자동 검색)
+- `PreToolUse` / `PostToolUse` — 도구 호출 직전·직후 (예: 위험한 명령 가로채기)
+
+우리 운영의 *실제 동력*들이 다 여기 얹혀 있어 — 매 세션마다 SOUL/IDENTITY/MEMORY 자동 주입, 팀 스킬 검색 가이드 주입, NO_REPLY 토큰 후처리, 페르소나 부팅 분기(뽀짝/뽀야) 등. **PI 모드면 이 생태계 못 씀** — Claude Code 자체 기능이라.
 
 ### 2. Claude Code 네이티브 도구 그대로
 
-Read / Edit / Write / Bash / Glob / Grep / WebFetch 등 *Anthropic이 잘 다듬어둔 도구 묶음*이 그대로 들어와. PI도 비슷한 도구를 만들어줄 수는 있지만 *Claude Code 본체 그대로*는 아님.
+**"Anthropic 도구"가 뭐냐?** — 클로드가 *세상을 만지는 손* 역할을 하는 도구 묶음. Anthropic이 Claude Code 본체에 직접 만들어 박아둔 거. 종류:
+
+- `Read` / `Write` / `Edit` — 파일 읽기·쓰기·부분수정
+- `Bash` — 터미널 명령 실행
+- `Glob` / `Grep` — 파일·내용 검색
+- `WebFetch` / `WebSearch` — 웹 가져오기·검색
+
+PI 모드는 OpenClaw가 *비슷한 도구*를 만들어 모델한테 넘겨야 함. CLI 모드는 *Anthropic이 다듬어둔 진품 그대로* 들어와서, 동작이 안정적이고 권한 모드(아래 5번)도 자연스럽게 연결됨.
 
 ### 3. `--plugin-dir`로 OpenClaw skills 동적 주입
+
+**스킬 시스템이 두 개 (OpenClaw + Claude Code) — 합쳐서 쓸 수 있나? 우선순위는?**
+
+답: **합쳐서 클로드한테 보임.** OpenClaw가 자기 skills 중 그 에이전트한테 허용된 것만 추려서 *임시 Claude Code 플러그인 형태로 변환*해 `--plugin-dir`로 넘기면, **Claude Code의 native skill resolver가 그걸 자기 skills 같이 인식**.
 
 > 📖 **공식문서 발췌 (번역)** — `gateway/cli-backends.md`
 >
 > "번들된 Anthropic `claude-cli` 백엔드는 OpenClaw skills 스냅샷을 두 가지 방식으로 받는다 — 시스템 프롬프트에 추가되는 OpenClaw skills 카탈로그, 그리고 `--plugin-dir`로 전달되는 *임시 Claude Code 플러그인*. 플러그인은 해당 에이전트/세션에 적합한 skills만 담고 있어, **Claude Code의 native skill resolver가 OpenClaw가 광고하는 것과 동일한 필터링된 set을 보게 된다**."
 
-→ OpenClaw skills와 Claude Code skill 시스템이 *충돌이 아니라 통합*. 둘 다 살려.
+**OpenClaw skills 우선순위** (같은 이름 충돌 시 위가 이김):
+
+| # | 위치 | 의미 |
+|---|---|---|
+| 1 | `<workspace>/skills/` | 그 봇 워크스페이스 전용 (최우선) |
+| 2 | `<workspace>/.agents/skills/` | 워크스페이스 안 에이전트 전용 |
+| 3 | `~/.agents/skills/` | 머신 단위 개인 에이전트 |
+| 4 | `~/.openclaw/skills/` | 머신 단위 공용 |
+| 5 | bundled (설치 포함) | OpenClaw 기본 |
+| 6 | `skills.load.extraDirs` | 설정으로 추가한 외부 |
+
+> 📖 **공식문서 발췌 (번역)** — `tools/skills.md`
+>
+> "OpenClaw는 다음 소스에서 skills를 로드한다, **우선순위 높은 순으로**: workspace skills → project-agent → personal-agent → managed/local → bundled → extra dirs. **이름이 충돌하면 가장 높은 소스가 이긴다.**"
+
+우리 셋업 예 — 같은 이름의 `create-issue` 스킬이 워크스페이스(`workspace-bboya/skills/`)에도, 머신 공용(`~/.openclaw/skills/`)에도 있으면 *워크스페이스 것이 이김*. 그래서 봇별로 다르게 굴리고 싶은 스킬은 워크스페이스에 두고, 모두가 똑같이 쓰는 건 공용에 둠.
+
+> 💡 **Claude Code 자체 skills (`~/.claude/skills/`)와 충돌하면?** — OpenClaw가 임시 플러그인으로 주입한 거랑 `~/.claude/skills/` 양쪽이 같은 이름이면 어느 게 이기는지는 OpenClaw docs엔 명시 X. 운영 안전책은 *이름 겹치지 않게 네임스페이스 관리*. 우린 OpenClaw 쪽 skills를 메인으로 쓰고 `~/.claude/skills/`엔 *Claude Code 전용 보조*만 둠.
 
 ### 4. Pro/Max 정액 빌링
 
@@ -94,7 +128,11 @@ Read / Edit / Write / Bash / Glob / Grep / WebFetch 등 *Anthropic이 잘 다듬
 
 ### 5. `--resume` 자체 세션 + `--permission-mode` 그대로
 
-Claude Code의 세션 jsonl 누적 + permission mode 시스템이 그대로 적용. OpenClaw가 그 위에 얹혀서 슬랙·텔레그램 라우팅만 추가.
+**`--resume`**: Claude Code가 *과거 세션 기억을 jsonl 파일에 누적*해두고, 같은 세션 ID로 다시 부르면 그 history를 다 끌어와서 답함. 슬랙 같은 스레드에서 봇이 *이전 대화 기억하고 답*하는 메커니즘이 이거. (자세한 작동은 [ep.2의 `--resume` 섹션](./ep-02-anatomy) 참조)
+
+**`--permission-mode`**: Claude Code가 *어떤 도구는 자동 실행, 어떤 도구는 사람한테 물어보고 실행*할지 정하는 모드. OpenClaw가 자기 보안 정책(`tools.exec.security`)을 이 모드에 자동 매핑해줘서, 봇이 *위험한 명령은 자동 차단*되고 *안전한 거만 자동 실행*되는 식으로 굴러감.
+
+OpenClaw가 그 위에 얹혀서 슬랙·텔레그램 라우팅만 추가.
 
 ---
 
