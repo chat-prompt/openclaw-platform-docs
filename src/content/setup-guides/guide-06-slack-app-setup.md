@@ -258,14 +258,33 @@ OpenClaw 에이전트가 Slack에서 살려면, **Slack 앱**이라는 "몸"이 
 ```bash
 openclaw channels add \
   --channel slack \
+  --account my-workspace \
+  --name "내 워크스페이스" \
   --bot-token "xoxb-여기에-봇토큰" \
   --app-token "xapp-여기에-앱토큰"
 ```
 
+- `--account`: **워크스페이스 식별자** (영문 소문자 짧은 ID). 이미 봇 여러 개 운영 중이거나 한 봇이 여러 슬랙 워크스페이스에 살 거면 명시하세요. 처음이면 생략해도 OK (`default`로 들어감)
+- `--name`: 표시용 이름 (한글 OK)
 - `--bot-token`: 5단계에서 메모해둔 봇 토큰 (`xoxb-`)
-- `--app-token`: 1단계에서 메모해둔 앱 토큰 (`xapp-`)
+- `--app-token`: 1-2단계에서 메모해둔 앱 토큰 (`xapp-`)
 
-이렇게 하면 OpenClaw 설정에 Slack 채널이 자동 등록돼요.
+이렇게 하면 OpenClaw 설정에 Slack 워크스페이스가 자동 등록되고, 게이트웨이가 hot-reload로 바로 반영해요. **별도 restart 불필요**.
+
+> ⚠️ **토큰 끝에 줄바꿈(`\n`) 따라오는 함정 주의!**
+>
+> Slack 페이지에서 토큰을 복사할 때 줄바꿈이 같이 따라오는 경우가 있어요. 그러면 토큰 값에 `\n`이 붙어서 **인증이 조용히 실패**해요 (에러 안 뜨고 그냥 응답 없음). 가장 안전한 방법:
+> ```bash
+> # 토큰 변수에 넣고 공백/개행 자동 제거
+> BOT="$(echo -n 'xoxb-...붙여넣기...' | tr -d '[:space:]')"
+> APP="$(echo -n 'xapp-...붙여넣기...' | tr -d '[:space:]')"
+> openclaw channels add --channel slack --account my-workspace --name "내 워크스페이스" \
+>   --bot-token "$BOT" --app-token "$APP"
+> ```
+
+> 💡 **`--account`를 안 쓰면 어떻게 돼요?**
+>
+> `default` 자리에 들어가요. 처음이면 OK이지만, 이미 다른 슬랙 봇/워크스페이스가 `default`를 점유 중이면 **legacy 형제 위치로 새어 들어가서 동작 안 합니다.** 봇 여러 개 운영하는 환경이라면 `--account`로 명시적 ID 주세요.
 
 > 💡 **`openclaw onboard`와 뭐가 다른가요?**
 >
@@ -275,13 +294,7 @@ openclaw channels add \
 >
 > 기본 DM 정책은 `pairing`이에요 — 처음 DM을 보내면 페어링 코드가 나오고, 승인해야 대화가 시작돼요 (8단계에서 자세히!). 나중에 JSON에서 `"dmPolicy": "open"`으로 바꾸면 페어링 없이 누구나 DM 가능하고, `"allowlist"`로 바꾸면 특정 유저만 허용할 수도 있어요.
 
-게이트웨이를 재시작해야 적용됩니다:
-
-```bash
-openclaw gateway restart
-```
-
-> 💡 세부 설정을 직접 JSON으로 편집하고 싶다면 [부록 B: openclaw.json 직접 편집](#부록-b-openclawjson-직접-편집)을 참고하세요.
+> 💡 세부 설정을 직접 JSON으로 편집하고 싶다면 [부록 B: openclaw.json 직접 편집](#부록-b-openclawjson-직접-편집)을 참고하세요. 단, 직접 수동 편집 시엔 `openclaw gateway restart`가 필요할 수 있어요.
 
 ---
 
@@ -389,9 +402,8 @@ openclaw pairing approve slack ABCD1234
 - [ ] Install to Workspace + 봇 토큰(`xoxb-`) 발급 & 저장
 - [ ] Slack에서 봇 앱 확인
 - [ ] 봇을 원하는 채널에 초대 (`/invite @봇이름`)
-- [ ] OpenClaw 연동 (`openclaw channels add`)
-- [ ] `openclaw gateway restart`
-- [ ] 페어링 완료 → Slack DM으로 대화 성공!
+- [ ] OpenClaw 연동 (`openclaw channels add --account <ID> --name "표시이름"` + 토큰)
+- [ ] 페어링 완료 → Slack DM으로 대화 성공! (게이트웨이 자동 hot-reload, 별도 restart 불필요)
 - [ ] (선택) 프로필 이미지 설정
 - [ ] 워크스페이스 폴더 위치 확인
 - [ ] 봇 Slack ID + 양육자 정보 등록 (봇에게 시키기!)
@@ -417,7 +429,22 @@ openclaw pairing approve slack ABCD1234
 
 ### "invalid_auth 에러"
 
-→ Reinstall 후 토큰이 바뀌었을 수 있음. 봇 토큰 업데이트 + `openclaw gateway restart`
+→ Reinstall 후 토큰이 바뀌었을 수 있음. 봇 토큰 다시 복사해서 `channels add` 재실행 (덮어쓰기, restart 불필요).
+
+### "DM 보내도 봇이 응답이 없어요. 에러도 없고요."
+
+→ 십중팔구 **토큰 끝에 줄바꿈(`\n`)이 붙어서 인증 조용히 실패**한 경우. `~/.openclaw/openclaw.json`에서 본인 계정의 `appToken`/`botToken` 값 끝을 확인하세요. `\n`이나 공백이 보이면 제거하거나, 위 7단계의 `tr -d '[:space:]'` 패턴으로 다시 add.
+
+### "페어링은 됐는데 (`Approved slack sender ...`) 그래도 응답이 없어요"
+
+→ **`bindings` 누락** 케이스. 페어링은 *발신자 권한* 인증이고, 봇이 메시지를 *어떤 에이전트*로 라우팅할지는 `bindings`에 정의돼 있어야 해요. `~/.openclaw/openclaw.json`의 `bindings` 배열에 본인 accountId가 없다면 추가하세요:
+```json
+{
+  "agentId": "bboya",
+  "match": { "channel": "slack", "accountId": "my-workspace" }
+}
+```
+추가 후 `openclaw gateway restart`.
 
 ### "Install to Workspace 버튼이 안 보여요"
 
