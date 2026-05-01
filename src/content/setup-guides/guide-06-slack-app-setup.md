@@ -54,13 +54,34 @@ OpenClaw 에이전트가 Slack에서 살려면, **Slack 앱**이라는 "몸"이 
 >
 > Socket Mode는 봇이 Slack과 **실시간으로 대화하는 통로**예요. HTTP 웹훅 방식과 달리, 공개 URL 없이도 봇이 메시지를 받을 수 있어서 개인 PC나 홈서버에서도 바로 쓸 수 있어요. OpenClaw이 이 방식을 기본으로 사용하기 때문에, 제일 먼저 켜줍니다.
 
+### 1-1. Socket Mode 토글 ON
+
 1. 왼쪽 메뉴 → **Socket Mode** 클릭
 2. **Enable Socket Mode** 토글을 ON으로
-3. 앱 토큰 생성 팝업이 뜹니다:
-   - **Token Name**: 영문 봇 이름 입력 (예: `bbodoong`, `my-bot`)
-   - **Scope**: `connections:write`가 기본으로 들어가 있어요. 이대로 OK!
-   - **Generate** 클릭
-4. 생성된 토큰 (`xapp-`로 시작) → **복사해서 메모장에 붙여넣기!** 📋
+
+### 1-2. App-Level Token 발급 (`xapp-`)
+
+> Socket Mode 토글만 켰다고 토큰이 자동 발급되진 않아요. 토큰은 **Basic Information** 페이지에서 따로 만들어야 해요.
+
+1. 왼쪽 메뉴 → **Basic Information** 클릭
+2. 페이지를 아래로 스크롤 → **App-Level Tokens** 섹션 찾기
+3. **Generate Token and Scopes** 클릭
+4. **Token Name**: 라벨이라 아무거나 OK. 헷갈리지 않게 **영문 봇 이름** 그대로 추천 (예: `bbodoong`)
+5. **Add permission by Scope or API method...** 드롭다운 → **`connections:write`** 선택
+6. **Generate** 클릭
+7. 생성된 토큰 (`xapp-`로 시작) → **복사해서 메모장에 붙여넣기!** 📋
+
+> 🤔 **드롭다운에 scope 3개 떠요. 다 추가해야 하나요?**
+>
+> **`connections:write` 하나만**. 나머지 둘은 OpenClaw 봇 운영에 불필요해요:
+>
+> | App-Level Scope | 역할 | OpenClaw 봇에 필요? |
+> |------|------|------|
+> | **`connections:write`** | Socket Mode로 실시간 메시지/이벤트 받기 | ✅ **필수** |
+> | `authorizations:read` | 앱이 설치된 워크스페이스 정보 조회 | ❌ 다중 배포 앱용 |
+> | `app_configurations:write` | API로 앱 설정 변경 (manifest 자동 업데이트 등) | ❌ 일반 봇 운영엔 불필요 |
+>
+> 💡 이건 **App-Level Token (`xapp-`)** 의 scope예요. 봇이 슬랙에서 *뭘 할 수 있는지*에 대한 권한(Bot Token Scopes, `xoxb-`)과는 별개입니다.
 
 > ⚠️ 이 토큰은 한 번 닫으면 다시 볼 수 없어요. 꼭 어딘가에 저장해두세요!
 >
@@ -512,7 +533,7 @@ openclaw pairing approve slack ABCD1234
 4. **Create** 클릭 → 앱이 1~4단계 설정이 완료된 상태로 생성돼요!
 5. 이후 **5단계**(Install to Workspace)부터 이어서 진행하면 됩니다
 
-> ⚠️ 앱 토큰(`xapp-`)은 매니페스트로 자동 생성되지 않아요. 생성 후 **Socket Mode** 메뉴에서 앱 토큰을 만들어야 합니다 (1단계의 3~4번 참고).
+> ⚠️ 앱 토큰(`xapp-`)은 매니페스트로 자동 생성되지 않아요. 앱 생성 후 **Basic Information → App-Level Tokens** 섹션에서 `connections:write` scope로 직접 발급해야 합니다 (1-2 단계 참고).
 
 **매니페스트에 포함된 설정 요약:**
 
