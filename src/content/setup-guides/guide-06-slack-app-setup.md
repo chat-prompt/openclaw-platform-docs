@@ -446,6 +446,10 @@ openclaw pairing approve slack ABCD1234
     "bot_user": {
       "display_name": "bbodoong",
       "always_online": true
+    },
+    "assistant_view": {
+      "assistant_description": "OpenClaw AI 에이전트",
+      "suggested_prompts": []
     }
   },
   "oauth_config": {
@@ -479,6 +483,8 @@ openclaw pairing approve slack ABCD1234
     "event_subscriptions": {
       "bot_events": [
         "app_mention",
+        "assistant_thread_context_changed",
+        "assistant_thread_started",
         "channel_rename",
         "member_joined_channel",
         "member_left_channel",
@@ -513,9 +519,9 @@ openclaw pairing approve slack ABCD1234
 | 항목 | 내용 | 본문 단계 |
 |------|------|----------|
 | Socket Mode | 활성화 | 1단계 |
-| Bot Token Scopes | 19개 전부 포함 | 2단계 |
-| App Home | Messages Tab 활성화, always_online | 3단계 |
-| Event Subscriptions | 4개 봇 이벤트 | 4단계 |
+| Bot Token Scopes | 21개 (AI 어시스턴트 포함) | 2단계 |
+| App Home + Assistant View | Messages Tab + AI 어시스턴트 패널 활성화 | 3단계 |
+| Event Subscriptions | 13개 봇 이벤트 (어시스턴트 스레드 포함) | 4단계 |
 
 ---
 
