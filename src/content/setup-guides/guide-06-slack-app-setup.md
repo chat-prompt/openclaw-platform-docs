@@ -409,7 +409,7 @@ openclaw pairing approve slack ABCD1234
 1. **Socket Mode** 켜져있는지 확인
 2. **Event Subscriptions**에 4개 이벤트 다 있는지 확인
 3. 봇이 해당 채널에 **초대**됐는지 확인 (6단계)
-4. OpenClaw 로그 확인: `openclaw gateway logs`
+4. OpenClaw 로그 확인: `openclaw logs --follow` (실시간 스트림)
 
 ### "permission_denied 에러"
 
