@@ -7,7 +7,6 @@ const notes = (await getCollection('notes')).sort((a, b) =>
   new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
 const academy = (await getCollection('academy')).sort((a, b) => a.data.episode - b.data.episode);
-const training = (await getCollection('training')).sort((a, b) => a.data.episode - b.data.episode);
 const caseStudies = (await getCollection('case-studies')).sort((a, b) => a.data.episode - b.data.episode);
 ---
 
@@ -59,15 +58,6 @@ const caseStudies = (await getCollection('case-studies')).sort((a, b) => a.data.
         </div>
         <span class="series-lock">🔒</span>
         <span class="series-count">{notes.length}편 →</span>
-      </a>
-      <a href="/training" class="series-card training-card">
-        <span class="series-icon">🏫</span>
-        <div class="series-body">
-          <h2>뽀피터스 훈련일지</h2>
-          <p>4남매가 팀으로 일하는 법을 배우는 실전 기록.</p>
-        </div>
-        <span class="series-lock">🔒</span>
-        <span class="series-count">{training.length}편 →</span>
       </a>
       <a href="/academy" class="series-card academy-card">
         <span class="series-icon">🎖️</span>
@@ -272,7 +262,6 @@ const caseStudies = (await getCollection('case-studies')).sort((a, b) => a.data.
   }
   .setup-card:hover { border-color: #E8590C; }
   .note-card:hover { border-color: #E8A87C; }
-  .training-card:hover { border-color: #3B82F6; }
   .academy-card:hover { border-color: #7B9E6B; }
   .case-studies-card:hover { border-color: #D4802A; }
   .academy-card:hover { border-color: #7B9E6B; }
@@ -316,7 +305,6 @@ const caseStudies = (await getCollection('case-studies')).sort((a, b) => a.data.
   .multi-agent-card .series-count { color: #8B5CF6; }
   .setup-card .series-count { color: #E8590C; }
   .note-card .series-count { color: #D4802A; }
-  .training-card .series-count { color: #3B82F6; }
   .case-studies-card .series-count { color: #D4802A; }
   .academy-card .series-count { color: #5A8A4A; }
 
